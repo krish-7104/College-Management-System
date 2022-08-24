@@ -1,6 +1,6 @@
 body {
   background-color: rgb(194, 194, 194);
-  overflow-y: hidden;
+  /* overflow-y: hidden; */
 }
 .loginContainer {
   height: 90vh;

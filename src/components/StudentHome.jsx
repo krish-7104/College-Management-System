@@ -3,8 +3,7 @@ import Navbar from "./Navbar";
 import StudentCard from "./StudentCard";
 import "../style/StudentHome.css";
 import { db } from "../backend/firebase";
-import { collection, query, onSnapshot } from "firebase/firestore";
-import { Link } from "react-router-dom";
+import { collection, query, onSnapshot, orderBy } from "firebase/firestore";
 const StudentHome = () => {
   let loginId = localStorage.getItem("loginid");
   let branch = localStorage.getItem("branch");
@@ -63,7 +62,7 @@ const StudentHome = () => {
       if (view2.classList.contains("disable")) {
         view2.classList.remove("disable");
       }
-      const q1 = query(collection(db, `notices`));
+      const q1 = query(collection(db, `notices`), orderBy("timestamp"));
       let html = container.innerHTML.replace("</table>", "");
       onSnapshot(q1, (querySnapshot) => {
         querySnapshot.docs.forEach((data) => {
@@ -89,6 +88,9 @@ const StudentHome = () => {
       noticeClick++;
     }
   };
+  const logoutHandler = () => {
+    window.open("/", "_self");
+  };
 
   return (
     <React.StrictMode>
@@ -97,18 +99,19 @@ const StudentHome = () => {
         <StudentCard allData={details} />
         <div className="studentBtnsArea">
           <ul className="studentList">
-            <li id="attendance">View Attendance</li>
             <li id="timetable">Timetable</li>
             <li id="material">Material</li>
             <li id="marks">View Marks</li>
             <li id="notices" onClick={getNotices}>
               Notices
             </li>
+            <li id="logout" onClick={logoutHandler}>
+              Log Out
+            </li>
           </ul>
         </div>
         <section className="studentView disable" id="studentView">
           <div className="notice disable" id="noticeArea">
-            <div className="studentViewtitle">Notices</div>
             <table>
               <th className="tableHead" id="noticeTime">
                 Timestamp
