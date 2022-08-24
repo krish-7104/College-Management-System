@@ -1,0 +1,81 @@
+.studentContainer {
+  display: flex;
+  align-items: center;
+  margin-top: 40px;
+  flex-direction: column;
+}
+.studentBtnsArea {
+  display: flex;
+  margin-top: 40px;
+}
+.studentList {
+  display: flex;
+}
+.studentList li {
+  list-style: none;
+  background-color: #1f1f1f;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 0px 10px;
+  width: 200px;
+  text-align: center;
+  cursor: pointer;
+  color: white;
+}
+.studentList li:hover {
+  background-color: black;
+  transition: 0.8s;
+}
+.studentView {
+  margin: 40px 0px;
+  background-color: white;
+  width: 85%;
+  padding: 20px;
+}
+.disable {
+  display: none !important;
+}
+.notice {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.studentViewtitle {
+  font-weight: 600;
+  text-align: center;
+  font-size: 26px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  padding-bottom: 20px;
+}
+table {
+  border-collapse: collapse;
+}
+th,
+tr,
+td {
+  border: 1.4px solid #1f1f1f;
+  padding: 10px 10px;
+  text-align: center;
+}
+.viewNotice {
+  color: black;
+  background-color: inherit;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding: 6px;
+  border: none;
+  font-size: 14px;
+  text-decoration: none;
+}
+.tableHead {
+  font-weight: 700;
+  background-color: #c7c7c7;
+  text-transform: uppercase;
+  padding: 10px 30px;
+  letter-spacing: 2px;
+}
+#noticeTitle {
+  width: 100%;
+}

@@ -4,20 +4,9 @@ import { db } from "../backend/firebase";
 import { collection, query, onSnapshot } from "firebase/firestore";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Navbar from "./Navbar";
 
 const Login = () => {
-  const notifySuccess = (text) => {
-    toast.success(text, {
-      position: "bottom-center",
-      autoClose: 4000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: false,
-      draggable: true,
-      progress: undefined,
-      theme: "dark",
-    });
-  };
   const notifyAlert = (text) => {
     toast.warn(text, {
       position: "bottom-center",
@@ -35,6 +24,7 @@ const Login = () => {
     {
       loginid: "",
       password: "",
+      branch: "",
     },
   ]);
   const [faculty, setFaculty] = useState([
@@ -47,15 +37,19 @@ const Login = () => {
   const loginValidate = () => {
     let userId = document.getElementById("loginid").value;
     let userPass = document.getElementById("password").value;
+    let branch = "";
     if (selectType === "students") {
       if (userId !== "" && userPass !== "") {
         students.forEach((user) => {
           if (user.loginid === userId && user.password === userPass) {
             k = 1;
+            branch = user.branch;
           }
         });
         if (k === 1) {
-          notifySuccess("Login Success!");
+          localStorage.setItem("loginid", userId);
+          localStorage.setItem("branch", branch);
+          window.open("/students-home", "_self");
           k = 0;
         } else {
           notifyAlert("Incorrect Credentials!");
@@ -71,7 +65,8 @@ const Login = () => {
           }
         });
         if (k === 1) {
-          notifySuccess("Login Success!");
+          localStorage.setItem("loginid", userId);
+          window.open("/faculty-home", "_self");
           k = 0;
         } else {
           notifyAlert("Incorrect Credentials!");
@@ -91,6 +86,7 @@ const Login = () => {
           {
             loginid: data.data().loginid,
             password: data.data().password,
+            branch: data.data().branch,
           },
         ]);
       });
@@ -130,7 +126,8 @@ const Login = () => {
 
   return (
     <React.StrictMode>
-      <section className="container pattern-checks-sm bg-blue white">
+      <Navbar title="Login" />
+      <section className="loginContainer">
         <div className="loginCard">
           <div className="select">
             <button

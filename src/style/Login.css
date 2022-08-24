@@ -1,7 +1,8 @@
 body {
   background-color: rgb(194, 194, 194);
+  overflow-y: hidden;
 }
-.container {
+.loginContainer {
   height: 90vh;
   width: 100%;
   display: flex;

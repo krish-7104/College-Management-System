@@ -1,0 +1,56 @@
+.mainCard {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  width: 85%;
+  background-color: white;
+  border-radius: 10px;
+}
+img {
+  width: 200px;
+  margin: 10px;
+}
+.infoSec {
+  width: 100%;
+  margin: 10px;
+  padding: 0px 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(4, auto);
+}
+.infoText {
+  font-weight: 500;
+  margin: 10px 0px;
+  letter-spacing: 1.5px;
+  text-transform: capitalize;
+}
+.fname {
+  grid-column: 1 / span 2;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 26px !important;
+  margin-bottom: 20px;
+}
+#email {
+  text-transform: none !important;
+}
+
+@media only screen and (max-width: 800px) {
+  .infoSec {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto repeat(6, 40px);
+  }
+  .mainCard {
+    flex-direction: column;
+    width: 90%;
+    padding: 10px;
+  }
+  .infoText {
+    font-size: 15px;
+  }
+  .fname {
+    grid-column: 1;
+    text-align: center;
+    font-size: 22px !important;
+  }
+}
