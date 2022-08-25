@@ -16,7 +16,7 @@
   background-color: #1f1f1f;
   padding: 10px;
   border-radius: 5px;
-  margin: 0px 10px;
+  margin: 10px;
   width: 200px;
   text-align: center;
   cursor: pointer;
@@ -79,4 +79,22 @@ td {
 }
 #marksTime {
   width: 55%;
+}
+.timetableShowArea {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.timetableShowArea img {
+  width: 100%;
+}
+#downTimeTable {
+  background-color: #1f1f1f;
+  border: none;
+  padding: 10px;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 15px;
 }

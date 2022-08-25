@@ -6,26 +6,40 @@ const Marks = () => {
   let branch = localStorage.getItem("branch");
   const [allData, setAllData] = useState([
     {
-      subjects: [],
-      midMarks: [],
-      externalMarks: [],
+      subjects: "",
+      midMarks: "",
+      externalMarks: "",
     },
   ]);
-
-  let container = document.getElementById("areaFormarksShow");
-  let html = container.innerHTML.replace("</table>", "");
-  const q1 = query(collection(db, `students_details/${branch}/student_marks/`));
-  onSnapshot(q1, (querySnapshot) => {
-    querySnapshot.docs.forEach((data) => {
-      if (data.id === e_no) {
-        setAllData({
-          subjects: data.data().subjects,
-          midMarks: data.data().mid_sem,
-          externalMarks: data.data().external,
-        });
-      }
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    let container = document.getElementById("areaFormarksShow");
+    let html = container.innerHTML.replace("</table>", "");
+    const q1 = query(
+      collection(db, `students_details/${branch}/student_marks`)
+    );
+    onSnapshot(q1, (querySnapshot) => {
+      querySnapshot.docs.forEach((data) => {
+        if (data.id === e_no) {
+          // document.getElementById("marksTime").innerText = data
+          //   .data()
+          //   .subjects.map((ele) => {
+          //     console.log(ele);
+          //   });
+          // setAllData(() => [
+          //   {
+          //     subjects: data.data().subjects,
+          //     midMarks: data.data().mid_sem,
+          //     externalMarks: data.data().external,
+          //   },
+          // ]);
+        }
+      });
+      showData();
     });
-  });
+  }, []);
+
+  const showData = () => {};
 
   return (
     <React.StrictMode>
@@ -40,7 +54,7 @@ const Marks = () => {
                 Mid Semester
               </th>
               <th className="tableHead" id="marksTitle">
-                End Semester
+                End Semester {allData[0].externalMarks[0]}
               </th>
             </tr>
           </thead>

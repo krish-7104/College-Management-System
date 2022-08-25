@@ -1,7 +1,8 @@
 import React from "react";
-import "../style/StudentCard.css";
+import "../../style/FacultyCard.css";
 const ProfileCard = (props) => {
-  let e_no = localStorage.getItem("loginid");
+  let email = localStorage.getItem("loginid");
+  let department = localStorage.getItem("department");
   return (
     <React.StrictMode>
       <section className="mainCard">
@@ -17,26 +18,27 @@ const ProfileCard = (props) => {
           <p className="infoText fname" id="fname">
             {props.allData[0].fullname}
           </p>
-          <p className="infoText" id="eno">
-            E No: {e_no}
+          <p className="infoText" id="email">
+            Email: {email}
+          </p>
+          <p className="infoText" id="department">
+            Department: {department}
+          </p>
+
+          <p className="infoText" id="phoneNo">
+            Phone No: {props.allData[0].phoneno}
+          </p>
+          <p className="infoText" id="post">
+            Post: {props.allData[0].post}
           </p>
           <p className="infoText" id="gender">
             Gender: {props.allData[0].gender}
           </p>
-          <p className="infoText" id="phoneNo">
-            Phone No: {props.allData[0].phoneno}
+          <p className="infoText" id="joining_date">
+            Joining Date: {props.allData[0].joining_date}
           </p>
-          <p className="infoText" id="branch">
-            Branch: {props.allData[0].branch}
-          </p>
-          <p className="infoText" id="currentSem">
-            Semester: {props.allData[0].semester}
-          </p>
-          <p className="infoText" id="category">
-            Category: {props.allData[0].category}
-          </p>
-          <p className="infoText" id="email">
-            Email Id: {e_no}@cms.ac.in
+          <p className="infoText" id="dob">
+            Experience: {props.allData[0].experience}+ Years
           </p>
           <p className="infoText" id="dob">
             DOB: {props.allData[0].dob}

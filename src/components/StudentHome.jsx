@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "./Navbar";
-import StudentCard from "./StudentCard";
+import StudentCard from "./Student/StudentCard";
 import "../style/StudentHome.css";
 import { db } from "../backend/firebase";
 import { collection, query, onSnapshot } from "firebase/firestore";
 import Notice from "./Student/Notice";
 import Material from "./Student/Material";
 import Marks from "./Student/Marks";
+import Timetable from "./Student/Timetable";
 
 const StudentHome = () => {
   let loginId = localStorage.getItem("loginid");
   let branch = localStorage.getItem("branch");
+  const [timetable, setTimeTable] = useState("");
   const [details, setDetails] = useState([
     {
       fullname: "",
@@ -60,15 +62,6 @@ const StudentHome = () => {
     window.open("/", "_self");
   };
 
-  // const timetablebtnClicked = () => {
-  //   let ele = document.getElementById("studentView");
-  //   ele.classList.remove("disable");
-  //   let ele2 = document.getElementById("timetableArea");
-  //   ele2.classList.remove("disable");
-  //   document.getElementById("marksArea").classList.add("disable");
-  //   document.getElementById("noticeArea").classList.add("disable");
-  //   document.getElementById("materialArea").classList.add("disable");
-  // };
   const materialbtnClicked = () => {
     let ele = document.getElementById("studentView");
     ele.classList.remove("disable");
@@ -76,6 +69,7 @@ const StudentHome = () => {
     ele2.classList.remove("disable");
     document.getElementById("marksArea").classList.add("disable");
     document.getElementById("noticeArea").classList.add("disable");
+    document.getElementById("timetableArea").classList.add("disable");
   };
   const marksbtnClicked = () => {
     let ele = document.getElementById("studentView");
@@ -84,6 +78,7 @@ const StudentHome = () => {
     ele2.classList.remove("disable");
     document.getElementById("noticeArea").classList.add("disable");
     document.getElementById("materialArea").classList.add("disable");
+    document.getElementById("timetableArea").classList.add("disable");
   };
   const noticesbtnClicked = () => {
     let ele = document.getElementById("studentView");
@@ -92,14 +87,23 @@ const StudentHome = () => {
     ele2.classList.remove("disable");
     document.getElementById("marksArea").classList.add("disable");
     document.getElementById("materialArea").classList.add("disable");
+    document.getElementById("timetableArea").classList.add("disable");
   };
 
   const timetablebtnClicked = () => {
+    let ele = document.getElementById("studentView");
+    ele.classList.remove("disable");
+    let ele2 = document.getElementById("timetableArea");
+    ele2.classList.remove("disable");
+    document.getElementById("marksArea").classList.add("disable");
+    document.getElementById("noticeArea").classList.add("disable");
+    document.getElementById("materialArea").classList.add("disable");
     const q2 = query(collection(db, `students_details/`));
     onSnapshot(q2, (querySnapshot) => {
       querySnapshot.docs.forEach((data) => {
         if (data.id === branch) {
-          window.open(data.data().timetable);
+          // window.open(data.data().timetable);
+          setTimeTable(data.data().timetable);
         }
       });
     });
@@ -137,7 +141,11 @@ const StudentHome = () => {
             <Material />
           </div>
           <div className="marks disable" id="marksArea">
-            {/* <Marks data={allData} /> */}
+            <Marks />
+            UNDER DEVELOPMENT.... 🚀
+          </div>
+          <div className="timetable disable" id="timetableArea">
+            <Timetable ttlink={timetable} title={`timetable of ${branch}`} />
           </div>
         </section>
       </section>

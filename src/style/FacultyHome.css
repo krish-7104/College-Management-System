@@ -1,0 +1,36 @@
+.facultyContainer {
+  display: flex;
+  align-items: center;
+  margin-top: 40px;
+  flex-direction: column;
+}
+.facultyBtnsArea {
+  display: flex;
+  margin-top: 40px;
+}
+.facultyList {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.facultyList li {
+  list-style: none;
+  background-color: #1f1f1f;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 10px;
+  width: 200px;
+  text-align: center;
+  cursor: pointer;
+  color: white;
+}
+.facultyList li:hover {
+  background-color: black;
+  transition: 0.8s;
+}
+.disable {
+  display: none;
+}
+.none {
+  display: block;
+}

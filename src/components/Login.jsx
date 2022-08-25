@@ -31,6 +31,8 @@ const Login = () => {
     {
       loginid: "",
       password: "",
+      department: "",
+      counsellor: "",
     },
   ]);
   let k = 0;
@@ -38,6 +40,8 @@ const Login = () => {
     let userId = document.getElementById("loginid").value;
     let userPass = document.getElementById("password").value;
     let branch = "";
+    let department = "";
+    let counsellor = "";
     if (selectType === "students") {
       if (userId !== "" && userPass !== "") {
         students.forEach((user) => {
@@ -62,10 +66,14 @@ const Login = () => {
         faculty.forEach((user) => {
           if (user.loginid === userId && user.password === userPass) {
             k = 1;
+            department = user.department;
+            counsellor = user.counsellor;
           }
         });
         if (k === 1) {
           localStorage.setItem("loginid", userId);
+          localStorage.setItem("department", department);
+          localStorage.setItem("counsellor", counsellor);
           window.open("/faculty-home", "_self");
           k = 0;
         } else {
@@ -99,6 +107,8 @@ const Login = () => {
           {
             loginid: data.data().loginid,
             password: data.data().password,
+            department: data.data().department,
+            counsellor: data.data().counsellor,
           },
         ]);
       });
