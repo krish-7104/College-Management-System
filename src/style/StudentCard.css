@@ -34,7 +34,23 @@ img {
 #email {
   text-transform: none !important;
 }
-
+.inputSub {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 80px;
+}
+#inputSub {
+  margin: 0px !important;
+  width: 100% !important;
+  padding: 10px;
+  font-size: 14px;
+}
+#noticesTable,
+#materialTitle {
+  width: 100%;
+}
 @media only screen and (max-width: 800px) {
   .infoSec {
     grid-template-columns: 1fr;

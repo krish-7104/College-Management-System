@@ -3,7 +3,11 @@ import Navbar from "./Navbar";
 import StudentCard from "./StudentCard";
 import "../style/StudentHome.css";
 import { db } from "../backend/firebase";
-import { collection, query, onSnapshot, orderBy } from "firebase/firestore";
+import { collection, query, onSnapshot } from "firebase/firestore";
+import Notice from "./Student/Notice";
+import Material from "./Student/Material";
+import Marks from "./Student/Marks";
+
 const StudentHome = () => {
   let loginId = localStorage.getItem("loginid");
   let branch = localStorage.getItem("branch");
@@ -50,46 +54,55 @@ const StudentHome = () => {
       });
     });
   }, []);
-  let noticeClick = 0;
-  const getNotices = () => {
-    if (noticeClick != 1) {
-      let container = document.getElementById("noticeArea");
-      let view1 = document.getElementById("studentView");
-      let view2 = document.getElementById("noticeArea");
-      if (view1.classList.contains("disable")) {
-        view1.classList.remove("disable");
-      }
-      if (view2.classList.contains("disable")) {
-        view2.classList.remove("disable");
-      }
-      const q1 = query(collection(db, `notices`), orderBy("timestamp"));
-      let html = container.innerHTML.replace("</table>", "");
-      onSnapshot(q1, (querySnapshot) => {
-        querySnapshot.docs.forEach((data) => {
-          if (data.data().link_present) {
-            html += `<tr>
-          <td>${data.data().timestamp}</td>
-          <td>${data.data().title}</td>
-          <td><a href="${
-            data.data().link
-          }" target = "_blank" class="viewNotice">View</a></td>
-          </tr>`;
-          } else {
-            html += `<tr>
-          <td>${data.data().timestamp}</td>
-          <td>${data.data().title}</td>
-          <td>No Link!</td>
-          </tr>`;
-          }
-        });
-        html += "";
-        container.innerHTML = html;
-      });
-      noticeClick++;
-    }
-  };
+
   const logoutHandler = () => {
+    localStorage.clear();
     window.open("/", "_self");
+  };
+
+  // const timetablebtnClicked = () => {
+  //   let ele = document.getElementById("studentView");
+  //   ele.classList.remove("disable");
+  //   let ele2 = document.getElementById("timetableArea");
+  //   ele2.classList.remove("disable");
+  //   document.getElementById("marksArea").classList.add("disable");
+  //   document.getElementById("noticeArea").classList.add("disable");
+  //   document.getElementById("materialArea").classList.add("disable");
+  // };
+  const materialbtnClicked = () => {
+    let ele = document.getElementById("studentView");
+    ele.classList.remove("disable");
+    let ele2 = document.getElementById("materialArea");
+    ele2.classList.remove("disable");
+    document.getElementById("marksArea").classList.add("disable");
+    document.getElementById("noticeArea").classList.add("disable");
+  };
+  const marksbtnClicked = () => {
+    let ele = document.getElementById("studentView");
+    ele.classList.remove("disable");
+    let ele2 = document.getElementById("marksArea");
+    ele2.classList.remove("disable");
+    document.getElementById("noticeArea").classList.add("disable");
+    document.getElementById("materialArea").classList.add("disable");
+  };
+  const noticesbtnClicked = () => {
+    let ele = document.getElementById("studentView");
+    ele.classList.remove("disable");
+    let ele2 = document.getElementById("noticeArea");
+    ele2.classList.remove("disable");
+    document.getElementById("marksArea").classList.add("disable");
+    document.getElementById("materialArea").classList.add("disable");
+  };
+
+  const timetablebtnClicked = () => {
+    const q2 = query(collection(db, `students_details/`));
+    onSnapshot(q2, (querySnapshot) => {
+      querySnapshot.docs.forEach((data) => {
+        if (data.id === branch) {
+          window.open(data.data().timetable);
+        }
+      });
+    });
   };
 
   return (
@@ -99,10 +112,16 @@ const StudentHome = () => {
         <StudentCard allData={details} />
         <div className="studentBtnsArea">
           <ul className="studentList">
-            <li id="timetable">Timetable</li>
-            <li id="material">Material</li>
-            <li id="marks">View Marks</li>
-            <li id="notices" onClick={getNotices}>
+            <li id="timetable" onClick={timetablebtnClicked}>
+              Timetable
+            </li>
+            <li id="material" onClick={materialbtnClicked}>
+              Material
+            </li>
+            <li id="marks" onClick={marksbtnClicked}>
+              View Marks
+            </li>
+            <li id="notices" onClick={noticesbtnClicked}>
               Notices
             </li>
             <li id="logout" onClick={logoutHandler}>
@@ -111,18 +130,14 @@ const StudentHome = () => {
           </ul>
         </div>
         <section className="studentView disable" id="studentView">
-          <div className="notice disable" id="noticeArea">
-            <table>
-              <th className="tableHead" id="noticeTime">
-                Timestamp
-              </th>
-              <th className="tableHead" id="noticeTitle">
-                Notice Title
-              </th>
-              <th className="tableHead" id="noticeLink">
-                Link
-              </th>
-            </table>
+          <div className="notice" id="noticeArea">
+            <Notice />
+          </div>
+          <div className="material disable" id="materialArea">
+            <Material />
+          </div>
+          <div className="marks disable" id="marksArea">
+            {/* <Marks data={allData} /> */}
           </div>
         </section>
       </section>

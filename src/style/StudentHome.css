@@ -51,7 +51,8 @@ td {
   padding: 10px 10px;
   text-align: center;
 }
-.viewNotice {
+.viewNotice,
+.viewMaterial {
   color: black;
   background-color: inherit;
   font-weight: bold;
@@ -63,6 +64,7 @@ td {
   text-decoration: none;
 }
 .tableHead {
+  font-size: 16px;
   font-weight: 700;
   background-color: #c7c7c7;
   text-transform: uppercase;
@@ -71,4 +73,10 @@ td {
 }
 #noticeTitle {
   width: 100%;
+}
+#marksTable {
+  width: 100%;
+}
+#marksTime {
+  width: 55%;
 }
