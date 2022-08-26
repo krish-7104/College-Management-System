@@ -4,11 +4,12 @@ import FacultyCard from "./Faculty/FacultyCard";
 import { db } from "../backend/firebase";
 import { collection, query, onSnapshot } from "firebase/firestore";
 import "../style/FacultyHome.css";
+import ShowNotice from "./Faculty/ShowNotice";
+import UploadNotice from "./Faculty/UploadNotice";
+import Admin from "./Faculty/Admin";
 const FacultyHome = () => {
   let loginId = localStorage.getItem("loginid");
   let department = localStorage.getItem("department");
-  let counsellor = localStorage.getItem("counsellor");
-
   const [details, setDetails] = useState([
     {
       email: "",
@@ -30,7 +31,6 @@ const FacultyHome = () => {
     );
     onSnapshot(q1, (querySnapshot) => {
       querySnapshot.docs.forEach((data) => {
-        console.log(data.data().email, loginId);
         if (data.data().email === loginId) {
           setDetails(() => [
             {
@@ -56,24 +56,33 @@ const FacultyHome = () => {
     });
   }, []);
 
-  const uploadMarksClicked = () => {
-    console.log("clicked");
-  };
   const uploadNoticebtnClicked = () => {
-    console.log("clicked");
-  };
-  const marksbtnClicked = () => {
-    console.log("clicked");
-  };
-  const stundentListbtnClicked = () => {
-    console.log("clicked");
+    let ele = document.getElementById("facultyShowArea");
+    ele.classList.remove("disable");
+    let ele2 = document.getElementById("uploadNotice");
+    ele2.classList.remove("disable");
+    document.getElementById("registerStudent").classList.add("disable");
+    document.getElementById("showNoticeFaculty").classList.add("disable");
   };
   const logoutHandler = () => {
     localStorage.clear();
     window.open("/", "_self");
   };
   const registerStudentClicked = () => {
-    console.log("clicked");
+    let ele = document.getElementById("facultyShowArea");
+    ele.classList.remove("disable");
+    let ele2 = document.getElementById("registerStudent");
+    ele2.classList.remove("disable");
+    document.getElementById("uploadNotice").classList.add("disable");
+    document.getElementById("showNoticeFaculty").classList.add("disable");
+  };
+  const showNoticeFacultyClicked = () => {
+    let ele = document.getElementById("facultyShowArea");
+    ele.classList.remove("disable");
+    let ele2 = document.getElementById("showNoticeFaculty");
+    ele2.classList.remove("disable");
+    document.getElementById("registerStudent").classList.add("disable");
+    document.getElementById("uploadNotice").classList.add("disable");
   };
   return (
     <React.StrictMode>
@@ -82,26 +91,30 @@ const FacultyHome = () => {
         <FacultyCard allData={details} />
         <div className="facultyBtnsArea">
           <ul className="facultyList">
-            <li id="uploadMarks" onClick={uploadMarksClicked}>
-              Upload Marks
-            </li>
-            <li id="uploadNotice" onClick={uploadNoticebtnClicked}>
+            <li id="uploadNoticeBtn" onClick={uploadNoticebtnClicked}>
               Upload Notice
             </li>
-            <li id="stundentList" onClick={stundentListbtnClicked}>
-              Student List
+            <li id="showNoticeFacultyBtn" onClick={showNoticeFacultyClicked}>
+              Show Notice
             </li>
-            <li
-              id="registerStudent"
-              className={counsellor === "true" ? "none" : "disable"}
-              onClick={registerStudentClicked}
-            >
+            <li id="registerStudentBtn" onClick={registerStudentClicked}>
               Register Student
             </li>
             <li id="logout" onClick={logoutHandler}>
               Log Out
             </li>
           </ul>
+        </div>
+        <div className="facultyShowArea disable" id="facultyShowArea">
+          <div className="uploadNotice disable" id="uploadNotice">
+            <UploadNotice />
+          </div>
+          <div className="showNoticeFaculty disable" id="showNoticeFaculty">
+            <ShowNotice />
+          </div>
+          <div className="registerStudent disable" id="registerStudent">
+            <Admin />
+          </div>
         </div>
       </section>
     </React.StrictMode>

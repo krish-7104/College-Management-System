@@ -6,7 +6,6 @@ import { db } from "../backend/firebase";
 import { collection, query, onSnapshot } from "firebase/firestore";
 import Notice from "./Student/Notice";
 import Material from "./Student/Material";
-import Marks from "./Student/Marks";
 import Timetable from "./Student/Timetable";
 
 const StudentHome = () => {
@@ -141,8 +140,7 @@ const StudentHome = () => {
             <Material />
           </div>
           <div className="marks disable" id="marksArea">
-            <Marks />
-            UNDER DEVELOPMENT.... 🚀
+            In Development...🚀
           </div>
           <div className="timetable disable" id="timetableArea">
             <Timetable ttlink={timetable} title={`timetable of ${branch}`} />

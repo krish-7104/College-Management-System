@@ -1,0 +1,40 @@
+.MainAdmin {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+.adminContainer {
+  background-color: white;
+  padding: 15px 50px;
+  display: grid;
+  border-radius: 6px;
+}
+.adminTitle {
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 2px;
+  margin-bottom: 20px;
+  font-size: 26px;
+  margin-top: 10px;
+}
+.adminForm {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+.adminForm input {
+  margin: 10px;
+}
+#submitDataAdmin {
+  background-color: #1f1f1f;
+  color: white;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  display: block;
+  border: none;
+  margin: auto;
+  margin-top: 20px;
+  padding: 12px 70px;
+  grid-column: 1 / span 2;
+}

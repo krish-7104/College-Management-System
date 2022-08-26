@@ -5,7 +5,6 @@ import { collection, query, onSnapshot } from "firebase/firestore";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Navbar from "./Navbar";
-
 const Login = () => {
   const notifyAlert = (text) => {
     toast.warn(text, {
@@ -32,7 +31,6 @@ const Login = () => {
       loginid: "",
       password: "",
       department: "",
-      counsellor: "",
     },
   ]);
   let k = 0;
@@ -41,7 +39,6 @@ const Login = () => {
     let userPass = document.getElementById("password").value;
     let branch = "";
     let department = "";
-    let counsellor = "";
     if (selectType === "students") {
       if (userId !== "" && userPass !== "") {
         students.forEach((user) => {
@@ -67,13 +64,11 @@ const Login = () => {
           if (user.loginid === userId && user.password === userPass) {
             k = 1;
             department = user.department;
-            counsellor = user.counsellor;
           }
         });
         if (k === 1) {
           localStorage.setItem("loginid", userId);
           localStorage.setItem("department", department);
-          localStorage.setItem("counsellor", counsellor);
           window.open("/faculty-home", "_self");
           k = 0;
         } else {
@@ -108,7 +103,6 @@ const Login = () => {
             loginid: data.data().loginid,
             password: data.data().password,
             department: data.data().department,
-            counsellor: data.data().counsellor,
           },
         ]);
       });
@@ -137,6 +131,13 @@ const Login = () => {
   return (
     <React.StrictMode>
       <Navbar title="Login" />
+      <div className="mobileContainer">
+        <p id="sign">⚠️⚠️⚠️</p>
+        <p>
+          Not Available For Android Devices Kindly Use Laptop/Desktop. Working
+          For Android, Coming Soon 🚀
+        </p>
+      </div>
       <section className="loginContainer">
         <div className="loginCard">
           <div className="select">

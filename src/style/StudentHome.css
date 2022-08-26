@@ -32,6 +32,7 @@
   width: 85%;
   padding: 20px;
   border-radius: 5px;
+  text-align: center;
 }
 .disable {
   display: none !important;
@@ -74,12 +75,6 @@ td {
 #noticeTitle {
   width: 100%;
 }
-#marksTable {
-  width: 100%;
-}
-#marksTime {
-  width: 55%;
-}
 .timetableShowArea {
   display: flex;
   flex-direction: column;
@@ -97,4 +92,7 @@ td {
   text-transform: uppercase;
   letter-spacing: 1.5px;
   margin-bottom: 15px;
+}
+.marksShow {
+  padding: 10px;
 }

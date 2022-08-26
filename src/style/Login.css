@@ -2,6 +2,23 @@ body {
   background-color: rgb(194, 194, 194);
   /* overflow-y: hidden; */
 }
+.mobileContainer {
+  background-color: white;
+  margin: 100px 30px;
+  display: none;
+  border-radius: 5px;
+  padding: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  font-weight: 600;
+  line-height: 30px;
+  align-items: center;
+  text-align: center;
+}
+#sign {
+  font-size: 24px;
+  padding: 10px;
+}
 .loginContainer {
   height: 90vh;
   width: 100%;
@@ -73,4 +90,12 @@ button {
   font-weight: 600;
   text-transform: uppercase;
   font-size: 22px;
+}
+@media only screen and (max-width: 800px) {
+  .loginContainer {
+    display: none;
+  }
+  .mobileContainer {
+    display: block;
+  }
 }
