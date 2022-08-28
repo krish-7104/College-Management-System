@@ -4,8 +4,13 @@ import { db } from "./backend/firebase";
 import { collection, addDoc } from "firebase/firestore";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import { useNavigate } from "react-router-dom";
 const Admin = () => {
+  const navigate = useNavigate();
+  let value = prompt("Enter Password: ");
+  if (value !== "07012004") {
+    navigate("/");
+  }
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {

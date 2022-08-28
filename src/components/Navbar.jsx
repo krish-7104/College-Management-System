@@ -4,7 +4,7 @@ const Navbar = (props) => {
   return (
     <React.StrictMode>
       <section className="navMain">
-        <p className="navTitle">College Managment System - {props.title}</p>
+        <p className="navTitle">College Management System - {props.title}</p>
       </section>
     </React.StrictMode>
   );
