@@ -3,6 +3,8 @@ College Managment System
 Link: https://cms-krish.netlify.app/
 (Not For Android Devices, Now it Is Only For Desktop)
 
+Video: https://youtu.be/Ad62m2PiTNM
+
 Sample Login Credentials: 
 
 ==> Faculty Login Details (Login id and Password):
