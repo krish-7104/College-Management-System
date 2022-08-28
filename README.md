@@ -8,11 +8,12 @@ Video: https://youtu.be/Ad62m2PiTNM
 Sample Login Credentials: 
 
 ==> Faculty Login Details (Login id and Password):
-    'sundarpichai@college.in' ==== 123456
+    sundarpichai@college.in
+    123456
 
 ==> Student Login Details (Login id and Password):
-     121021105010 ==== 123456
-     121021103010 ==== 123456
+     121021105010
+     123456
      
 About Project: 
 
