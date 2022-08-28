@@ -4,10 +4,13 @@ import FacultyCard from "./Faculty/FacultyCard";
 import { db } from "../backend/firebase";
 import { collection, query, onSnapshot } from "firebase/firestore";
 import "../style/FacultyHome.css";
-import ShowNotice from "./Faculty/ShowNotice";
 import UploadNotice from "./Faculty/UploadNotice";
-import Admin from "./Faculty/Admin";
+import AddStudent from "./Faculty/AddStudent";
+import UploadMaterial from "./Faculty/UploadMaterial";
+import { useNavigate } from "react-router-dom";
+
 const FacultyHome = () => {
+  const navigate = useNavigate();
   let loginId = localStorage.getItem("loginid");
   let department = localStorage.getItem("department");
   const [details, setDetails] = useState([
@@ -43,11 +46,11 @@ const FacultyHome = () => {
               email: loginId,
               experience: data.data().experience,
               department: department,
-              dob: data.data().dob,
+              dob: data.data().birth_date,
               post: data.data().post,
               joining_date: data.data().joining_date,
               gender: data.data().gender,
-              phoneno: data.data().phoneno,
+              phoneno: data.data().phone_no,
               photo: data.data().photo,
             },
           ]);
@@ -66,7 +69,7 @@ const FacultyHome = () => {
   };
   const logoutHandler = () => {
     localStorage.clear();
-    window.open("/", "_self");
+    navigate("/");
   };
   const registerStudentClicked = () => {
     let ele = document.getElementById("facultyShowArea");
@@ -76,7 +79,7 @@ const FacultyHome = () => {
     document.getElementById("uploadNotice").classList.add("disable");
     document.getElementById("showNoticeFaculty").classList.add("disable");
   };
-  const showNoticeFacultyClicked = () => {
+  const updateMaterialbtnClicked = () => {
     let ele = document.getElementById("facultyShowArea");
     ele.classList.remove("disable");
     let ele2 = document.getElementById("showNoticeFaculty");
@@ -94,8 +97,11 @@ const FacultyHome = () => {
             <li id="uploadNoticeBtn" onClick={uploadNoticebtnClicked}>
               Upload Notice
             </li>
-            <li id="showNoticeFacultyBtn" onClick={showNoticeFacultyClicked}>
-              Show Notice
+            <li
+              id="uploadMaterialFacultyBtn"
+              onClick={updateMaterialbtnClicked}
+            >
+              Upload Material
             </li>
             <li id="registerStudentBtn" onClick={registerStudentClicked}>
               Register Student
@@ -110,10 +116,10 @@ const FacultyHome = () => {
             <UploadNotice />
           </div>
           <div className="showNoticeFaculty disable" id="showNoticeFaculty">
-            <ShowNotice />
+            <UploadMaterial />
           </div>
           <div className="registerStudent disable" id="registerStudent">
-            <Admin />
+            <AddStudent />
           </div>
         </div>
       </section>

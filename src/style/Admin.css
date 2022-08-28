@@ -38,3 +38,6 @@
   padding: 12px 70px;
   grid-column: 1 / span 2;
 }
+.facultyAdminAdd {
+  margin: 40px;
+}

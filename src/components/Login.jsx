@@ -5,7 +5,9 @@ import { collection, query, onSnapshot } from "firebase/firestore";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Navbar from "./Navbar";
+import { useNavigate } from "react-router-dom";
 const Login = () => {
+  const navigate = useNavigate();
   const notifyAlert = (text) => {
     toast.warn(text, {
       position: "bottom-center",
@@ -50,7 +52,7 @@ const Login = () => {
         if (k === 1) {
           localStorage.setItem("loginid", userId);
           localStorage.setItem("branch", branch);
-          window.open("/students-home", "_self");
+          navigate("/students-home");
           k = 0;
         } else {
           notifyAlert("Incorrect Credentials!");
@@ -69,7 +71,8 @@ const Login = () => {
         if (k === 1) {
           localStorage.setItem("loginid", userId);
           localStorage.setItem("department", department);
-          window.open("/faculty-home", "_self");
+          navigate("/faculty-home");
+
           k = 0;
         } else {
           notifyAlert("Incorrect Credentials!");

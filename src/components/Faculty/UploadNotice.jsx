@@ -4,7 +4,7 @@ import { collection, addDoc } from "firebase/firestore";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const UploadNotice = () => {
-  const submitBtnClicked = async () => {
+  const submitBtnClickedNotice = async () => {
     let uploadDate = new Date().toLocaleDateString();
     let title = document.getElementById("noticeTitleAdd");
     let link = document.getElementById("noticeLinkAdd");
@@ -16,20 +16,13 @@ const UploadNotice = () => {
             link_present: false,
             timestamp: uploadDate,
           });
-          toast.success("Notice Uploaded Successfully", {
-            position: "bottom-right",
-            autoClose: 4000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: false,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-          });
+          alert("Data Added Successfully!");
+          title.value = "";
+          link.title = "";
         } catch (err) {
           toast.warn("Notice Upload Failed, Try Again!", {
             position: "bottom-right",
-            autoClose: 4000,
+            autoClose: 2000,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: false,
@@ -46,20 +39,11 @@ const UploadNotice = () => {
             link_present: true,
             timestamp: uploadDate,
           });
-          toast.success("Notice Uploaded Successfully", {
-            position: "bottom-right",
-            autoClose: 4000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: false,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-          });
+          alert("Data Added Successfully!");
         } catch (err) {
           toast.warn("Notice Upload Failed, Try Again!", {
             position: "bottom-right",
-            autoClose: 4000,
+            autoClose: 2000,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: false,
@@ -72,7 +56,7 @@ const UploadNotice = () => {
     } else {
       toast.warn("Enter Notice Title Please!", {
         position: "bottom-right",
-        autoClose: 4000,
+        autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: false,
@@ -99,7 +83,7 @@ const UploadNotice = () => {
           <input type="text" id="noticeLinkAdd" />
           <p>Leave Notice Link Empty If No Link Present</p>
         </div>
-        <button id="uploadNoticeSubmitBtn" onClick={submitBtnClicked}>
+        <button id="uploadNoticeSubmitBtn" onClick={submitBtnClickedNotice}>
           Upload Notice
         </button>
       </div>

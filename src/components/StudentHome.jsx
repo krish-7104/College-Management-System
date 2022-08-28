@@ -7,8 +7,11 @@ import { collection, query, onSnapshot } from "firebase/firestore";
 import Notice from "./Student/Notice";
 import Material from "./Student/Material";
 import Timetable from "./Student/Timetable";
+import { useNavigate } from "react-router-dom";
 
 const StudentHome = () => {
+  const navigate = useNavigate();
+
   let loginId = localStorage.getItem("loginid");
   let branch = localStorage.getItem("branch");
   const [timetable, setTimeTable] = useState("");
@@ -58,7 +61,7 @@ const StudentHome = () => {
 
   const logoutHandler = () => {
     localStorage.clear();
-    window.open("/", "_self");
+    navigate("/");
   };
 
   const materialbtnClicked = () => {
@@ -70,15 +73,15 @@ const StudentHome = () => {
     document.getElementById("noticeArea").classList.add("disable");
     document.getElementById("timetableArea").classList.add("disable");
   };
-  const marksbtnClicked = () => {
-    let ele = document.getElementById("studentView");
-    ele.classList.remove("disable");
-    let ele2 = document.getElementById("marksArea");
-    ele2.classList.remove("disable");
-    document.getElementById("noticeArea").classList.add("disable");
-    document.getElementById("materialArea").classList.add("disable");
-    document.getElementById("timetableArea").classList.add("disable");
-  };
+  // const marksbtnClicked = () => {
+  //   let ele = document.getElementById("studentView");
+  //   ele.classList.remove("disable");
+  //   let ele2 = document.getElementById("marksArea");
+  //   ele2.classList.remove("disable");
+  //   document.getElementById("noticeArea").classList.add("disable");
+  //   document.getElementById("materialArea").classList.add("disable");
+  //   document.getElementById("timetableArea").classList.add("disable");
+  // };
   const noticesbtnClicked = () => {
     let ele = document.getElementById("studentView");
     ele.classList.remove("disable");
@@ -121,9 +124,9 @@ const StudentHome = () => {
             <li id="material" onClick={materialbtnClicked}>
               Material
             </li>
-            <li id="marks" onClick={marksbtnClicked}>
+            {/* <li id="marks" onClick={marksbtnClicked}>
               View Marks
-            </li>
+            </li> */}
             <li id="notices" onClick={noticesbtnClicked}>
               Notices
             </li>

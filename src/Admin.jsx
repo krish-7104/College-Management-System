@@ -1,42 +1,43 @@
 import React from "react";
-import "../../style/Admin.css";
-import { db } from "../../backend/firebase";
+import "./style/Admin.css";
+import { db } from "./backend/firebase";
 import { collection, addDoc } from "firebase/firestore";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-const Admin = (props) => {
+
+const Admin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await addDoc(
         collection(
           db,
-          `students_details/${
-            document.getElementById("branch").value
-          }/individual_student`
+          `faculty_details/${
+            document.getElementById("department").value
+          }/faculty_info`
         ),
         {
+          email: document.getElementById("emailFac").value,
           first_name: document.getElementById("FirstName").value,
           middle_name: document.getElementById("MiddleName").value,
-          e_no: document.getElementById("e_no").value,
           last_name: document.getElementById("LastName").value,
+          photo: document.getElementById("photoFac").value,
+          experience: document.getElementById("experience").value,
           birth_date: document.getElementById("DOB").value,
-          current_sem: document.getElementById("currentSem").value,
+          joining_date: document.getElementById("joining_date").value,
           gender: document.getElementById("genderStu").value,
           phone_no: document.getElementById("phoneStu").value,
-          photo: document.getElementById("photoStu").value,
-          email: document.getElementById("emailStu").value,
-          category: document.getElementById("categoryStu").value,
+          post: document.getElementById("post").value,
         }
       );
     } catch (err) {
       alert(err);
     }
     try {
-      await addDoc(collection(db, "students_credentials"), {
+      await addDoc(collection(db, "faculty_credentials"), {
         password: "123456",
-        branch: document.getElementById("branch").value,
-        loginid: document.getElementById("e_no").value,
+        department: document.getElementById("department").value,
+        loginid: document.getElementById("emailFac").value,
       });
       toast.success("Data Uploaded Successfully!", {
         position: "bottom-center",
@@ -55,9 +56,9 @@ const Admin = (props) => {
   };
   return (
     <React.StrictMode>
-      <section className={props.type === "krish" ? "MainAdmin" : "none"}>
+      <section className="facultyAdminAdd">
         <div className="adminContainer">
-          <p className="adminTitle">Add Students</p>
+          <p className="adminTitle">Add Faculty</p>
           <form className="adminForm" name="adminForm">
             <input
               required
@@ -75,17 +76,22 @@ const Admin = (props) => {
             <input required type="text" placeholder="Date Of Birth" id="DOB" />
             <input
               required
-              type="number"
-              placeholder="Current Semester"
-              id="currentSem"
+              type="text"
+              placeholder="Joining Date"
+              id="joining_date"
             />
             <input
               required
               type="number"
-              placeholder="Enrollment No"
-              id="e_no"
+              placeholder="Experience"
+              id="experience"
             />
-            <input required type="text" placeholder="Branch" id="branch" />
+            <input
+              required
+              type="text"
+              placeholder="Department"
+              id="department"
+            />
             <input required type="text" placeholder="Gender" id="genderStu" />
             <input
               required
@@ -93,27 +99,22 @@ const Admin = (props) => {
               placeholder="Phone Number"
               id="phoneStu"
             />
-            <input
-              required
-              type="text"
-              placeholder="Category"
-              id="categoryStu"
-            />
+            <input required type="text" placeholder="Post" id="post" />
             <input
               required
               type="email"
               placeholder="Email Address"
-              id="emailStu"
+              id="emailFac"
             />
             <input
               required
               type="text"
               placeholder="Profile Photo Link"
               name="photo"
-              id="photoStu"
+              id="photoFac"
             />
             <button onClick={handleSubmit} id="submitDataAdmin">
-              Upload Student
+              Upload Faculty
             </button>
           </form>
         </div>
