@@ -10,6 +10,9 @@
 }
 .studentList {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
 }
 .studentList li {
   list-style: none;
@@ -95,4 +98,15 @@ td {
 }
 .marksShow {
   padding: 10px;
+}
+@media only screen and (max-width: 700px) {
+  .studentList li {
+    width: 150px;
+  }
+  .tableHead {
+    font-size: 12px;
+  }
+  .noticesTable {
+    width: 100%;
+  }
 }

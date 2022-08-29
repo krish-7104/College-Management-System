@@ -6,11 +6,7 @@ const ProfileCard = (props) => {
     <React.StrictMode>
       <section className="mainCard">
         <div className="imageSec">
-          <img
-            id="profilePic"
-            src={props.allData[0].photo}
-            alt="profile picture"
-          />
+          <img id="profilePic" src={props.allData[0].photo} alt="" />
         </div>
         <hr />
         <div className="infoSec">
@@ -36,7 +32,7 @@ const ProfileCard = (props) => {
             Category: {props.allData[0].category}
           </p>
           <p className="infoText" id="email">
-            Email Id: {e_no}@cms.ac.in
+            Email Id: {props.allData[0].email}
           </p>
           <p className="infoText" id="dob">
             DOB: {props.allData[0].dob}

@@ -10,10 +10,10 @@ const App = () => {
     <React.StrictMode>
       <BrowserRouter>
         <Routes>
-          <Route exact path="/" element={<Login />} />
-          <Route path="/students-home" element={<StudentHome />} />
-          <Route path="/faculty-home" element={<FacultyHome />} />
-          <Route path="/add-faculty/admin/07012004/" element={<Admin />} />
+          <Route path="/" element={<Login />} />
+          <Route path="students-home" element={<StudentHome />} />
+          <Route path="faculty-home" element={<FacultyHome />} />
+          <Route path="add-faculty/admin/07012004/" element={<Admin />} />
         </Routes>
       </BrowserRouter>
     </React.StrictMode>

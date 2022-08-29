@@ -57,7 +57,7 @@ const FacultyHome = () => {
         }
       });
     });
-  }, []);
+  }, [loginId, department]);
 
   const uploadNoticebtnClicked = () => {
     let ele = document.getElementById("facultyShowArea");

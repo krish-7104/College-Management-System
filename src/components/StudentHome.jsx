@@ -25,6 +25,7 @@ const StudentHome = () => {
       semester: "",
       category: "",
       dob: "",
+      email: "",
       photo:
         "https://cdn.pixabay.com/photo/2017/11/10/05/48/user-2935527_1280.png",
     },
@@ -51,13 +52,14 @@ const StudentHome = () => {
               semester: data.data().current_sem,
               category: data.data().category,
               photo: data.data().photo,
+              email: data.data().email,
               dob: data.data().birth_date,
             },
           ]);
         }
       });
     });
-  }, []);
+  }, [branch, loginId]);
 
   const logoutHandler = () => {
     localStorage.clear();

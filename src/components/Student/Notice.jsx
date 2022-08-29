@@ -3,7 +3,7 @@ import { db } from "../../backend/firebase";
 import { collection, query, onSnapshot, orderBy } from "firebase/firestore";
 
 const Notice = () => {
-  useEffect(() => {
+  const callNoticeData = () => {
     let container = document.getElementById("areaForNoticeShow");
     const q1 = query(collection(db, `notices`), orderBy("timestamp"));
     let html = container.innerHTML.replace("</table>", "");
@@ -28,6 +28,9 @@ const Notice = () => {
       html += "";
       container.innerHTML = html;
     });
+  };
+  useEffect(() => {
+    callNoticeData();
   }, []);
   return (
     <React.StrictMode>

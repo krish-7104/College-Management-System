@@ -41,3 +41,16 @@
 .facultyAdminAdd {
   margin: 40px;
 }
+@media only screen and (max-width: 700px) {
+  .adminForm {
+    display: flex;
+    flex-direction: column;
+  }
+  .adminContainer {
+    width: 100%;
+    padding: 0;
+  }
+  #submitDataAdmin {
+    padding: 10px 30px;
+  }
+}

@@ -7,11 +7,7 @@ const ProfileCard = (props) => {
     <React.StrictMode>
       <section className="mainCard">
         <div className="imageSec">
-          <img
-            id="profilePic"
-            src={props.allData[0].photo}
-            alt="profile picture"
-          />
+          <img id="profilePic" src={props.allData[0].photo} alt="" />
         </div>
         <hr />
         <div className="infoSec">
