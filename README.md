@@ -1,7 +1,6 @@
 College Management System
 
 Link: https://cms-krish.netlify.app/
-(Not For Android Devices, Now it Is Only For Desktop)
 
 Video: https://youtu.be/Ad62m2PiTNM
 
