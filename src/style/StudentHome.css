@@ -103,10 +103,19 @@ td {
   .studentList li {
     width: 150px;
   }
-  .tableHead {
-    font-size: 12px;
+  table,
+  thead,
+  tbody,
+  th,
+  td,
+  tr {
+    display: block;
   }
-  .noticesTable {
-    width: 100%;
+  thead,
+  th {
+    display: none;
+  }
+  tr {
+    border: none;
   }
 }
