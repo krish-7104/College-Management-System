@@ -11,9 +11,9 @@ const App = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route path="students-home" element={<StudentHome />} />
-          <Route path="faculty-home" element={<FacultyHome />} />
-          <Route path="add-faculty/admin/07012004/" element={<Admin />} />
+          <Route path="/students-home" element={<StudentHome />} />
+          <Route path="/faculty-home" element={<FacultyHome />} />
+          <Route path="/add-faculty/admin/07012004/" element={<Admin />} />
         </Routes>
       </BrowserRouter>
     </React.StrictMode>

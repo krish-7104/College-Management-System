@@ -72,7 +72,6 @@ const Login = () => {
           localStorage.setItem("loginid", userId);
           localStorage.setItem("department", department);
           navigate("/faculty-home");
-
           k = 0;
         } else {
           notifyAlert("Incorrect Credentials!");
