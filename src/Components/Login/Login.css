@@ -1,0 +1,113 @@
+.mainSec {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-image: radial-gradient(
+    rgba(150, 150, 150, 0.5) 2px,
+    transparent 2px
+  );
+  background-size: calc(20 * 2px) calc(20 * 2px);
+  background-position: 0 0, calc(10 * 2px) calc(10 * 2px);
+}
+.loginPageTitle {
+  font-size: 28px;
+  margin-top: 15px;
+  position: absolute;
+  top: 0;
+  text-align: center;
+}
+.loginCard {
+  background-color: #fff;
+  padding: 20px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: rgba(100, 100, 111, 0.3) 0px 7px 29px 0px;
+  border-radius: 10px;
+}
+.divider {
+  background-color: rgba(0, 0, 0, 0.3);
+  height: 95%;
+  width: 1.4px;
+  border-radius: 10px;
+}
+.loginImg {
+  width: 280px;
+  margin: 40px;
+  filter: drop-shadow(1.3px 1.3px 2px rgba(0, 0, 0, 30%));
+}
+.loginForm {
+  margin: 40px;
+}
+.loginTitle {
+  letter-spacing: 1.2px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  font-size: 22px;
+  text-align: center;
+}
+label {
+  padding: 10px 0px 5px 0px;
+  font-size: 12px;
+  font-weight: 500;
+  width: 100%;
+  letter-spacing: 1.5px;
+}
+input {
+  padding: 6px;
+  width: 100%;
+  outline: none;
+  font-size: 13px;
+  background-color: white;
+  border: 1.2px solid black;
+  border-radius: 4px;
+}
+.inputDiv {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+#loginInBtn {
+  background-color: #663399;
+  border: none;
+  color: white;
+  padding: 10px;
+  letter-spacing: 1.4px;
+  display: block;
+  font-weight: 500;
+  margin: 20px auto 0px auto;
+  width: 100px;
+  border-radius: 4px;
+  cursor: pointer;
+  outline: none;
+}
+@media only screen and (max-width: 688px) {
+  .loginCard {
+    flex-direction: column;
+  }
+  .loginPageTitle {
+    font-size: 20px;
+    background-color: white;
+    width: 100%;
+  }
+  .loginImg {
+    display: none;
+  }
+  .loginCard {
+    width: 85%;
+    z-index: 1;
+  }
+  .loginTitle {
+    font-size: 18px;
+    text-align: center;
+  }
+  .loginForm {
+    margin: 0px;
+    width: 80%;
+  }
+}
