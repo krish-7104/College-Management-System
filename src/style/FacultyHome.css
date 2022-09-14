@@ -1,0 +1,93 @@
+.facultyContainer {
+  display: flex;
+  align-items: center;
+  margin-top: 40px;
+  flex-direction: column;
+}
+.facultyBtnsArea {
+  display: flex;
+  margin-top: 40px;
+}
+.facultyList {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.facultyList li {
+  list-style: none;
+  background-color: #1f1f1f;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 10px;
+  width: 200px;
+  text-align: center;
+  cursor: pointer;
+  color: white;
+}
+.facultyList li:hover {
+  background-color: black;
+  transition: 0.8s;
+}
+.disable {
+  display: none;
+}
+.none {
+  display: block;
+}
+.facultyShowArea {
+  margin: 40px 0px;
+  background-color: white;
+  width: 85%;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+}
+.noticeAddForm,
+.materialAddForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.noticeAddtitle,
+.materialAddtitle {
+  font-size: 24px;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 30px;
+  border-bottom: 1.5px solid black;
+}
+.addNoticeTitleInput,
+.addmaterialTitleInput {
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+}
+.noticeLabel,
+.materialLabel {
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+}
+#uploadNoticeSubmitBtn,
+#uploadMaterialSubmitBtn {
+  background-color: #1f1f1f;
+  border: none;
+  padding: 10px;
+  margin-top: 10px;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 600;
+  display: flex;
+}
+@media only screen and (max-width: 700px) {
+  .addNoticeTitleInput,
+  .addmaterialTitleInput {
+    width: 90%;
+  }
+  .noticeAddForm input {
+    width: 100%;
+  }
+}
