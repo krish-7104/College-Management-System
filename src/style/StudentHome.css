@@ -30,8 +30,7 @@
   transition: 0.8s;
 }
 .studentView {
-  margin: 40px 0px;
-  background-color: white;
+  margin: 10px 0px;
   width: 85%;
   padding: 20px;
   border-radius: 5px;
@@ -44,39 +43,6 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-}
-table {
-  border-collapse: collapse;
-}
-th,
-tr,
-td {
-  border: 1.4px solid #1f1f1f;
-  padding: 10px 10px;
-  text-align: center;
-}
-.viewNotice,
-.viewMaterial {
-  color: black;
-  background-color: inherit;
-  font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  padding: 6px;
-  border: none;
-  font-size: 14px;
-  text-decoration: none;
-}
-.tableHead {
-  font-size: 16px;
-  font-weight: 700;
-  background-color: #c7c7c7;
-  text-transform: uppercase;
-  padding: 10px 30px;
-  letter-spacing: 2px;
-}
-#noticeTitle {
-  width: 100%;
 }
 .timetableShowArea {
   display: flex;
@@ -96,26 +62,73 @@ td {
   letter-spacing: 1.5px;
   margin-bottom: 15px;
 }
-.marksShow {
-  padding: 10px;
+.noticeCards {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.noticeCard {
+  background-color: white;
+  margin: 10px;
+  border-radius: 4px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  place-items: center;
+  padding: 6px;
+  width: 90%;
+}
+.noticeTitle {
+  grid-area: 1 /2 / 2 / 3;
+  text-align: left;
+  display: inline-block;
+  width: 90%;
+  padding: 8px;
+}
+.noticeTime {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: left;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(194, 194, 194);
+  padding: 8px;
+  border-radius: 4px;
+}
+.noticeViewButton {
+  background-color: rgb(194, 194, 194);
+  padding: 8px;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  color: black;
+  text-decoration: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.openLinkNoticeIcon {
+  margin: 0px 6px;
+}
+.noticeIcon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-right: 10px;
 }
 @media only screen and (max-width: 700px) {
   .studentList li {
     width: 150px;
   }
-  table,
-  thead,
-  tbody,
-  th,
-  td,
-  tr {
-    display: block;
+  .noticeCard {
+    display: grid;
+    grid-template-columns: 100px 1fr 1fr 100px;
+    grid-template-rows: 100px 1fr 1fr 100px;
   }
-  thead,
-  th {
-    display: none;
-  }
-  tr {
-    border: none;
+  .noticeTitle {
+    padding-bottom: 5px;
   }
 }

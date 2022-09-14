@@ -1,10 +1,9 @@
 import React from "react";
 import "./style/App.css";
 import Login from "./components/Login";
-import { Routes, Route, BrowserRouter } from "react-router-dom";
+import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom";
 import StudentHome from "./components/StudentHome";
 import FacultyHome from "./components/FacultyHome";
-import Admin from "./Admin";
 const App = () => {
   return (
     <React.StrictMode>
@@ -13,7 +12,6 @@ const App = () => {
           <Route path="/" element={<Login />} />
           <Route path="/students-home" element={<StudentHome />} />
           <Route path="/faculty-home" element={<FacultyHome />} />
-          <Route path="/add-faculty/admin/07012004/" element={<Admin />} />
         </Routes>
       </BrowserRouter>
     </React.StrictMode>
