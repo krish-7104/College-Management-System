@@ -3,7 +3,9 @@ import "./Login.css";
 const Login = () => {
   const [loginId, setLoginid] = useState();
   const [password, setPassword] = useState();
-  const loginBtnHandler = () => {};
+  const loginBtnHandler = (e) => {
+    e.preventDefault();
+  };
   return (
     <section className="mainSec">
       <h1 className="loginPageTitle">College Management System</h1>

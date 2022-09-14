@@ -11,6 +11,7 @@
   );
   background-size: calc(20 * 2px) calc(20 * 2px);
   background-position: 0 0, calc(10 * 2px) calc(10 * 2px);
+  user-select: none;
 }
 .loginPageTitle {
   font-size: 28px;
@@ -86,6 +87,7 @@ input {
   cursor: pointer;
   outline: none;
 }
+
 @media only screen and (max-width: 688px) {
   .loginCard {
     flex-direction: column;
