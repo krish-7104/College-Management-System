@@ -1,7 +1,7 @@
 import React from "react";
 import "./style/App.css";
 import Login from "./components/Login";
-import { Routes, Route, BrowserRouter } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import StudentHome from "./components/StudentHome";
 import FacultyHome from "./components/FacultyHome";
 import Error from "./components/Error";
