@@ -7,16 +7,14 @@ import FacultyHome from "./components/FacultyHome";
 import Error from "./components/Error";
 const App = () => {
   return (
-    <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/students-home" element={<StudentHome />} />
-          <Route path="/faculty-home" element={<FacultyHome />} />
-          <Route path="*" element={<Error />} />
-        </Routes>
-      </BrowserRouter>
-    </>
+    <React.StrictMode>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/students-home" element={<StudentHome />} />
+        <Route path="/faculty-home" element={<FacultyHome />} />
+        <Route path="*" element={<Error />} />
+      </Routes>
+    </React.StrictMode>
   );
 };
 
