@@ -67,7 +67,7 @@ const UploadNotice = () => {
     }
   };
   return (
-    <React.StrictMode>
+    <>
       <div className="noticeAddForm">
         <p className="noticeAddtitle">Upload Notice</p>
         <div className="addNoticeTitleInput">
@@ -88,7 +88,7 @@ const UploadNotice = () => {
         </button>
       </div>
       <ToastContainer />
-    </React.StrictMode>
+    </>
   );
 };
 

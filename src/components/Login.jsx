@@ -131,7 +131,7 @@ const Login = () => {
   };
 
   return (
-    <React.StrictMode>
+    <>
       <Navbar title="Login" />
       <div className="mobileContainer">
         <p id="sign">⚠️⚠️⚠️</p>
@@ -172,7 +172,7 @@ const Login = () => {
         </div>
         <ToastContainer />
       </section>
-    </React.StrictMode>
+    </>
   );
 };
 

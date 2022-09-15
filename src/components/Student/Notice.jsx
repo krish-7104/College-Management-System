@@ -31,6 +31,7 @@ const Notice = () => {
             {data.timestamp}
           </p>
           <p className="noticeTitle">{data.title}</p>
+          <a className="noticeViewButton">No Link!</a>
         </div>
       );
     } else {
@@ -54,6 +55,17 @@ const Notice = () => {
     <>
       <div className="notice" id="areaForNoticeShow">
         <div className="noticeCards">
+          <div className="noticeCard">
+            <p className="noticeTime">
+              <b>Upload Time</b>
+            </p>
+            <p className="noticeTitle" id="noticeTitle">
+              <b>Notice Title</b>
+            </p>
+            <a className="noticeViewButton">
+              <b>Notice Link</b>
+            </a>
+          </div>
           <p id="noNotice">No Notice</p> {notice.map(NoticeViewCard)}
         </div>
       </div>

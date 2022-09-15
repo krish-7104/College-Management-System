@@ -54,7 +54,7 @@ const AddStudent = (props) => {
     }
   };
   return (
-    <React.StrictMode>
+    <>
       <section className="MainAdmin">
         <div className="adminContainer">
           <p className="adminTitle">Add Students</p>
@@ -119,7 +119,7 @@ const AddStudent = (props) => {
         </div>
         <ToastContainer />
       </section>
-    </React.StrictMode>
+    </>
   );
 };
 export default AddStudent;

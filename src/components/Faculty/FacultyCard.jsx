@@ -4,7 +4,7 @@ const ProfileCard = (props) => {
   let email = localStorage.getItem("loginid");
   let department = localStorage.getItem("department");
   return (
-    <React.StrictMode>
+    <>
       <section className="mainCard">
         <div className="imageSec">
           <img id="profilePic" src={props.allData[0].photo} alt="" />
@@ -41,7 +41,7 @@ const ProfileCard = (props) => {
           </p>
         </div>
       </section>
-    </React.StrictMode>
+    </>
   );
 };
 

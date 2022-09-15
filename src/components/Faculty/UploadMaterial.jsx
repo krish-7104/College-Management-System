@@ -8,18 +8,18 @@ const UploadMaterial = () => {
     let uploadDate = new Date().toLocaleDateString();
     let title = document.getElementById("materialTitleAdd");
     let link = document.getElementById("materialLinkAdd");
-    let professor = document.getElementById("materialSubjectAdd");
+    let subject = document.getElementById("materialSubjectAdd");
     if (title.value !== "") {
       try {
         await addDoc(collection(db, "materials"), {
           title: title.value,
           link: link.value,
-          professor: professor.value,
+          subject: subject.value,
           timestamp: uploadDate,
         });
         title.value = "";
         link.value = "";
-        professor.value = "";
+        subject.value = "";
         alert("Data Added Successfully!");
       } catch (err) {
         toast.warn("Material Upload Failed, Try Again!", {
@@ -47,7 +47,7 @@ const UploadMaterial = () => {
     }
   };
   return (
-    <React.StrictMode>
+    <>
       <div className="materialAddForm">
         <p className="materialAddtitle">Upload Material</p>
         <div className="addmaterialTitleInput">
@@ -64,7 +64,7 @@ const UploadMaterial = () => {
         </div>
         <div className="addmaterialTitleInput">
           <label htmlFor="materialSubjectAdd" className="materialLabel">
-            SUbject Of Material
+            Professor Name
           </label>
           <input type="text" id="materialSubjectAdd" />
         </div>
@@ -73,7 +73,7 @@ const UploadMaterial = () => {
         </button>
       </div>
       <ToastContainer />
-    </React.StrictMode>
+    </>
   );
 };
 

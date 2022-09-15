@@ -1,46 +1,56 @@
 import React, { useEffect } from "react";
 import { db } from "../../backend/firebase";
 import { collection, query, onSnapshot, orderBy } from "firebase/firestore";
+import { useState } from "react";
+import { BsFillPinAngleFill } from "react-icons/bs";
+import { FiExternalLink } from "react-icons/fi";
 const Material = () => {
+  const [material, setMaterial] = useState([]);
   useEffect(() => {
-    let container = document.getElementById("areaFormaterialShow");
     const q1 = query(collection(db, `materials`), orderBy("timestamp"));
-    let html = container.innerHTML.replace("</table>", "");
     onSnapshot(q1, (querySnapshot) => {
       querySnapshot.docs.forEach((data) => {
-        html += `<tr>
-            <td>${data.data().timestamp}</td>
-            <td>${data.data().professor}</td>
-            <td>${data.data().title}</td>
-            <td><a href="${
-              data.data().link
-            }" target = "_blank" class="viewMaterial">View</a></td>
-            </tr>`;
+        setMaterial((e) => [...e, data.data()]);
       });
-      container.innerHTML = html;
     });
   }, []);
+
+  const MaterialViewCard = (data) => {
+    document.getElementById("noMaterial").style.display = "none";
+    return (
+      <div className="materialCard">
+        <p className="materialTime">
+          <span className="materialIcon">
+            <BsFillPinAngleFill />
+          </span>
+          {data.timestamp}
+        </p>
+        <p className="materialTitle">
+          {data.title} - {data.subject}
+        </p>
+        <a className="materialViewButton" target="_blank" href={`${data.link}`}>
+          View Material <FiExternalLink className="openLinkMaterialIcon" />
+        </a>
+      </div>
+    );
+  };
   return (
     <React.StrictMode>
       <div className="material" id="areaFormaterialShow">
-        <table id="materialTable">
-          <thead>
-            <tr>
-              <th className="tableHead" id="materialTime">
-                Timestamp
-              </th>
-              <th className="tableHead" id="materialProfessor">
-                Professor
-              </th>
-              <th className="tableHead" id="materialTitle">
-                Material Title
-              </th>
-              <th className="tableHead" id="materialLink">
-                Link
-              </th>
-            </tr>
-          </thead>
-        </table>
+        <div className="materialCards">
+          <div className="materialCard">
+            <p className="materialTime">
+              <b>Upload Time</b>
+            </p>
+            <p className="materialTitle" id="materialTitle">
+              <b>Material - Subject</b>
+            </p>
+            <a className="materialViewButton">
+              <b>Material Link</b>
+            </a>
+          </div>
+          <p id="noMaterial">No Material</p> {material.map(MaterialViewCard)}
+        </div>
       </div>
     </React.StrictMode>
   );

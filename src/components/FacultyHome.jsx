@@ -88,7 +88,7 @@ const FacultyHome = () => {
     document.getElementById("uploadNotice").classList.add("disable");
   };
   return (
-    <React.StrictMode>
+    <>
       <Navbar title="Faculty" />
       <section className="facultyContainer">
         <FacultyCard allData={details} />
@@ -123,7 +123,7 @@ const FacultyHome = () => {
           </div>
         </div>
       </section>
-    </React.StrictMode>
+    </>
   );
 };
 

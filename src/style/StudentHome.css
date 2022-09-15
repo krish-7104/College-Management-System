@@ -39,7 +39,8 @@
 .disable {
   display: none !important;
 }
-.notice {
+.notice,
+.material {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -62,13 +63,15 @@
   letter-spacing: 1.5px;
   margin-bottom: 15px;
 }
-.noticeCards {
+.noticeCards,
+.materialCards {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
 }
-.noticeCard {
+.noticeCard,
+.materialCard {
   background-color: white;
   margin: 10px;
   border-radius: 4px;
@@ -78,14 +81,16 @@
   padding: 6px;
   width: 90%;
 }
-.noticeTitle {
+.noticeTitle,
+.materialTitle {
   grid-area: 1 /2 / 2 / 3;
   text-align: left;
   display: inline-block;
   width: 90%;
   padding: 8px;
 }
-.noticeTime {
+.noticeTime,
+.materialTime {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -97,7 +102,8 @@
   padding: 8px;
   border-radius: 4px;
 }
-.noticeViewButton {
+.noticeViewButton,
+.materialViewButton {
   background-color: rgb(194, 194, 194);
   padding: 8px;
   border-radius: 4px;
@@ -110,25 +116,53 @@
   justify-content: center;
   align-items: center;
 }
-.openLinkNoticeIcon {
+.openLinkNoticeIcon,
+.openLinkMaterialIcon {
   margin: 0px 6px;
 }
-.noticeIcon {
+.noticeIcon,
+.materialIcon {
   display: flex;
   justify-content: center;
   align-items: center;
   padding-right: 10px;
 }
+#noticeTitle,
+#materialTitle {
+  text-align: center;
+}
 @media only screen and (max-width: 700px) {
   .studentList li {
     width: 150px;
   }
-  .noticeCard {
-    display: grid;
-    grid-template-columns: 100px 1fr 1fr 100px;
-    grid-template-rows: 100px 1fr 1fr 100px;
+  .noticeTime,
+  .materialTime {
+    background-color: inherit;
+    font-size: 14px;
+    grid-area: 1 / 1 / 2 / 2;
   }
-  .noticeTitle {
+  .noticeCard,
+  .materialCard {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(3, 1fr);
+  }
+  .noticeTitle,
+  .materialTitle {
     padding-bottom: 5px;
+    text-align: center;
+    grid-area: 2 / 1 / 3 / 2;
+  }
+  .noticeViewButton,
+  .materialViewButton {
+    background-color: inherit;
+    grid-area: 3 / 1 / 4 / 2;
+  }
+  .noticeIcon,
+  .materialIcon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-right: 10px;
   }
 }

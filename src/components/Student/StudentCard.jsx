@@ -3,7 +3,7 @@ import "../../style/StudentCard.css";
 const ProfileCard = (props) => {
   let e_no = localStorage.getItem("loginid");
   return (
-    <React.StrictMode>
+    <>
       <section className="mainCard">
         <div className="imageSec">
           <img id="profilePic" src={props.allData[0].photo} alt="" />
@@ -39,7 +39,7 @@ const ProfileCard = (props) => {
           </p>
         </div>
       </section>
-    </React.StrictMode>
+    </>
   );
 };
 

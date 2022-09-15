@@ -114,7 +114,7 @@ const StudentHome = () => {
   };
 
   return (
-    <React.StrictMode>
+    <>
       <Navbar title="Students" />
       <section className="studentContainer">
         <StudentCard allData={details} />
@@ -152,7 +152,7 @@ const StudentHome = () => {
           </div>
         </section>
       </section>
-    </React.StrictMode>
+    </>
   );
 };
 
