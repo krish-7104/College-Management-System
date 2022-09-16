@@ -1,60 +1,36 @@
 import React from "react";
 import { db } from "../../backend/firebase";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, Timestamp } from "firebase/firestore";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const UploadNotice = () => {
   const submitBtnClickedNotice = async () => {
-    let uploadDate = new Date().toLocaleDateString();
+    let uploadDate = Timestamp.now();
     let title = document.getElementById("noticeTitleAdd");
     let link = document.getElementById("noticeLinkAdd");
-    if (title.value !== "") {
-      if (link.value === "") {
-        try {
-          await addDoc(collection(db, "notices"), {
-            title: title.value,
-            link_present: false,
-            timestamp: uploadDate,
-          });
-          alert("Data Added Successfully!");
-          title.value = "";
-          link.title = "";
-        } catch (err) {
-          toast.warn("Notice Upload Failed, Try Again!", {
-            position: "bottom-right",
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: false,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-          });
-        }
-      } else {
-        try {
-          await addDoc(collection(db, "notices"), {
-            title: title.value,
-            link: link.value,
-            link_present: true,
-            timestamp: uploadDate,
-          });
-          alert("Data Added Successfully!");
-        } catch (err) {
-          toast.warn("Notice Upload Failed, Try Again!", {
-            position: "bottom-right",
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: false,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-          });
-        }
+    if (title.value !== "" && link.value !== "") {
+      try {
+        await addDoc(collection(db, "notices"), {
+          title: title.value,
+          link: link.value,
+          link_present: true,
+          timestamp: uploadDate,
+        });
+        alert("Data Added Successfully!");
+      } catch (err) {
+        toast.warn("Notice Upload Failed, Try Again!", {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
       }
     } else {
-      toast.warn("Enter Notice Title Please!", {
+      toast.warn("Enter All Fields Please!", {
         position: "bottom-right",
         autoClose: 2000,
         hideProgressBar: false,
@@ -81,7 +57,6 @@ const UploadNotice = () => {
             Notice Link
           </label>
           <input type="text" id="noticeLinkAdd" />
-          <p>Leave Notice Link Empty If No Link Present</p>
         </div>
         <button id="uploadNoticeSubmitBtn" onClick={submitBtnClickedNotice}>
           Upload Notice

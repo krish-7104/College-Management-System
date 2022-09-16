@@ -1,11 +1,11 @@
 import React from "react";
 import { db } from "../../backend/firebase";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, Timestamp } from "firebase/firestore";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const UploadMaterial = () => {
   const submitBtnClickedMaterial = async () => {
-    let uploadDate = new Date().toLocaleDateString();
+    let uploadDate = Timestamp.now();
     let title = document.getElementById("materialTitleAdd");
     let link = document.getElementById("materialLinkAdd");
     let subject = document.getElementById("materialSubjectAdd");

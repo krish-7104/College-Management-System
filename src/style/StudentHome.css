@@ -130,11 +130,6 @@
     font-size: 14px;
     grid-area: 1 / 1 / 2 / 2;
   }
-  .itemShowCard {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: repeat(3, 1fr);
-  }
   .itemShowTitle {
     padding-bottom: 5px;
     text-align: center;
@@ -149,5 +144,11 @@
     justify-content: center;
     align-items: center;
     padding-right: 10px;
+  }
+  .itemShowCard {
+    width: 100%;
+    margin: 0px;
+    display: flex;
+    flex-direction: column;
   }
 }

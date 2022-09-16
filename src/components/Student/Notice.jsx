@@ -8,9 +8,12 @@ const Notice = () => {
   const callNoticeData = () => {
     const q1 = query(collection(db, `notices`), orderBy("timestamp"));
     onSnapshot(q1, (querySnapshot) => {
-      querySnapshot.docs.forEach((data) => {
-        setNotice((e) => [...e, data.data()]);
-      });
+      setNotice(
+        querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          allData: doc.data(),
+        }))
+      );
     });
   };
   useEffect(() => {
@@ -23,9 +26,9 @@ const Notice = () => {
       return (
         <ShowCard
           key={data.id}
-          time={data.timestamp}
-          title={data.title}
-          link="no link"
+          time={data.allData.timestamp}
+          title={data.allData.title}
+          link="nolink"
           type="notice"
         />
       );
@@ -33,9 +36,9 @@ const Notice = () => {
       return (
         <ShowCard
           key={data.id}
-          time={data.timestamp}
-          title={data.title}
-          link={data.link}
+          time={data.allData.timestamp}
+          title={data.allData.title}
+          link={data.allData.link}
           type="notice"
         />
       );

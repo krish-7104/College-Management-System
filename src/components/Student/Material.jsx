@@ -9,9 +9,12 @@ const Material = () => {
   useEffect(() => {
     const q1 = query(collection(db, `materials`), orderBy("timestamp"));
     onSnapshot(q1, (querySnapshot) => {
-      querySnapshot.docs.forEach((data) => {
-        setMaterial((e) => [...e, data.data()]);
-      });
+      setMaterial(
+        querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          allData: doc.data(),
+        }))
+      );
     });
   }, []);
 
@@ -20,9 +23,9 @@ const Material = () => {
     return (
       <ShowCard
         key={data.id}
-        time={data.timestamp}
-        title={data.title + " - " + data.subject}
-        link={data.link}
+        time={data.allData.timestamp}
+        title={data.allData.title + " - " + data.allData.subject}
+        link={data.allData.link}
         type="material"
       />
     );

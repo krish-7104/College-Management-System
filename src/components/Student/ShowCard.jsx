@@ -8,25 +8,21 @@ const ShowCard = (props) => {
         <span className="itemShowIcon">
           <BsFillPinAngleFill />
         </span>
-        {props.time}
+        {props.time
+          .toDate()
+          .toString()
+          .replace("GMT+0530 (India Standard Time)", "")}
       </p>
       <p className="itemShowTitle">{props.title}</p>
-      {props.link === "no link" ? (
-        <a className="itemShowViewButton" target="_blank">
-          {props.type === "notice" ? "" : "View itemShow"}
-        </a>
-      ) : (
-        <a
-          className="itemShowViewButton"
-          target="_blank"
-          href={`${props.link}`}
-          without
-          rel="noreferrer"
-        >
-          {props.type === "notice" ? "View Notice" : "View Material"}
-          <FiExternalLink className="openLinkitemShowIcon" />
-        </a>
-      )}
+      <a
+        className="itemShowViewButton"
+        target="_blank"
+        href={`${props.link}`}
+        rel="noreferrer"
+      >
+        {props.type === "notice" ? "View Notice" : "View Material"}
+        <FiExternalLink className="openLinkitemShowIcon" />
+      </a>
     </div>
   );
 };
