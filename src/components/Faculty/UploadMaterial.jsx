@@ -64,7 +64,7 @@ const UploadMaterial = () => {
         </div>
         <div className="addmaterialTitleInput">
           <label htmlFor="materialSubjectAdd" className="materialLabel">
-            Professor Name
+            Subject Name
           </label>
           <input type="text" id="materialSubjectAdd" />
         </div>
