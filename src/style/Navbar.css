@@ -25,16 +25,16 @@
   letter-spacing: 1px;
   font-weight: 600;
   margin: 10px 15px;
-  background-color: #14213d;
+  background-color: #1f1f1f;
   padding: 4px 8px;
   color: #e5e5e5;
-  border-radius: 6px;
+  border-radius: 2px !important;
 }
 .navLogoutIcon {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 18px;
+  font-size: 16px;
   margin-left: 6px;
 }
 @media only screen and (max-width: 700px) {

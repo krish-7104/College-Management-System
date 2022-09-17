@@ -12,6 +12,8 @@ const StudentHome = () => {
   const [selectedBtn, setSeletedBtn] = useState("");
   let loginId = localStorage.getItem("loginid");
   let branch = localStorage.getItem("branch");
+  const [externalMarks, setExternalMarks] = useState(null);
+  const [internalMarks, setInternalMarks] = useState(null);
   const [timetable, setTimeTable] = useState("");
   const [details, setDetails] = useState([
     {
@@ -44,6 +46,14 @@ const StudentHome = () => {
     onSnapshot(q1, (querySnapshot) => {
       querySnapshot.docs.forEach((data) => {
         if (data.data().e_no === loginId) {
+          setInternalMarks([
+            Object.keys(data.data().midsem3),
+            Object.values(data.data().midsem3),
+          ]);
+          setExternalMarks([
+            Object.keys(data.data().external3),
+            Object.values(data.data().external3),
+          ]);
           setDetails(() => [
             {
               fullname:
@@ -90,7 +100,7 @@ const StudentHome = () => {
     } else if (selectedBtn === "marks") {
       let btn = document.getElementById("marks");
       btn.classList.add("active");
-      return <Marks />;
+      return <Marks internal={internalMarks} external={externalMarks} />;
     } else if (selectedBtn === "notice") {
       ResetActiveMenu();
       let btn = document.getElementById("notices");

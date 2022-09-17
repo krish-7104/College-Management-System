@@ -60,6 +60,7 @@ img {
 #materialTitle {
   width: 100%;
 }
+
 @media only screen and (max-width: 800px) {
   .infoSec {
     grid-template-columns: 1fr;

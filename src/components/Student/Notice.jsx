@@ -47,9 +47,7 @@ const Notice = () => {
   return (
     <>
       <div className="notice" id="areaForNoticeShow">
-        <div className="noticeCards">
-          <p id="noNotice">No Notice</p> {notice.map(NoticeViewCard)}
-        </div>
+        <p id="noNotice">No Notice</p> {notice.map(NoticeViewCard)}
       </div>
     </>
   );

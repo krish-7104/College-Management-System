@@ -24,14 +24,17 @@
   text-align: center;
   cursor: pointer;
   color: white;
-  border: 1.4px solid #1f1f1f;
+  border-bottom: 1.4px solid #1f1f1f;
 }
 .studentView {
   margin: 10px 0px;
-  width: 85%;
+  width: 100%;
   padding: 20px;
   border-radius: 5px;
   text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .disable {
   display: none !important;
@@ -49,7 +52,7 @@
   align-items: center;
 }
 .timetableShowArea img {
-  width: 100%;
+  width: 80%;
 }
 #downTimeTable {
   background-color: #1f1f1f;
@@ -61,26 +64,27 @@
   margin: 20px 0px;
   border-radius: 5px;
 }
-.itemShowCards {
+.material,
+.notice {
+  width: 100%;
   display: flex;
-  justify-content: center;
   align-items: center;
-  flex-direction: column;
+  justify-content: center;
 }
 .itemShowCard {
   background-color: white;
   margin: 10px;
   border-radius: 4px;
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  place-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 80%;
   padding: 6px;
-  width: 90%;
   box-shadow: rgba(0, 0, 0, 0.2) 1.95px 1.95px 2.6px;
 }
 .itemShowTitle {
-  grid-area: 1 /2 / 2 / 3;
   padding: 8px;
+  font-weight: 600;
 }
 .itemShowTime {
   display: flex;
@@ -120,28 +124,68 @@
   align-items: center;
   padding-right: 10px;
 }
-.noticeCards,
-.materialCards {
+.marksShowArea {
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+}
+.marksCard {
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  padding: 20px;
+  background-color: white;
+  width: 45%;
+}
+.marksCard li {
+  color: black !important;
+  list-style: none;
+  margin-bottom: 10px;
+  font-size: 15px;
+  padding: 4px 10px;
+  border-radius: 0px !important;
+}
+.marksTitle {
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+.marksTable {
+  margin-top: 10px;
   display: flex;
   justify-content: center;
+  align-items: center;
+}
+.subjectList {
+  width: 80%;
+  text-align: left;
+}
+.marksList {
+  width: 20%;
+}
+.totalMarkShow {
+  font-weight: 600;
+}
+.marksCard li:last-child {
+  background-color: #cacacabf;
 }
 @media only screen and (max-width: 700px) {
+  .material,
+  .notice {
+    width: 90%;
+  }
   .studentList li {
     width: 150px;
   }
   .itemShowTime {
     background-color: inherit;
     font-size: 14px;
-    grid-area: 1 / 1 / 2 / 2;
   }
   .itemShowTitle {
     padding-bottom: 5px;
     text-align: center;
-    grid-area: 2 / 1 / 3 / 2;
   }
   .itemShowViewButton {
     background-color: inherit;
-    grid-area: 3 / 1 / 4 / 2;
   }
   .itemShowIcon {
     display: flex;
@@ -151,8 +195,35 @@
   }
   .itemShowCard {
     width: 100%;
-    margin: 0px;
     display: flex;
     flex-direction: column;
+  }
+  .marksShowArea {
+    flex-direction: column;
+    justify-content: center;
+  }
+  .marksCard:first-child {
+    margin-bottom: 20px;
+  }
+  .marksCard {
+    width: 100%;
+  }
+  .studentView {
+    width: 100%;
+    padding: 0px 5px;
+    margin: 25px 0px;
+  }
+  .marksTitle {
+    font-size: 15px;
+  }
+  .subjectList li,
+  .marksList li {
+    font-size: 13.5px;
+  }
+  .marksShowArea {
+    width: 95%;
+  }
+  .marksCard li:last-child {
+    background-color: #cacaca75;
   }
 }
