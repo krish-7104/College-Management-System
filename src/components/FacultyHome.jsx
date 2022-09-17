@@ -67,10 +67,6 @@ const FacultyHome = () => {
     document.getElementById("registerStudent").classList.add("disable");
     document.getElementById("showNoticeFaculty").classList.add("disable");
   };
-  const logoutHandler = () => {
-    localStorage.clear();
-    navigate("/");
-  };
   const registerStudentClicked = () => {
     let ele = document.getElementById("facultyShowArea");
     ele.classList.remove("disable");
@@ -105,9 +101,6 @@ const FacultyHome = () => {
             </li>
             <li id="registerStudentBtn" onClick={registerStudentClicked}>
               Register Student
-            </li>
-            <li id="logout" onClick={logoutHandler}>
-              Log Out
             </li>
           </ul>
         </div>

@@ -1,23 +1,9 @@
 body {
-  background-color: rgb(227, 227, 227);
-  /* overflow-y: hidden; */
-}
-.mobileContainer {
-  background-color: white;
-  margin: 100px 30px;
-  display: none;
-  border-radius: 5px;
-  padding: 10px;
-  text-transform: uppercase;
-  letter-spacing: 1.2px;
-  font-weight: 600;
-  line-height: 30px;
-  align-items: center;
-  text-align: center;
-}
-#sign {
-  font-size: 24px;
-  padding: 10px;
+  background: radial-gradient(
+    circle,
+    hsla(0, 0%, 90%, 1) 0%,
+    hsla(0, 0%, 96%, 1) 99%
+  );
 }
 .loginContainer {
   height: 90vh;
@@ -26,32 +12,23 @@ body {
   justify-content: center;
   align-items: center;
 }
+#loginImg {
+  width: 25vw;
+  margin: 30px;
+  margin-right: 0px !important;
+  padding-right: 20px;
+  border-right: 1.3px solid rgb(127, 127, 127);
+}
 .loginCard {
-  min-width: 30vw;
-  background-color: white;
+  min-width: 25vw;
+  background-color: #ffffff;
   display: flex;
   justify-content: center;
-  flex-direction: column;
+  align-items: center;
   border-radius: 8px;
-}
-.select {
-  display: flex;
-  justify-content: center;
-}
-.selectBtn {
-  padding: 10px;
-  border: none;
-  transition: 0.5s;
-  font-size: 16px;
-  width: 100%;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-}
-.selectBtn:first-child {
-  border-top-left-radius: 8px;
-}
-.selectBtn:last-child {
-  border-top-right-radius: 8px;
+  padding: 30px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
 .login {
   display: flex;
@@ -63,11 +40,7 @@ input {
   padding: 8px;
   margin-bottom: 20px;
   outline: none;
-  font-size: 17px;
-}
-.activeBtn {
-  background-color: #1f1f1f;
-  color: white;
+  font-size: 16px;
 }
 .submitBtn {
   padding: 8px;
@@ -75,12 +48,14 @@ input {
   margin-top: 8px;
   font-weight: 500;
   font-size: 15px;
-  border: 1.2px solid #1f1f1f;
+  background-color: #14213d;
   text-transform: uppercase;
   letter-spacing: 1.5px;
+  color: #e5e5e5;
+  border-radius: 5px;
 }
 label {
-  font-size: 16px;
+  font-size: 13px;
   margin-bottom: 4px;
 }
 button {
@@ -91,7 +66,4 @@ button {
   font-weight: 600;
   text-transform: uppercase;
   font-size: 22px;
-}
-.sign {
-  font-size: 20px;
 }

@@ -20,7 +20,6 @@ const Login = () => {
       theme: "dark",
     });
   };
-  const [selectType, setSelectType] = useState("students");
   const [students, setStudents] = useState([
     {
       loginid: "",
@@ -41,7 +40,7 @@ const Login = () => {
     let userPass = document.getElementById("password").value;
     let branch = "";
     let department = "";
-    if (selectType === "students") {
+    if (!userId.includes("@")) {
       if (userId !== "" && userPass !== "") {
         students.forEach((user) => {
           if (user.loginid === userId && user.password === userPass) {
@@ -60,7 +59,7 @@ const Login = () => {
       } else {
         notifyAlert("Enter Credentials Please!");
       }
-    } else if (selectType === "faculty") {
+    } else {
       if (userId !== "" && userPass !== "") {
         faculty.forEach((user) => {
           if (user.loginid === userId && user.password === userPass) {
@@ -115,54 +114,21 @@ const Login = () => {
     callCredentials();
   }, []);
 
-  const studentEventHandler = () => {
-    setSelectType("students");
-    let ele1 = document.getElementById("studentSelect");
-    let ele2 = document.getElementById("facultySelect");
-    ele2.classList.remove("activeBtn");
-    ele1.classList.add("activeBtn");
-  };
-  const facultyEventHandler = () => {
-    setSelectType("faculty");
-    let ele1 = document.getElementById("studentSelect");
-    let ele2 = document.getElementById("facultySelect");
-    ele1.classList.remove("activeBtn");
-    ele2.classList.add("activeBtn");
-  };
-
   return (
-    <>
+    <React.StrictMode>
       <Navbar title="Login" />
-      <div className="mobileContainer">
-        <p id="sign">⚠️⚠️⚠️</p>
-        <p>
-          Not Available For Android Devices Kindly Use Laptop/Desktop. Working
-          For Android, Coming Soon 🚀
-        </p>
-      </div>
       <section className="loginContainer">
         <div className="loginCard">
-          <div className="select">
-            <button
-              className="selectBtn activeBtn"
-              id="studentSelect"
-              onClick={studentEventHandler}
-            >
-              Students
-            </button>
-            <hr />
-            <button
-              className="selectBtn"
-              id="facultySelect"
-              onClick={facultyEventHandler}
-            >
-              Faculty
-            </button>
-          </div>
-          <hr />
+          <img id="loginImg" src={require("../assets/classPng.png")} alt="" />
           <div className="login">
             <label htmlFor="loginid">Login Id</label>
-            <input type="text" id="loginid" name="loginid" required />
+            <input
+              type="text"
+              id="loginid"
+              name="loginid"
+              required
+              autoComplete="off"
+            />
             <label htmlFor="password">Password</label>
             <input type="password" name="password" id="password" required />
             <button className="submitBtn" onClick={loginValidate}>
@@ -172,7 +138,7 @@ const Login = () => {
         </div>
         <ToastContainer />
       </section>
-    </>
+    </React.StrictMode>
   );
 };
 

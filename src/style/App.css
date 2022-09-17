@@ -5,3 +5,9 @@
   box-sizing: border-box;
   font-family: "Montserrat", sans-serif;
 }
+button,
+li {
+  color: #e5e5e5 !important;
+  border: none !important;
+  border-radius: 5px !important;
+}

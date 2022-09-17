@@ -11,7 +11,6 @@ import { useNavigate } from "react-router-dom";
 
 const StudentHome = () => {
   const navigate = useNavigate();
-
   let loginId = localStorage.getItem("loginid");
   let branch = localStorage.getItem("branch");
   const [timetable, setTimeTable] = useState("");
@@ -61,11 +60,6 @@ const StudentHome = () => {
     });
   }, [branch, loginId]);
 
-  const logoutHandler = () => {
-    localStorage.clear();
-    navigate("/");
-  };
-
   const materialbtnClicked = () => {
     let ele = document.getElementById("studentView");
     ele.classList.remove("disable");
@@ -75,15 +69,15 @@ const StudentHome = () => {
     document.getElementById("noticeArea").classList.add("disable");
     document.getElementById("timetableArea").classList.add("disable");
   };
-  // const marksbtnClicked = () => {
-  //   let ele = document.getElementById("studentView");
-  //   ele.classList.remove("disable");
-  //   let ele2 = document.getElementById("marksArea");
-  //   ele2.classList.remove("disable");
-  //   document.getElementById("noticeArea").classList.add("disable");
-  //   document.getElementById("materialArea").classList.add("disable");
-  //   document.getElementById("timetableArea").classList.add("disable");
-  // };
+  const marksbtnClicked = () => {
+    let ele = document.getElementById("studentView");
+    ele.classList.remove("disable");
+    let ele2 = document.getElementById("marksArea");
+    ele2.classList.remove("disable");
+    document.getElementById("noticeArea").classList.add("disable");
+    document.getElementById("materialArea").classList.add("disable");
+    document.getElementById("timetableArea").classList.add("disable");
+  };
   const noticesbtnClicked = () => {
     let ele = document.getElementById("studentView");
     ele.classList.remove("disable");
@@ -106,7 +100,6 @@ const StudentHome = () => {
     onSnapshot(q2, (querySnapshot) => {
       querySnapshot.docs.forEach((data) => {
         if (data.id === branch) {
-          // window.open(data.data().timetable);
           setTimeTable(data.data().timetable);
         }
       });
@@ -115,7 +108,7 @@ const StudentHome = () => {
 
   return (
     <>
-      <Navbar title="Students" />
+      <Navbar title="Students" showText={details[0].e_no} />
       <section className="studentContainer">
         <StudentCard allData={details} />
         <div className="studentBtnsArea">
@@ -126,14 +119,11 @@ const StudentHome = () => {
             <li id="material" onClick={materialbtnClicked}>
               Material
             </li>
-            {/* <li id="marks" onClick={marksbtnClicked}>
+            <li id="marks" onClick={marksbtnClicked}>
               View Marks
-            </li> */}
+            </li>
             <li id="notices" onClick={noticesbtnClicked}>
               Notices
-            </li>
-            <li id="logout" onClick={logoutHandler}>
-              Log Out
             </li>
           </ul>
         </div>

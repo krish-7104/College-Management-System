@@ -5,6 +5,7 @@
   width: 85%;
   background-color: white;
   border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 img {
   width: 200px;
@@ -23,6 +24,8 @@ img {
   margin: 10px 0px;
   letter-spacing: 1.5px;
   text-transform: capitalize;
+  display: flex;
+  align-items: center;
 }
 .fname {
   grid-column: 1 / span 2;

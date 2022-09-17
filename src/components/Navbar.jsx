@@ -1,13 +1,39 @@
 import React from "react";
 import "../style/Navbar.css";
+import { MdLogout } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
+
 const Navbar = (props) => {
-  return (
-    <>
-      <section className="navMain">
-        <p className="navTitle">College Management System - {props.title}</p>
-      </section>
-    </>
-  );
+  const navigate = useNavigate();
+  const logoutHandler = () => {
+    localStorage.clear();
+    navigate("/");
+  };
+  if (props.showText !== "") {
+    return (
+      <>
+        <section className="navMain">
+          <p className="navTitle leftnavTitle">
+            College Management System - {props.title}
+          </p>
+          <button className="logoutNavBtn" onClick={logoutHandler}>
+            Logout{" "}
+            <span className="navLogoutIcon">
+              <MdLogout />
+            </span>
+          </button>
+        </section>
+      </>
+    );
+  } else {
+    return (
+      <>
+        <section className="navMain">
+          <p className="navTitle">College Management System - {props.title}</p>
+        </section>
+      </>
+    );
+  }
 };
 
 export default Navbar;

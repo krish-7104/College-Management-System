@@ -1,5 +1,6 @@
 import React from "react";
 import "../../style/FacultyCard.css";
+import { MdEmail, MdCalendarToday, MdCall, MdClass } from "react-icons/md";
 const ProfileCard = (props) => {
   let email = localStorage.getItem("loginid");
   let department = localStorage.getItem("department");
@@ -15,14 +16,16 @@ const ProfileCard = (props) => {
             {props.allData[0].fullname}
           </p>
           <p className="infoText" id="email">
-            Email: {email}
+            <MdEmail />
+            &nbsp;{props.allData[0].email}
           </p>
           <p className="infoText" id="department">
-            Department: {department}
+            <MdClass />
+            &nbsp;{department}
           </p>
-
           <p className="infoText" id="phoneNo">
-            Phone No: {props.allData[0].phoneno}
+            <MdCall />
+            &nbsp;{props.allData[0].phoneno}
           </p>
           <p className="infoText" id="post">
             Post: {props.allData[0].post}

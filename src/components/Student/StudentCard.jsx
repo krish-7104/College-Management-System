@@ -1,5 +1,6 @@
 import React from "react";
 import "../../style/StudentCard.css";
+import { MdEmail, MdCalendarToday, MdCall, MdClass } from "react-icons/md";
 const ProfileCard = (props) => {
   let e_no = localStorage.getItem("loginid");
   return (
@@ -20,10 +21,12 @@ const ProfileCard = (props) => {
             Gender: {props.allData[0].gender}
           </p>
           <p className="infoText" id="phoneNo">
-            Phone No: {props.allData[0].phoneno}
+            <MdCall />
+            &nbsp;{props.allData[0].phoneno}
           </p>
           <p className="infoText" id="branch">
-            Branch: {props.allData[0].branch}
+            <MdClass />
+            &nbsp; {props.allData[0].branch}
           </p>
           <p className="infoText" id="currentSem">
             Semester: {props.allData[0].semester}
@@ -32,10 +35,12 @@ const ProfileCard = (props) => {
             Category: {props.allData[0].category}
           </p>
           <p className="infoText" id="email">
-            Email Id: {props.allData[0].email}
+            <MdEmail />
+            &nbsp;{props.allData[0].email}
           </p>
           <p className="infoText" id="dob">
-            DOB: {props.allData[0].dob}
+            <MdCalendarToday />
+            &nbsp; {props.allData[0].dob}
           </p>
         </div>
       </section>

@@ -1,15 +1,41 @@
 .navMain {
-  background-color: whitesmoke;
-  padding: 15px;
-  -webkit-box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.4);
-  -moz-box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.4);
-  box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.4);
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  display: flex;
+  justify-content: space-between;
 }
 .navTitle {
   text-align: center;
   text-transform: uppercase;
-  letter-spacing: 1.4px;
+  letter-spacing: 1px;
   font-weight: 600;
+  font-size: 15px;
+  margin: 16px;
+}
+.leftnavTitle {
+  text-align: left !important;
+}
+.logoutNavBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+  margin: 10px 15px;
+  background-color: #14213d;
+  padding: 4px 8px;
+  color: #e5e5e5;
+  border-radius: 6px;
+}
+.navLogoutIcon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  margin-left: 6px;
 }
 @media only screen and (max-width: 700px) {
   .navTitle {

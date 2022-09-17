@@ -61,7 +61,8 @@
   color: white;
   text-transform: uppercase;
   letter-spacing: 1.5px;
-  margin-bottom: 15px;
+  margin: 20px 0px;
+  border-radius: 5px;
 }
 .itemShowCards {
   display: flex;
@@ -78,6 +79,7 @@
   place-items: center;
   padding: 6px;
   width: 90%;
+  box-shadow: rgba(0, 0, 0, 0.2) 1.95px 1.95px 2.6px;
 }
 .itemShowTitle {
   grid-area: 1 /2 / 2 / 3;
@@ -120,6 +122,11 @@
   justify-content: center;
   align-items: center;
   padding-right: 10px;
+}
+.noticeCards,
+.materialCards {
+  display: flex;
+  justify-content: center;
 }
 @media only screen and (max-width: 700px) {
   .studentList li {
