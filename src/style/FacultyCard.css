@@ -9,6 +9,7 @@
 img {
   width: 200px;
   margin: 10px;
+  border-radius: 10px;
 }
 .infoSec {
   width: 100%;
@@ -67,6 +68,6 @@ img {
   .fname {
     grid-column: 1;
     text-align: center;
-    font-size: 22px !important;
+    font-size: 18px !important;
   }
 }

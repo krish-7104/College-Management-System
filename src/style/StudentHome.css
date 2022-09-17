@@ -18,16 +18,13 @@
   list-style: none;
   background-color: #1f1f1f;
   padding: 10px;
-  border-radius: 5px;
+  border-radius: 4px;
   margin: 10px;
   width: 200px;
   text-align: center;
   cursor: pointer;
   color: white;
-}
-.studentList li:hover {
-  background-color: black;
-  transition: 0.8s;
+  border: 1.4px solid #1f1f1f;
 }
 .studentView {
   margin: 10px 0px;

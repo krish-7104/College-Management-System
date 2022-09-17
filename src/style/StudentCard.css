@@ -10,6 +10,7 @@
 img {
   width: 200px;
   margin: 10px;
+  border-radius: 10px;
 }
 .infoSec {
   width: 100%;
@@ -26,6 +27,11 @@ img {
   text-transform: capitalize;
   display: flex;
   align-items: center;
+}
+.cardDataIcons {
+  display: flex;
+  align-items: center;
+  font-size: 20px;
 }
 .fname {
   grid-column: 1 / span 2;
@@ -73,6 +79,7 @@ img {
     font-size: 20px !important;
   }
   #profilePic {
-    width: 100px;
+    height: 150px;
+    object-fit: cover;
   }
 }

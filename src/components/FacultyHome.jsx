@@ -7,12 +7,11 @@ import "../style/FacultyHome.css";
 import UploadNotice from "./Faculty/UploadNotice";
 import AddStudent from "./Faculty/AddStudent";
 import UploadMaterial from "./Faculty/UploadMaterial";
-import { useNavigate } from "react-router-dom";
 
 const FacultyHome = () => {
-  const navigate = useNavigate();
   let loginId = localStorage.getItem("loginid");
   let department = localStorage.getItem("department");
+  const [selectedBtn, setSeletedBtn] = useState("");
   const [details, setDetails] = useState([
     {
       email: "",
@@ -29,6 +28,10 @@ const FacultyHome = () => {
     },
   ]);
   useEffect(() => {
+    callData();
+  }, []);
+
+  const callData = () => {
     const q1 = query(
       collection(db, `faculty_details/${department}/faculty_info`)
     );
@@ -57,63 +60,64 @@ const FacultyHome = () => {
         }
       });
     });
-  }, [loginId, department]);
-
-  const uploadNoticebtnClicked = () => {
-    let ele = document.getElementById("facultyShowArea");
-    ele.classList.remove("disable");
-    let ele2 = document.getElementById("uploadNotice");
-    ele2.classList.remove("disable");
-    document.getElementById("registerStudent").classList.add("disable");
-    document.getElementById("showNoticeFaculty").classList.add("disable");
   };
-  const registerStudentClicked = () => {
-    let ele = document.getElementById("facultyShowArea");
-    ele.classList.remove("disable");
-    let ele2 = document.getElementById("registerStudent");
-    ele2.classList.remove("disable");
-    document.getElementById("uploadNotice").classList.add("disable");
-    document.getElementById("showNoticeFaculty").classList.add("disable");
+  const ResetActiveMenu = () => {
+    let btnsCont = document.getElementById("facultyList");
+    let btns = btnsCont.getElementsByClassName("facultyMenuList");
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].classList.remove("active");
+    }
   };
-  const updateMaterialbtnClicked = () => {
-    let ele = document.getElementById("facultyShowArea");
-    ele.classList.remove("disable");
-    let ele2 = document.getElementById("showNoticeFaculty");
-    ele2.classList.remove("disable");
-    document.getElementById("registerStudent").classList.add("disable");
-    document.getElementById("uploadNotice").classList.add("disable");
+  const menuSelectedHandlerValue = () => {
+    if (selectedBtn === "material") {
+      ResetActiveMenu();
+      let btn = document.getElementById("uploadMaterialFacultyBtn");
+      btn.classList.add("active");
+      return <UploadMaterial />;
+    } else if (selectedBtn === "notice") {
+      ResetActiveMenu();
+      let btn = document.getElementById("uploadNoticeBtn");
+      btn.classList.add("active");
+      return <UploadNotice />;
+    } else if (selectedBtn === "register") {
+      ResetActiveMenu();
+      let btn = document.getElementById("registerStudentBtn");
+      btn.classList.add("active");
+      return <AddStudent />;
+    }
   };
   return (
     <>
-      <Navbar title="Faculty" />
+      <Navbar title="Faculty Login - CMS" />
       <section className="facultyContainer">
         <FacultyCard allData={details} />
         <div className="facultyBtnsArea">
-          <ul className="facultyList">
-            <li id="uploadNoticeBtn" onClick={uploadNoticebtnClicked}>
+          <ul className="facultyList" id="facultyList">
+            <li
+              id="uploadNoticeBtn"
+              className="facultyMenuList"
+              onClick={() => setSeletedBtn("notice")}
+            >
               Upload Notice
             </li>
             <li
               id="uploadMaterialFacultyBtn"
-              onClick={updateMaterialbtnClicked}
+              className="facultyMenuList"
+              onClick={() => setSeletedBtn("material")}
             >
               Upload Material
             </li>
-            <li id="registerStudentBtn" onClick={registerStudentClicked}>
+            <li
+              id="registerStudentBtn"
+              className="facultyMenuList"
+              onClick={() => setSeletedBtn("register")}
+            >
               Register Student
             </li>
           </ul>
         </div>
-        <div className="facultyShowArea disable" id="facultyShowArea">
-          <div className="uploadNotice disable" id="uploadNotice">
-            <UploadNotice />
-          </div>
-          <div className="showNoticeFaculty disable" id="showNoticeFaculty">
-            <UploadMaterial />
-          </div>
-          <div className="registerStudent disable" id="registerStudent">
-            <AddStudent />
-          </div>
+        <div className="facultyShowArea" id="facultyShowArea">
+          {menuSelectedHandlerValue()}
         </div>
       </section>
     </>

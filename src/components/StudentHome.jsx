@@ -7,10 +7,9 @@ import { collection, query, onSnapshot } from "firebase/firestore";
 import Notice from "./Student/Notice";
 import Material from "./Student/Material";
 import Timetable from "./Student/Timetable";
-import { useNavigate } from "react-router-dom";
-
+import Marks from "./Student/Marks";
 const StudentHome = () => {
-  const navigate = useNavigate();
+  const [selectedBtn, setSeletedBtn] = useState("");
   let loginId = localStorage.getItem("loginid");
   let branch = localStorage.getItem("branch");
   const [timetable, setTimeTable] = useState("");
@@ -29,7 +28,16 @@ const StudentHome = () => {
         "https://cdn.pixabay.com/photo/2017/11/10/05/48/user-2935527_1280.png",
     },
   ]);
-  useEffect(() => {
+
+  const callDataFromDatabase = () => {
+    const q2 = query(collection(db, `students_details/`));
+    onSnapshot(q2, (querySnapshot) => {
+      querySnapshot.docs.forEach((data) => {
+        if (data.id === branch) {
+          setTimeTable(data.data().timetable);
+        }
+      });
+    });
     const q1 = query(
       collection(db, `students_details/${branch}/individual_student/`)
     );
@@ -58,88 +66,82 @@ const StudentHome = () => {
         }
       });
     });
+  };
+  useEffect(() => {
+    callDataFromDatabase();
   }, [branch, loginId]);
 
-  const materialbtnClicked = () => {
-    let ele = document.getElementById("studentView");
-    ele.classList.remove("disable");
-    let ele2 = document.getElementById("materialArea");
-    ele2.classList.remove("disable");
-    document.getElementById("marksArea").classList.add("disable");
-    document.getElementById("noticeArea").classList.add("disable");
-    document.getElementById("timetableArea").classList.add("disable");
+  const ResetActiveMenu = () => {
+    let btnsCont = document.getElementById("studentList");
+    if (btnsCont !== null) {
+      let btns = btnsCont.getElementsByClassName("studentMenuList");
+      for (var i = 0; i < btns.length; i++) {
+        btns[i].classList.remove("active");
+      }
+    }
   };
-  const marksbtnClicked = () => {
-    let ele = document.getElementById("studentView");
-    ele.classList.remove("disable");
-    let ele2 = document.getElementById("marksArea");
-    ele2.classList.remove("disable");
-    document.getElementById("noticeArea").classList.add("disable");
-    document.getElementById("materialArea").classList.add("disable");
-    document.getElementById("timetableArea").classList.add("disable");
+  const menuSelectedHandlerValue = () => {
+    ResetActiveMenu();
+    if (selectedBtn === "material") {
+      ResetActiveMenu();
+      let btn = document.getElementById("material");
+      btn.classList.add("active");
+      return <Material />;
+    } else if (selectedBtn === "marks") {
+      let btn = document.getElementById("marks");
+      btn.classList.add("active");
+      return <Marks />;
+    } else if (selectedBtn === "notice") {
+      ResetActiveMenu();
+      let btn = document.getElementById("notices");
+      btn.classList.add("active");
+      return <Notice />;
+    } else if (selectedBtn === "timetable") {
+      ResetActiveMenu();
+      let btn = document.getElementById("timetable");
+      btn.classList.add("active");
+      return <Timetable ttlink={timetable} title={branch + "Timetable"} />;
+    }
   };
-  const noticesbtnClicked = () => {
-    let ele = document.getElementById("studentView");
-    ele.classList.remove("disable");
-    let ele2 = document.getElementById("noticeArea");
-    ele2.classList.remove("disable");
-    document.getElementById("marksArea").classList.add("disable");
-    document.getElementById("materialArea").classList.add("disable");
-    document.getElementById("timetableArea").classList.add("disable");
-  };
-
-  const timetablebtnClicked = () => {
-    let ele = document.getElementById("studentView");
-    ele.classList.remove("disable");
-    let ele2 = document.getElementById("timetableArea");
-    ele2.classList.remove("disable");
-    document.getElementById("marksArea").classList.add("disable");
-    document.getElementById("noticeArea").classList.add("disable");
-    document.getElementById("materialArea").classList.add("disable");
-    const q2 = query(collection(db, `students_details/`));
-    onSnapshot(q2, (querySnapshot) => {
-      querySnapshot.docs.forEach((data) => {
-        if (data.id === branch) {
-          setTimeTable(data.data().timetable);
-        }
-      });
-    });
-  };
-
   return (
     <>
-      <Navbar title="Students" showText={details[0].e_no} />
+      <Navbar title="Student Login - CMS" showText={details[0].e_no} />
       <section className="studentContainer">
         <StudentCard allData={details} />
         <div className="studentBtnsArea">
-          <ul className="studentList">
-            <li id="timetable" onClick={timetablebtnClicked}>
+          <ul className="studentList" id="studentList">
+            <li
+              id="timetable"
+              className="studentMenuList"
+              onClick={() => setSeletedBtn("timetable")}
+            >
               Timetable
             </li>
-            <li id="material" onClick={materialbtnClicked}>
+            <li
+              id="material"
+              className="studentMenuList"
+              onClick={() => setSeletedBtn("material")}
+            >
               Material
             </li>
-            <li id="marks" onClick={marksbtnClicked}>
+            <li
+              id="marks"
+              className="studentMenuList"
+              onClick={() => setSeletedBtn("marks")}
+            >
               View Marks
             </li>
-            <li id="notices" onClick={noticesbtnClicked}>
+            <li
+              id="notices"
+              className="studentMenuList"
+              onClick={() => setSeletedBtn("notice")}
+            >
               Notices
             </li>
           </ul>
         </div>
-        <section className="studentView disable" id="studentView">
-          <div className="notice" id="noticeArea">
-            <Notice />
-          </div>
-          <div className="material disable" id="materialArea">
-            <Material />
-          </div>
-          <div className="marks disable" id="marksArea">
-            In Development...🚀
-          </div>
-          <div className="timetable disable" id="timetableArea">
-            <Timetable ttlink={timetable} title={`timetable of ${branch}`} />
-          </div>
+        <section className="studentView" id="studentView">
+          {menuSelectedHandlerValue()}
         </section>
       </section>
     </>

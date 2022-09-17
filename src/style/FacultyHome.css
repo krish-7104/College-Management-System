@@ -17,19 +17,13 @@
   list-style: none;
   background-color: #1f1f1f;
   padding: 10px;
-  border-radius: 5px;
+  border-radius: 4px;
   margin: 10px;
   width: 200px;
   text-align: center;
   cursor: pointer;
   color: white;
-}
-.facultyList li:hover {
-  background-color: black;
-  transition: 0.8s;
-}
-.disable {
-  display: none;
+  border: 1.4px solid #1f1f1f;
 }
 .none {
   display: block;
@@ -37,7 +31,7 @@
 .facultyShowArea {
   margin: 40px 0px;
   background-color: white;
-  width: 85%;
+  width: 70%;
   padding: 20px;
   border-radius: 5px;
   text-align: center;
@@ -48,7 +42,6 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-bottom: 20px;
 }
 .noticeAddtitle,
 .materialAddtitle {

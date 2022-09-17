@@ -13,11 +13,9 @@ const Navbar = (props) => {
     return (
       <>
         <section className="navMain">
-          <p className="navTitle leftnavTitle">
-            College Management System - {props.title}
-          </p>
+          <p className="navTitle">{props.title}</p>
           <button className="logoutNavBtn" onClick={logoutHandler}>
-            Logout{" "}
+            <span id="logoutText">Logout </span>
             <span className="navLogoutIcon">
               <MdLogout />
             </span>
@@ -28,8 +26,8 @@ const Navbar = (props) => {
   } else {
     return (
       <>
-        <section className="navMain">
-          <p className="navTitle">College Management System - {props.title}</p>
+        <section className="navMain MainNavHead">
+          <p className="navTitle">{props.title}</p>
         </section>
       </>
     );

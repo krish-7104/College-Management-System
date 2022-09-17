@@ -116,7 +116,7 @@ const Login = () => {
 
   return (
     <React.StrictMode>
-      <Navbar title="Login" />
+      <Navbar title="College Management System" showText="" />
       <section className="loginContainer">
         <div className="loginCard">
           <img id="loginImg" src={require("../assets/classPng.png")} alt="" />
