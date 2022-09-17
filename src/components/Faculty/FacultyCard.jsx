@@ -1,9 +1,15 @@
 import React from "react";
 import "../../style/FacultyCard.css";
-import { MdEmail, MdCalendarToday, MdCall, MdClass } from "react-icons/md";
+import {
+  MdEmail,
+  MdCalendarToday,
+  MdCall,
+  MdClass,
+  MdFemale,
+  MdMale,
+  MdOutlineLocalOffer,
+} from "react-icons/md";
 const ProfileCard = (props) => {
-  let email = localStorage.getItem("loginid");
-  let department = localStorage.getItem("department");
   return (
     <>
       <section className="mainCard">
@@ -15,32 +21,41 @@ const ProfileCard = (props) => {
           <p className="infoText fname" id="fname">
             {props.allData[0].fullname}
           </p>
-          <p className="infoText" id="email">
-            <MdEmail />
-            &nbsp;{props.allData[0].email}
+          <p className="infoText" id="emp_id" title="Employee Number">
+            <span className="cardDataIcons">
+              <MdOutlineLocalOffer />
+            </span>
+            &nbsp; {props.allData[0].emp_id}
           </p>
-          <p className="infoText" id="department">
-            <MdClass />
-            &nbsp;{department}
+          <p className="infoText" id="email" title="Email Address">
+            <span className="cardDataIcons">
+              <MdEmail />
+            </span>
+            &nbsp; {props.allData[0].email}
           </p>
-          <p className="infoText" id="phoneNo">
-            <MdCall />
-            &nbsp;{props.allData[0].phoneno}
+          <p className="infoText" id="department" title="Department">
+            <span className="cardDataIcons">
+              <MdClass />
+            </span>
+            &nbsp; {props.allData[0].post}
           </p>
-          <p className="infoText" id="post">
-            Post: {props.allData[0].post}
+          <p className="infoText" id="phoneNo" title="Phone Number">
+            <span className="cardDataIcons">
+              <MdCall />
+            </span>
+            &nbsp; {props.allData[0].phoneno}
           </p>
-          <p className="infoText" id="gender">
-            Gender: {props.allData[0].gender}
+          <p className="infoText" id="dob" title="Date Of Birth">
+            <span className="cardDataIcons">
+              <MdCalendarToday />
+            </span>
+            &nbsp; {props.allData[0].dob}
           </p>
-          <p className="infoText" id="joining_date">
-            Joining Date: {props.allData[0].joining_date}
-          </p>
-          <p className="infoText" id="dob">
-            Experience: {props.allData[0].experience}+ Years
-          </p>
-          <p className="infoText" id="dob">
-            DOB: {props.allData[0].dob}
+          <p className="infoText" id="gender" title="Gender">
+            <span className="cardDataIcons">
+              {props.allData[0].gender === "Male" ? <MdMale /> : <MdFemale />}
+            </span>
+            &nbsp; {props.allData[0].gender}
           </p>
         </div>
       </section>

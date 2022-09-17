@@ -31,10 +31,11 @@
 .facultyShowArea {
   margin: 40px 0px;
   background-color: white;
-  width: 70%;
+  width: 60%;
   padding: 20px;
   border-radius: 5px;
   text-align: center;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 }
 .noticeAddForm,
 .materialAddForm {
@@ -45,35 +46,49 @@
 }
 .noticeAddtitle,
 .materialAddtitle {
-  font-size: 24px;
+  font-size: 20px;
   text-transform: uppercase;
   font-weight: 600;
-  margin-bottom: 30px;
-  border-bottom: 1.5px solid black;
+  margin-bottom: 20px;
 }
 .addNoticeTitleInput,
 .addmaterialTitleInput {
   display: flex;
   flex-direction: column;
-  width: 40%;
+  width: 60%;
 }
 .noticeLabel,
 .materialLabel {
   text-transform: uppercase;
   font-weight: 600;
   letter-spacing: 1.5px;
+  text-align: left;
+  margin: 10px 0px;
 }
 #uploadNoticeSubmitBtn,
 #uploadMaterialSubmitBtn {
   background-color: #1f1f1f;
   border: none;
   padding: 10px;
-  margin-top: 10px;
+  margin-top: 20px;
   color: white;
   text-transform: uppercase;
   letter-spacing: 1.5px;
   font-weight: 600;
   display: flex;
+}
+.inputSub {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 80px;
+}
+#inputSub {
+  margin: 0px !important;
+  width: 100% !important;
+  padding: 10px;
+  font-size: 14px;
 }
 @media only screen and (max-width: 700px) {
   .addNoticeTitleInput,
@@ -82,5 +97,16 @@
   }
   .noticeAddForm input {
     width: 100%;
+  }
+  .noticeAddtitle,
+  .materialAddtitle {
+    font-size: 18px;
+  }
+  .facultyShowArea {
+    width: 80%;
+  }
+  .noticeLabel,
+  .materialLabel {
+    font-size: 12px;
   }
 }

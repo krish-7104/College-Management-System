@@ -5,7 +5,6 @@ import { db } from "../backend/firebase";
 import { collection, query, onSnapshot } from "firebase/firestore";
 import "../style/FacultyHome.css";
 import UploadNotice from "./Faculty/UploadNotice";
-import AddStudent from "./Faculty/AddStudent";
 import UploadMaterial from "./Faculty/UploadMaterial";
 
 const FacultyHome = () => {
@@ -23,6 +22,7 @@ const FacultyHome = () => {
       dob: "",
       post: "",
       joining_date: "",
+      emp_id: "",
       photo:
         "https://cdn.pixabay.com/photo/2017/11/10/05/48/user-2935527_1280.png",
     },
@@ -55,6 +55,7 @@ const FacultyHome = () => {
               gender: data.data().gender,
               phoneno: data.data().phone_no,
               photo: data.data().photo,
+              emp_id: data.data().emp_id,
             },
           ]);
         }
@@ -79,11 +80,11 @@ const FacultyHome = () => {
       let btn = document.getElementById("uploadNoticeBtn");
       btn.classList.add("active");
       return <UploadNotice />;
-    } else if (selectedBtn === "register") {
+    } else if (selectedBtn === "marks") {
       ResetActiveMenu();
-      let btn = document.getElementById("registerStudentBtn");
+      let btn = document.getElementById("uploadMarksFacultyBtn");
       btn.classList.add("active");
-      return <AddStudent />;
+      return <UploadNotice />;
     }
   };
   return (
@@ -108,11 +109,11 @@ const FacultyHome = () => {
               Upload Material
             </li>
             <li
-              id="registerStudentBtn"
+              id="uploadMarksFacultyBtn"
               className="facultyMenuList"
-              onClick={() => setSeletedBtn("register")}
+              onClick={() => setSeletedBtn("marks")}
             >
-              Register Student
+              Upload Marks
             </li>
           </ul>
         </div>
