@@ -18,7 +18,16 @@ const Marks = (props) => {
               return <li>{marks}</li>;
             })}
             <li className="totalMarkShow">
-              {props.internal[1].reduce((x, y) => parseInt(x) + parseInt(y))}
+              {props.internal[1].reduce((x, y) => parseInt(x) + parseInt(y))}/
+              {props.internal[1].reduce(
+                (x, y) =>
+                  40 -
+                  parseInt(x) +
+                  parseInt(x) +
+                  40 -
+                  parseInt(y) +
+                  parseInt(y)
+              )}
             </li>
           </ul>
         </div>
@@ -38,7 +47,16 @@ const Marks = (props) => {
               return <li>{marks}</li>;
             })}
             <li className="totalMarkShow">
-              {props.external[1].reduce((x, y) => parseInt(x) + parseInt(y))}
+              {props.external[1].reduce((x, y) => parseInt(x) + parseInt(y))}/
+              {props.external[1].reduce(
+                (x, y) =>
+                  60 -
+                  parseInt(x) +
+                  parseInt(x) +
+                  60 -
+                  parseInt(y) +
+                  parseInt(y)
+              )}
             </li>
           </ul>
         </div>

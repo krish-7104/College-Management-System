@@ -6,6 +6,7 @@ import { collection, query, onSnapshot } from "firebase/firestore";
 import "../style/FacultyHome.css";
 import UploadNotice from "./Faculty/UploadNotice";
 import UploadMaterial from "./Faculty/UploadMaterial";
+import UploadMarks from "./Faculty/UploadMarks";
 
 const FacultyHome = () => {
   let loginId = localStorage.getItem("loginid");
@@ -84,7 +85,7 @@ const FacultyHome = () => {
       ResetActiveMenu();
       let btn = document.getElementById("uploadMarksFacultyBtn");
       btn.classList.add("active");
-      return <UploadNotice />;
+      return <UploadMarks />;
     }
   };
   return (

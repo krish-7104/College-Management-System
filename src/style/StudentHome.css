@@ -125,7 +125,7 @@
   padding-right: 10px;
 }
 .marksShowArea {
-  width: 80%;
+  width: 76%;
   display: flex;
   justify-content: space-between;
 }
@@ -133,7 +133,8 @@
   box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
   padding: 20px;
   background-color: white;
-  width: 45%;
+  width: 46%;
+  border-radius: 6px;
 }
 .marksCard li {
   color: black !important;
