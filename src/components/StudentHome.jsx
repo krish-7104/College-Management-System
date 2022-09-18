@@ -12,8 +12,6 @@ const StudentHome = () => {
   const [selectedBtn, setSeletedBtn] = useState("");
   let loginId = localStorage.getItem("loginid");
   let branch = localStorage.getItem("branch");
-  const [externalMarks, setExternalMarks] = useState(null);
-  const [internalMarks, setInternalMarks] = useState(null);
   const [timetable, setTimeTable] = useState("");
   const [details, setDetails] = useState([
     {
@@ -26,6 +24,8 @@ const StudentHome = () => {
       category: "",
       dob: "",
       email: "",
+      midsem: [],
+      external: [],
       photo:
         "https://cdn.pixabay.com/photo/2017/11/10/05/48/user-2935527_1280.png",
     },
@@ -46,14 +46,6 @@ const StudentHome = () => {
     onSnapshot(q1, (querySnapshot) => {
       querySnapshot.docs.forEach((data) => {
         if (data.data().e_no === loginId) {
-          setInternalMarks([
-            Object.keys(data.data().midsem3),
-            Object.values(data.data().midsem3),
-          ]);
-          setExternalMarks([
-            Object.keys(data.data().external3),
-            Object.values(data.data().external3),
-          ]);
           setDetails(() => [
             {
               fullname:
@@ -71,6 +63,14 @@ const StudentHome = () => {
               photo: data.data().photo,
               email: data.data().email,
               dob: data.data().birth_date,
+              midsem: [
+                Object.keys(data.data().midsem[data.data().current_sem]),
+                Object.values(data.data().midsem[data.data().current_sem]),
+              ],
+              external: [
+                Object.keys(data.data().external[data.data().current_sem]),
+                Object.values(data.data().external[data.data().current_sem]),
+              ],
             },
           ]);
         }
@@ -100,7 +100,9 @@ const StudentHome = () => {
     } else if (selectedBtn === "marks") {
       let btn = document.getElementById("marks");
       btn.classList.add("active");
-      return <Marks internal={internalMarks} external={externalMarks} />;
+      return (
+        <Marks internal={details[0].midsem} external={details[0].external} />
+      );
     } else if (selectedBtn === "notice") {
       ResetActiveMenu();
       let btn = document.getElementById("notices");
