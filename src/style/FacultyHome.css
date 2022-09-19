@@ -29,11 +29,10 @@
   display: block;
 }
 .facultyShowArea {
+  width: 100%;
   margin: 40px 0px;
-  width: 60%;
-  border-radius: 5px;
-  text-align: center;
-  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  display: flex;
+  justify-content: center;
 }
 .noticeAddForm,
 .materialAddForm {
@@ -43,6 +42,8 @@
   align-items: center;
   background-color: white;
   padding: 20px;
+  width: 50%;
+  box-shadow: rgba(0, 0, 0, 0.2) 1.95px 1.95px 2.6px;
 }
 .noticeAddtitle,
 .materialAddtitle {
@@ -89,6 +90,57 @@
   width: 100% !important;
   padding: 10px;
   font-size: 14px;
+}
+.studentListViewFaculty {
+  background-color: white;
+  padding: 20px;
+  width: 80%;
+  box-shadow: rgba(0, 0, 0, 0.2) 1.95px 1.95px 2.6px;
+}
+.selectBranch {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+select {
+  padding: 8px;
+  font-size: 14px;
+}
+.studentBranchShowTitle {
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1.4px;
+  font-size: 22px;
+  margin-bottom: 20px;
+}
+.studentListShowCard {
+  background-color: white;
+  display: grid;
+  grid-template-columns: auto repeat(4, 1fr);
+  padding: 10px;
+  border-bottom: 1.4px solid #1f1f1f;
+}
+.studentListShowName {
+  grid-column: 3 / span 2;
+}
+.studentListShowCard:nth-child(odd) {
+  background-color: #cbcbcb80;
+}
+.studentlistViewProfile {
+  height: 60px !important;
+  width: 60px !important;
+  object-fit: cover !important;
+  margin: 0px !important;
+  border-radius: 10%;
+  margin-right: 20px !important;
+}
+.studentListShowEnrollment,
+.studentListShowName,
+.studentListShowPhoneNo {
+  display: grid;
+  place-items: center start;
 }
 @media only screen and (max-width: 700px) {
   .addNoticeTitleInput,
