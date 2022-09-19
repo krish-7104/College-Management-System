@@ -2,11 +2,13 @@ import React from "react";
 import { db } from "../../backend/firebase";
 import { collection, query, onSnapshot } from "firebase/firestore";
 import { useState, useEffect } from "react";
+
 const StudentList = () => {
   const [branches, setBranches] = useState([]);
-  const [selectedBranch, setSelectedBranch] = useState("");
+  const [selectedBranch, setSelectedBranch] = useState(null);
+  const [selectedSemester, setSelectedSemester] = useState(null);
 
-  const callDataFromDatabase = () => {
+  const callBranchDataFromDatabase = () => {
     const q2 = query(collection(db, `students_details/`));
     onSnapshot(q2, (querySnapshot) => {
       querySnapshot.docs.forEach((data) => {
@@ -16,13 +18,60 @@ const StudentList = () => {
   };
 
   useEffect(() => {
-    callDataFromDatabase();
+    callBranchDataFromDatabase();
   }, []);
 
   const branchSelectHandler = (e) => {
+    let data = document.getElementById("showListSec");
     setSelectedBranch(e.target.value);
   };
-
+  const semesterSelectHandler = (e) => {
+    let data = document.getElementById("showListSec");
+    setSelectedSemester(e.target.value);
+  };
+  const callStudentListDataFromDatabase = () => {
+    const q2 = query(
+      collection(db, `students_details/${selectedBranch}/individual_student/`)
+    );
+    onSnapshot(q2, (querySnapshot) => {
+      let data = document.getElementById("showListSec");
+      let html = `<div class="studentListTable">
+        <p class="studentBranchShowTitle">
+        Students Of ${selectedBranch} Branch
+        </p>`;
+      querySnapshot.docs.forEach((data) => {
+        console.log(data.data().current_sem);
+        if (
+          data.data().current_sem.toString() === selectedSemester.toString()
+        ) {
+          html += ` <div class="studentListShowCard">
+        <img
+          class="studentlistViewProfile"
+          src=${data.data().photo}
+          alt="student list data"
+        />
+        <p class="studentListShowEnrollment">
+        ${data.data().e_no}
+        </p>
+        <p class="studentListShowName">${
+          data.data().first_name +
+          " " +
+          data.data().middle_name +
+          " " +
+          data.data().last_name
+        }</p>
+        <p class="studentListShowPhoneNo">
+        ${data.data().phone_no}
+        </p>
+      </div>`;
+        }
+      });
+      if (html.endsWith("</p>")) {
+        html = "No Students Detail Found!";
+      }
+      data.innerHTML = html;
+    });
+  };
   return (
     <section className="studentListViewFaculty">
       <div className="selectBranch">
@@ -40,34 +89,29 @@ const StudentList = () => {
             );
           })}
         </select>
+        <select
+          name="selectSemester"
+          id="selectSemester"
+          onChange={semesterSelectHandler}
+        >
+          <option value="null">--- Select Semester ---</option>
+          <option value="1">1st Semester</option>
+          <option value="2">2nd Semester</option>
+          <option value="3">3rd Semester</option>
+          <option value="4">4th Semester</option>
+          <option value="5">5th Semester</option>
+          <option value="6">6th Semester</option>
+          <option value="7">7th Semester</option>
+          <option value="8">8th Semester</option>
+        </select>
+        <button
+          id="getStudentDataBtn"
+          onClick={() => callStudentListDataFromDatabase()}
+        >
+          Get Student Data
+        </button>
       </div>
-      <div className="showListSec">
-        <div className="studentListTable">
-          <p className="studentBranchShowTitle">
-            Students Of {selectedBranch} Branch
-          </p>
-          <div className="studentListShowCard">
-            <img
-              className="studentlistViewProfile"
-              src="https://images.unsplash.com/photo-1597589827317-4c6d6e0a90bd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8c3F1YXJlfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60"
-              alt="student list data"
-            />
-            <p className="studentListShowEnrollment">Lorem ipsum .</p>
-            <p className="studentListShowName">Lorem, ipsum dolor.</p>
-            <p className="studentListShowPhoneNo">09875432</p>
-          </div>
-          <div className="studentListShowCard">
-            <img
-              className="studentlistViewProfile"
-              src="https://images.unsplash.com/photo-1597589827317-4c6d6e0a90bd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8c3F1YXJlfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60"
-              alt="student list data"
-            />
-            <p className="studentListShowEnrollment">Lorem ipsum .</p>
-            <p className="studentListShowName">Lorem, ipsum dolor.</p>
-            <p className="studentListShowPhoneNo">09875432</p>
-          </div>
-        </div>
-      </div>
+      <div className="showListSec" id="showListSec"></div>
     </section>
   );
 };

@@ -99,7 +99,7 @@
 }
 .selectBranch {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
   margin-bottom: 20px;
@@ -107,6 +107,11 @@
 select {
   padding: 8px;
   font-size: 14px;
+  margin: 10px;
+}
+.showListSec {
+  width: 100%;
+  margin-top: 20px;
 }
 .studentBranchShowTitle {
   font-weight: bold;
@@ -120,14 +125,15 @@ select {
   display: grid;
   grid-template-columns: auto repeat(4, 1fr);
   padding: 10px;
+  width: 100%;
   border-bottom: 1.4px solid #1f1f1f;
 }
 .studentListShowName {
   grid-column: 3 / span 2;
 }
-.studentListShowCard:nth-child(odd) {
+/* .studentListShowCard:nth-child(odd) {
   background-color: #cbcbcb80;
-}
+} */
 .studentlistViewProfile {
   height: 60px !important;
   width: 60px !important;
@@ -141,6 +147,11 @@ select {
 .studentListShowPhoneNo {
   display: grid;
   place-items: center start;
+}
+#getStudentDataBtn {
+  background-color: #1f1f1f;
+  padding: 10px;
+  margin: 10px;
 }
 @media only screen and (max-width: 700px) {
   .addNoticeTitleInput,
