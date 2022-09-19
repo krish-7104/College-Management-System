@@ -30,9 +30,7 @@
 }
 .facultyShowArea {
   margin: 40px 0px;
-  background-color: white;
   width: 60%;
-  padding: 20px;
   border-radius: 5px;
   text-align: center;
   box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
@@ -43,6 +41,8 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-color: white;
+  padding: 20px;
 }
 .noticeAddtitle,
 .materialAddtitle {

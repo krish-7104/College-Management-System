@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import Navbar from "./Navbar";
-import StudentCard from "./Student/StudentCard";
-import "../style/StudentHome.css";
-import { db } from "../backend/firebase";
+import Navbar from "../Navbar";
+import StudentCard from "./StudentCard";
+import "../../style/StudentHome.css";
+import { db } from "../../backend/firebase";
 import { collection, query, onSnapshot } from "firebase/firestore";
-import Notice from "./Student/Notice";
-import Material from "./Student/Material";
-import Timetable from "./Student/Timetable";
-import Marks from "./Student/Marks";
+import Notice from "./Notice";
+import Material from "./Material";
+import Timetable from "./Timetable";
+import Marks from "./Marks";
 const StudentHome = () => {
   const [selectedBtn, setSeletedBtn] = useState("");
   let loginId = localStorage.getItem("loginid");

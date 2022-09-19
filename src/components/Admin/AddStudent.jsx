@@ -59,52 +59,64 @@ const AddStudent = (props) => {
         <div className="adminContainer">
           <p className="adminTitle">Add Students</p>
           <form className="adminForm" name="adminForm">
+            <label htmlFor="FirstName">First Name</label>
             <input
               required
               type="text"
               placeholder="First Name"
               id="FirstName"
             />
+            <label htmlFor="">Hello</label>
             <input
               required
               type="text"
               placeholder="Middle Name"
               id="MiddleName"
             />
+            <label htmlFor="">Hello</label>
             <input required type="text" placeholder="Last Name" id="LastName" />
+            <label htmlFor="">Hello</label>
             <input required type="text" placeholder="Date Of Birth" id="DOB" />
+            <label htmlFor="">Hello</label>
             <input
               required
               type="number"
               placeholder="Current Semester"
               id="currentSem"
             />
+            <label htmlFor="">Hello</label>
             <input
               required
               type="number"
               placeholder="Enrollment No"
               id="e_no"
             />
+            <label htmlFor="">Hello</label>
             <input required type="text" placeholder="Branch" id="branch" />
+            <label htmlFor="">Hello</label>
             <input required type="text" placeholder="Gender" id="genderStu" />
+            <label htmlFor="">Hello</label>
             <input
               required
               type="number"
               placeholder="Phone Number"
               id="phoneStu"
             />
+            <label htmlFor="">Hello</label>
             <input
               required
               type="text"
               placeholder="Category"
               id="categoryStu"
             />
+            <label htmlFor="">Hello</label>
             <input
               required
               type="email"
               placeholder="Email Address"
               id="emailStu"
             />
+            <label htmlFor="">Hello</label>
             <input
               required
               type="text"

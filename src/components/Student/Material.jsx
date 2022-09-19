@@ -31,11 +31,11 @@ const Material = () => {
     );
   };
   return (
-    <React.StrictMode>
+    <>
       <div className="material" id="areaFormaterialShow">
         <p id="noMaterial">No Material</p> {material.map(MaterialViewCard)}
       </div>
-    </React.StrictMode>
+    </>
   );
 };
 

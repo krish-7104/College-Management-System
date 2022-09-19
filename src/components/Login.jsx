@@ -115,7 +115,7 @@ const Login = () => {
   }, []);
 
   return (
-    <React.StrictMode>
+    <>
       <Navbar title="College Management System" showText="" />
       <section className="loginContainer">
         <div className="loginCard">
@@ -138,7 +138,7 @@ const Login = () => {
         </div>
         <ToastContainer />
       </section>
-    </React.StrictMode>
+    </>
   );
 };
 

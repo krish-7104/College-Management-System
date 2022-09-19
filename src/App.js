@@ -1,18 +1,13 @@
 import React from "react";
 import "./style/App.css";
 import Login from "./components/Login";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
-import StudentHome from "./components/StudentHome";
-import FacultyHome from "./components/FacultyHome";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import StudentHome from "./components/Student/StudentHome";
+import FacultyHome from "./components/Faculty/FacultyHome";
 import Error from "./components/Error";
 const App = () => {
   return (
-    <React.StrictMode>
+    <>
       <Router>
         <Routes>
           <Route path="/" element={<Login />} />
@@ -21,7 +16,7 @@ const App = () => {
           <Route path="*" element={<Error />} />
         </Routes>
       </Router>
-    </React.StrictMode>
+    </>
   );
 };
 

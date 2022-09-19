@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
-import Navbar from "./Navbar";
-import FacultyCard from "./Faculty/FacultyCard";
-import { db } from "../backend/firebase";
+import Navbar from "../Navbar";
+import FacultyCard from "./FacultyCard";
+import { db } from "../../backend/firebase";
 import { collection, query, onSnapshot } from "firebase/firestore";
-import "../style/FacultyHome.css";
-import UploadNotice from "./Faculty/UploadNotice";
-import UploadMaterial from "./Faculty/UploadMaterial";
-import UploadMarks from "./Faculty/UploadMarks";
+import "../../style/FacultyHome.css";
+import UploadNotice from "./UploadNotice";
+import UploadMaterial from "./UploadMaterial";
+import UploadMarks from "./UploadMarks";
+import StudentList from "./StudentList";
 
 const FacultyHome = () => {
   let loginId = localStorage.getItem("loginid");
@@ -29,10 +30,6 @@ const FacultyHome = () => {
     },
   ]);
   useEffect(() => {
-    callData();
-  }, []);
-
-  const callData = () => {
     const q1 = query(
       collection(db, `faculty_details/${department}/faculty_info`)
     );
@@ -62,7 +59,8 @@ const FacultyHome = () => {
         }
       });
     });
-  };
+  }, [department, loginId]);
+
   const ResetActiveMenu = () => {
     let btnsCont = document.getElementById("facultyList");
     let btns = btnsCont.getElementsByClassName("facultyMenuList");
@@ -86,6 +84,11 @@ const FacultyHome = () => {
       let btn = document.getElementById("uploadMarksFacultyBtn");
       btn.classList.add("active");
       return <UploadMarks />;
+    } else if (selectedBtn === "student-list") {
+      ResetActiveMenu();
+      let btn = document.getElementById("viewStudentFacultyBtn");
+      btn.classList.add("active");
+      return <StudentList />;
     }
   };
   return (
@@ -115,6 +118,13 @@ const FacultyHome = () => {
               onClick={() => setSeletedBtn("marks")}
             >
               Upload Marks
+            </li>
+            <li
+              id="viewStudentFacultyBtn"
+              className="facultyMenuList"
+              onClick={() => setSeletedBtn("student-list")}
+            >
+              Student List
             </li>
           </ul>
         </div>
