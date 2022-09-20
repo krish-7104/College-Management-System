@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { db } from "../../backend/firebase";
 import { collection, query, onSnapshot } from "firebase/firestore";
-import { useState, useEffect } from "react";
 
 const StudentList = () => {
   const [branches, setBranches] = useState([]);
@@ -22,11 +21,9 @@ const StudentList = () => {
   }, []);
 
   const branchSelectHandler = (e) => {
-    let data = document.getElementById("showListSec");
     setSelectedBranch(e.target.value);
   };
   const semesterSelectHandler = (e) => {
-    let data = document.getElementById("showListSec");
     setSelectedSemester(e.target.value);
   };
   const callStudentListDataFromDatabase = () => {
@@ -40,20 +37,22 @@ const StudentList = () => {
         Students Of ${selectedBranch} Branch
         </p>`;
       querySnapshot.docs.forEach((data) => {
-        console.log(data.data().current_sem);
         if (
           data.data().current_sem.toString() === selectedSemester.toString()
         ) {
-          html += ` <div class="studentListShowCard">
+          html += ` <div class="studentListShowCardStudentView">
         <img
           class="studentlistViewProfile"
           src=${data.data().photo}
           alt="student list data"
         />
         <p class="studentListShowEnrollment">
+        <small>E No.</small>
         ${data.data().e_no}
         </p>
-        <p class="studentListShowName">${
+        <p class="studentListShowName">
+        <small>Full Name</small>
+        ${
           data.data().first_name +
           " " +
           data.data().middle_name +
@@ -61,6 +60,7 @@ const StudentList = () => {
           data.data().last_name
         }</p>
         <p class="studentListShowPhoneNo">
+        <small>Phone No.</small>
         ${data.data().phone_no}
         </p>
       </div>`;
