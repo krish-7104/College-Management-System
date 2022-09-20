@@ -1,0 +1,126 @@
+.adminCards {
+  margin-top: 15px;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.adminCard {
+  background-color: whitesmoke;
+  box-shadow: rgba(0, 0, 0, 0.2) 1.95px 1.95px 2.6px;
+  margin: 20px;
+  width: 20%;
+  padding: 15px;
+  border-radius: 6px;
+}
+.adminCardLabel {
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-align: center;
+}
+.mainAdminArea {
+  margin: 0px 100px;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.adminBtnArea {
+  margin-top: 30px;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  align-self: flex-end;
+  background-color: whitesmoke;
+  box-shadow: rgba(0, 0, 0, 0.2) 1.95px 1.95px 2.6px;
+  padding: 8px;
+  border-radius: 6px;
+}
+.adminPanelBtns {
+  background-color: #1f1f1f;
+  padding: 10px;
+  border-radius: 4px;
+  margin: 10px;
+  width: 200px;
+  text-align: center;
+  cursor: pointer;
+  color: white;
+  border: 1.4px solid #1f1f1f;
+}
+.adminAllBranchData {
+  width: 40%;
+  background-color: whitesmoke;
+  box-shadow: rgba(0, 0, 0, 0.2) 1.95px 1.95px 2.6px;
+  padding: 20px;
+}
+.adminBranchDetailTitle {
+  font-weight: bold;
+  text-align: center;
+  border-bottom: 1.4px solid black;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+.adminBranchDetailLabel {
+  text-align: center;
+  padding: 10px;
+}
+/* Add Student Css */
+.MainAdmin {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+.adminContainer {
+  background-color: white;
+  padding: 15px 20px;
+  display: grid;
+  border-radius: 6px;
+}
+.adminTitle {
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 2px;
+  margin-bottom: 20px;
+  font-size: 26px;
+  margin-top: 10px;
+}
+.adminForm {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+.adminForm input {
+  margin: 10px;
+}
+#submitDataAdmin {
+  background-color: #1f1f1f;
+  color: white;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  display: block;
+  border: none;
+  margin: auto;
+  margin-top: 20px;
+  padding: 12px 70px;
+  grid-column: 1 / span 2;
+}
+
+.addStudentInputs {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  flex-direction: column;
+}
+.addStudentInputs input {
+  margin: 5px !important;
+}
+
+.addStudentInputs label {
+  margin: 2px !important;
+}

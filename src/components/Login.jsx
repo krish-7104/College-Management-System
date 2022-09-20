@@ -68,9 +68,14 @@ const Login = () => {
           }
         });
         if (k === 1) {
+          console.log(userId);
           localStorage.setItem("loginid", userId);
           localStorage.setItem("department", department);
-          navigate("/faculty-home");
+          if (userId.includes("admin")) {
+            navigate("/admin");
+          } else {
+            navigate("/faculty-home");
+          }
           k = 0;
         } else {
           notifyAlert("Incorrect Credentials!");

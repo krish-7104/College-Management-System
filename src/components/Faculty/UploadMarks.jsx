@@ -1,13 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { db } from "../../backend/firebase";
-import { collection, query, onSnapshot } from "firebase/firestore";
-import { MdOutlineFileUpload } from "react-icons/md";
+import {
+  collection,
+  query,
+  onSnapshot,
+  setDoc,
+  doc,
+  Timestamp,
+} from "firebase/firestore";
 const UploadMarks = () => {
   const [branches, setBranches] = useState([]);
   const [selectedBranch, setSelectedBranch] = useState(null);
   const [subjects, setSubjects] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [selectedSemester, setSelectedSemester] = useState(null);
+  const [examTypeSemester, setExamTypeSemester] = useState(null);
+
   const callBranchDataFromDatabase = () => {
     const q2 = query(collection(db, `students_details/`));
     onSnapshot(q2, (querySnapshot) => {
@@ -32,16 +40,48 @@ const UploadMarks = () => {
   const branchSelectHandler = (e) => {
     setSelectedBranch(e.target.value);
   };
+  const selectExamTypeHandler = (e) => {
+    setExamTypeSemester(e.target.value);
+  };
   const subjectSelectHandler = (e) => {
     setSelectedSubject(e.target.value);
   };
   const semesterSelectHandler = (e) => {
     setSelectedSemester(e.target.value);
   };
+  const submitMarksOnDatabase = async () => {};
+  //   let allbtns = document.getElementsByClassName("submitMarksUploadMarksSec");
+  //   for (let i = 0; i < allbtns.length - 1; i++) {
+  //     let mark = document.getElementById(allbtns[i].id + "mark").value;
+  //     console.count("hey");
+  //     if (examTypeSemester === "midsem") {
+  //       try {
+  //         await setDoc(
+  //           doc(
+  //             db,
+  //             `students_details/${selectedBranch}/individual_student/`,
+  //             allbtns[i].id
+  //           ),
+  //           {
+  //             midsem: {
+  //               `${selectedSemester}`: {
+  //                 selectedSemester: mark,
+  //               },
+  //             },
+  //             updated: Timestamp.now(),
+  //           }
+  //         );
+  //       } catch (err) {
+  //         alert(err);
+  //       }
+  //     }
+  //   }
+  // };
   const callStudentListDataFromDatabase = () => {
     const q2 = query(
       collection(db, `students_details/${selectedBranch}/individual_student/`)
     );
+    console.log(selectedBranch);
     onSnapshot(q2, (querySnapshot) => {
       let data = document.getElementById("showStudentMarkUploadSec");
       let html = `<div class="studentListTable">
@@ -49,6 +89,7 @@ const UploadMarks = () => {
       Upload Marks Of ${selectedSubject} - ${selectedBranch}
       </p>`;
       querySnapshot.docs.forEach((data) => {
+        console.log(data);
         if (
           data.data().current_sem.toString() === selectedSemester.toString()
         ) {
@@ -65,7 +106,7 @@ const UploadMarks = () => {
           data.data().last_name
         }</p>
         <input type="number" name="marks" id='${
-          data.data().e_no
+          data.data().e_no + "mark"
         }' placeholder="Enter Marks" />
       </div>`;
         }
@@ -76,6 +117,7 @@ const UploadMarks = () => {
       data.innerHTML = html;
     });
   };
+
   return (
     <section className="uploadMarksSection">
       <div className="selectBranch">
@@ -84,6 +126,7 @@ const UploadMarks = () => {
           id="selectBranch"
           onChange={branchSelectHandler}
         >
+          <option value="null">--Select Branch--</option>
           {branches.map((branch, index) => {
             return (
               <option key={index} value={branch}>
@@ -97,6 +140,7 @@ const UploadMarks = () => {
           id="selectSemester"
           onChange={semesterSelectHandler}
         >
+          <option value="null">--Select Semester--</option>
           <option value="1">1st Semester</option>
           <option value="2">2nd Semester</option>
           <option value="3">3rd Semester</option>
@@ -111,19 +155,29 @@ const UploadMarks = () => {
           id="selectSubject"
           onChange={subjectSelectHandler}
         >
+          <option value="null">--Select Subject--</option>
           {subjects.map((branch, index) => {
             return (
-              <option key={index} value={branch}>
+              <option key={index + 1} value={branch}>
                 {branch}
               </option>
             );
           })}
         </select>
+        <select
+          name="selectExamType"
+          id="selectExamType"
+          onChange={selectExamTypeHandler}
+        >
+          <option value="null">--Select Exam--</option>
+          <option value="midsem">Midsem</option>
+          <option value="external">External</option>
+        </select>
         <button
           id="getStudentDataBtn"
           onClick={() => callStudentListDataFromDatabase()}
         >
-          Get Student Data
+          Get Student Details
         </button>
       </div>
       <div
@@ -131,7 +185,10 @@ const UploadMarks = () => {
         id="showStudentMarkUploadSec"
       ></div>
       <div className="uploadMarksSubmitArea">
-        <button className="submitMarksUploadMarksSec">
+        <button
+          className="submitMarksUploadMarksSec"
+          onClick={submitMarksOnDatabase}
+        >
           Upload Marks Of Student
         </button>
       </div>

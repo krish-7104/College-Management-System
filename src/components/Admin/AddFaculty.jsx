@@ -1,9 +1,10 @@
 import React from "react";
 import "../../style/Admin.css";
 import { db } from "../../backend/firebase";
-import { setDoc, doc } from "firebase/firestore";
+import { collection, addDoc, setDoc, doc } from "firebase/firestore";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useState } from "react";
 const AddStudent = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();

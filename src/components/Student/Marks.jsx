@@ -1,30 +1,47 @@
 import React from "react";
+import { useState, useEffect } from "react";
 
 const Marks = (props) => {
+  const [midMarks, setmidMarks] = useState([]);
+  const [external, setExternal] = useState([]);
+  const [subjectsMid, setSubjectsMid] = useState([]);
+  const [subjectsExternal, setSubjectsExternal] = useState([]);
+
+  useEffect(() => {
+    props.internal[0].split(",").forEach((ele) => {
+      setSubjectsMid((prev) => [...prev, ele.split("+")[0]]);
+    });
+    props.internal[0].split(",").forEach((ele) => {
+      setmidMarks((prev) => [...prev, ele.split("+")[1]]);
+    });
+    props.external[0].split(",").forEach((ele) => {
+      setSubjectsExternal((prev) => [...prev, ele.split("+")[0]]);
+    });
+    props.external[0].split(",").forEach((ele) => {
+      setExternal((prev) => [...prev, ele.split("+")[1]]);
+    });
+  }, []);
   return (
+    // <div>Hi</div>
     <section className="marksShowArea">
       <div className="marksCard">
         <p className="marksTitle">Internal Exam Marks (40)</p>
         <hr />
         <div className="marksTable">
           <ul className="subjectList">
-            {props.internal === null
-              ? " --- "
-              : props.internal[0].map((subject) => {
-                  return <li>{subject}</li>;
-                })}
+            {subjectsMid.map((subject) => {
+              return <li>{subject}</li>;
+            })}
             <li className="totalMarkShow">Total Marks</li>
           </ul>
           <ul className="marksList">
-            {props.internal === null
-              ? 0
-              : props.internal[1].map((marks) => {
-                  return <li>{marks}</li>;
-                })}
+            {midMarks.map((marks) => {
+              return <li>{marks}</li>;
+            })}
             <li className="totalMarkShow">
-              {props.internal === null
-                ? 0
-                : props.internal[1].reduce((x, y) => parseInt(x) + parseInt(y))}
+              {midMarks.length !== 0
+                ? midMarks.reduce((x, y) => parseInt(x) + parseInt(y))
+                : 0}
             </li>
           </ul>
         </div>
@@ -34,23 +51,19 @@ const Marks = (props) => {
         <hr />
         <div className="marksTable">
           <ul className="subjectList">
-            {props.external === null
-              ? " --- "
-              : props.external[0].map((subject) => {
-                  return <li>{subject}</li>;
-                })}
+            {subjectsExternal.map((subjects) => {
+              return <li>{subjects}</li>;
+            })}
             <li className="totalMarkShow">Total Marks</li>
           </ul>
           <ul className="marksList">
-            {props.external === null
-              ? 0
-              : props.external[1].map((marks) => {
-                  return <li>{marks}</li>;
-                })}
+            {external.map((marks) => {
+              return <li>{marks}</li>;
+            })}
             <li className="totalMarkShow">
-              {props.external === null
-                ? 0
-                : props.external[1].reduce((x, y) => parseInt(x) + parseInt(y))}
+              {external.length !== 0
+                ? external.reduce((x, y) => parseInt(x) + parseInt(y))
+                : 0}
             </li>
           </ul>
         </div>
@@ -58,5 +71,4 @@ const Marks = (props) => {
     </section>
   );
 };
-
 export default Marks;

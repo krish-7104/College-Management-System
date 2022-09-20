@@ -13,6 +13,12 @@ const StudentHome = () => {
   let loginId = localStorage.getItem("loginid");
   let branch = localStorage.getItem("branch");
   const [timetable, setTimeTable] = useState("");
+  const [studentMarks, setStudentMarks] = useState([
+    {
+      midsem: [],
+      external: [],
+    },
+  ]);
   const [details, setDetails] = useState([
     {
       fullname: "",
@@ -24,22 +30,12 @@ const StudentHome = () => {
       category: "",
       dob: "",
       email: "",
-      midsem: [],
-      external: [],
       photo:
         "https://cdn.pixabay.com/photo/2017/11/10/05/48/user-2935527_1280.png",
     },
   ]);
 
-  const callDataFromDatabase = () => {
-    const q2 = query(collection(db, `students_details/`));
-    onSnapshot(q2, (querySnapshot) => {
-      querySnapshot.docs.forEach((data) => {
-        if (data.id === branch) {
-          setTimeTable(data.data().timetable);
-        }
-      });
-    });
+  useEffect(() => {
     const q1 = query(
       collection(db, `students_details/${branch}/individual_student/`)
     );
@@ -63,23 +59,35 @@ const StudentHome = () => {
               photo: data.data().photo,
               email: data.data().email,
               dob: data.data().birth_date,
-              midsem: [
-                Object.keys(data.data().midsem[data.data().current_sem]),
-                Object.values(data.data().midsem[data.data().current_sem]),
-              ],
-              external: [
-                Object.keys(data.data().external[data.data().current_sem]),
-                Object.values(data.data().external[data.data().current_sem]),
-              ],
             },
           ]);
         }
       });
     });
-  };
-  useEffect(() => {
-    callDataFromDatabase();
-  }, [branch, loginId]);
+    const q2 = query(collection(db, `students_details/`));
+    onSnapshot(q2, (querySnapshot) => {
+      querySnapshot.docs.forEach((data) => {
+        if (data.id === branch) {
+          setTimeTable(data.data().timetable);
+        }
+      });
+    });
+    const q3 = query(
+      collection(db, `students_details/${branch}/student_marks/`)
+    );
+    onSnapshot(q3, (querySnapshot) => {
+      querySnapshot.docs.forEach((data) => {
+        if (data.id === loginId) {
+          setStudentMarks(() => [
+            {
+              midsem: data.data().midsem,
+              external: data.data().external,
+            },
+          ]);
+        }
+      });
+    });
+  }, []);
 
   const ResetActiveMenu = () => {
     let btnsCont = document.getElementById("studentList");
@@ -101,7 +109,10 @@ const StudentHome = () => {
       let btn = document.getElementById("marks");
       btn.classList.add("active");
       return (
-        <Marks internal={details[0].midsem} external={details[0].external} />
+        <Marks
+          internal={studentMarks[0].midsem}
+          external={studentMarks[0].external}
+        />
       );
     } else if (selectedBtn === "notice") {
       ResetActiveMenu();
