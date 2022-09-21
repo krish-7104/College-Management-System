@@ -6,17 +6,28 @@ import "react-toastify/dist/ReactToastify.css";
 const UploadNotice = () => {
   const submitBtnClickedNotice = async () => {
     let uploadDate = Timestamp.now();
-    let title = document.getElementById("noticeTitleAdd");
-    let link = document.getElementById("noticeLinkAdd");
-    if (title.value !== "" && link.value !== "") {
+    let title = document.getElementById("noticeTitleAdd").value;
+    let link = document.getElementById("noticeLinkAdd").value;
+    if (link === "") {
+      link = "no";
+    }
+    if (title.value !== "") {
       try {
         await addDoc(collection(db, "notices"), {
-          title: title.value,
-          link: link.value,
-          link_present: true,
+          title: title,
+          link: link,
           timestamp: uploadDate,
         });
-        alert("Data Added Successfully!");
+        toast.success("Notice Upload Successfully!", {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
       } catch (err) {
         toast.warn("Notice Upload Failed, Try Again!", {
           position: "bottom-right",
@@ -58,6 +69,8 @@ const UploadNotice = () => {
           </label>
           <input type="text" id="noticeLinkAdd" />
         </div>
+        <br />
+        <p className="leaveBlankMessage">Leave Blank If No Link Present</p>
         <button id="uploadNoticeSubmitBtn" onClick={submitBtnClickedNotice}>
           Upload Notice
         </button>

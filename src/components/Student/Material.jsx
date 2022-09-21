@@ -7,7 +7,7 @@ import ShowCard from "./ShowCard";
 const Material = () => {
   const [material, setMaterial] = useState([]);
   useEffect(() => {
-    const q1 = query(collection(db, `materials`), orderBy("timestamp"));
+    const q1 = query(collection(db, `materials`), orderBy("timestamp", "desc"));
     onSnapshot(q1, (querySnapshot) => {
       setMaterial(
         querySnapshot.docs.map((doc) => ({

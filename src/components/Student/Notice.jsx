@@ -6,7 +6,7 @@ import ShowCard from "./ShowCard";
 const Notice = () => {
   const [notice, setNotice] = useState([]);
   const callNoticeData = () => {
-    const q1 = query(collection(db, `notices`), orderBy("timestamp"));
+    const q1 = query(collection(db, `notices`), orderBy("timestamp", "desc"));
     onSnapshot(q1, (querySnapshot) => {
       setNotice(
         querySnapshot.docs.map((doc) => ({
@@ -22,27 +22,15 @@ const Notice = () => {
 
   const NoticeViewCard = (data) => {
     document.getElementById("noNotice").style.display = "none";
-    if (data.link_present === false) {
-      return (
-        <ShowCard
-          key={data.id}
-          time={data.allData.timestamp}
-          title={data.allData.title}
-          link="nolink"
-          type="notice"
-        />
-      );
-    } else {
-      return (
-        <ShowCard
-          key={data.id}
-          time={data.allData.timestamp}
-          title={data.allData.title}
-          link={data.allData.link}
-          type="notice"
-        />
-      );
-    }
+    return (
+      <ShowCard
+        key={data.id}
+        time={data.allData.timestamp}
+        title={data.allData.title}
+        link={data.allData.link}
+        type="notice"
+      />
+    );
   };
   return (
     <>
