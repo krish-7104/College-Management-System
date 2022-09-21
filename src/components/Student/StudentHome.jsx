@@ -38,12 +38,7 @@ const StudentHome = () => {
         if (data.data().e_no === loginId) {
           setDetails(() => [
             {
-              fullname:
-                data.data().first_name +
-                " " +
-                data.data().middle_name +
-                " " +
-                data.data().last_name,
+              fullname: data.data().first_name + " " + data.data().last_name,
               e_no: loginId,
               gender: data.data().gender,
               phoneno: data.data().phone_no,

@@ -8,17 +8,18 @@ import AddSubject from "./AddSubject";
 import { useEffect } from "react";
 import { db } from "../../backend/firebase";
 import { collection, query, onSnapshot } from "firebase/firestore";
+import { CgDanger } from "react-icons/cg";
+import AddFaculty from "./AddFaculty";
+
 const AdminHome = () => {
   const [selectedBtn, setSeletedBtn] = useState("");
-  const [studentCount, setStudentCount] = useState(0);
+  const [branchWiseData, SetbranchWiseData] = useState([]);
+  const [branchWiseStudentData, SetbranchWiseStudentData] = useState([]);
   const [branchCount, setbranchCount] = useState(0);
   const [subjectCount, setsubjectCount] = useState(0);
   const [facultyCount, setfacultyCount] = useState(0);
+  const [totalStudent, setTotalStudents] = useState(0);
   useEffect(() => {
-    const student = query(collection(db, `students_credentials/`));
-    onSnapshot(student, (querySnapshot) => {
-      setStudentCount(querySnapshot.docs.length);
-    });
     const faculty = query(collection(db, `faculty_credentials/`));
     onSnapshot(faculty, (querySnapshot) => {
       setfacultyCount(querySnapshot.docs.length);
@@ -30,6 +31,22 @@ const AdminHome = () => {
     const branches = query(collection(db, `students_details/`));
     onSnapshot(branches, (querySnapshot) => {
       setbranchCount(querySnapshot.docs.length);
+    });
+    const branchWiseDetail = query(collection(db, `students_details/`));
+    onSnapshot(branchWiseDetail, (querySnapshot) => {
+      querySnapshot.forEach((data) => {
+        SetbranchWiseData((prev) => [...prev, data.id]);
+        const detailOfStudents = query(
+          collection(db, `students_details/${data.id}/individual_student`)
+        );
+        onSnapshot(detailOfStudents, (querySnapshot) => {
+          setTotalStudents(totalStudent + querySnapshot.docs.length);
+          SetbranchWiseStudentData((prev) => [
+            ...prev,
+            querySnapshot.docs.length,
+          ]);
+        });
+      });
     });
   }, []);
 
@@ -50,7 +67,7 @@ const AdminHome = () => {
       ResetActiveMenu();
       let btn = document.getElementById("adminPanelAddFacultyBtm");
       btn.classList.add("active");
-      return <div>Hello Faculty</div>;
+      return <AddFaculty />;
     } else if (selectedBtn === "add_notice") {
       ResetActiveMenu();
       let btn = document.getElementById("adminPanelAddNoticeBtn");
@@ -70,11 +87,13 @@ const AdminHome = () => {
   };
   return (
     <>
-      <Navbar title="Admin Panel - CMS" />
+      <Navbar
+        title={`Admin Panel - CMS | ${localStorage.getItem("rights")} Access`}
+      />
       <section className="mainAdminPanelContainer">
         <div className="adminCards">
           <div className="adminCard">
-            <p className="adminCardLabel">Total Students - {studentCount}</p>
+            <p className="adminCardLabel">Total Students - {totalStudent}</p>
           </div>
           <div className="adminCard">
             <p className="adminCardLabel">Total Faculty - {facultyCount}</p>
@@ -88,25 +107,55 @@ const AdminHome = () => {
         </div>
         <div className="adminAllBranchData">
           <p className="adminBranchDetailTitle">Branch And Students Detail</p>
-          <p className="adminBranchDetailLabel">CSE-IOT Branch : 20 Students</p>
-          <p className="adminBranchDetailLabel">CSE-IOT Branch : 20 Students</p>
-          <p className="adminBranchDetailLabel">CSE-IOT Branch : 20 Students</p>
+          {branchWiseData.map((branch, index) => {
+            return (
+              <p className="adminBranchDetailLabel">
+                {branch} Branch : {branchWiseStudentData[index]} Students
+              </p>
+            );
+          })}
         </div>
-
+        <p
+          className={
+            localStorage.getItem("rights") === "limited"
+              ? "rightsMessage "
+              : "rightsMessage disable"
+          }
+        >
+          <span id="rightIcon">
+            <CgDanger />
+          </span>
+          You Admin Rights Are Limited!
+        </p>
         <div className="adminBtnArea" id="adminBtnArea">
           <button
-            className="adminPanelBtns"
+            className={
+              localStorage.getItem("rights") === "limited"
+                ? "adminPanelBtns disable "
+                : "adminPanelBtns"
+            }
             onClick={() => setSeletedBtn("add_student")}
             id="adminPanelAddStudentBtn"
           >
-            Student Details
+            Add Student
           </button>
           <button
-            className="adminPanelBtns"
+            className={
+              localStorage.getItem("rights") === "limited"
+                ? "disable"
+                : "adminPanelBtns"
+            }
             onClick={() => setSeletedBtn("add_faculty")}
             id="adminPanelAddFacultyBtm"
           >
             Add Faculty
+          </button>
+          <button
+            className="adminPanelBtns"
+            onClick={() => setSeletedBtn("add_subject")}
+            id="adminPanelAddSubjectBtn"
+          >
+            Add Subject
           </button>
           <button
             className="adminPanelBtns"
@@ -121,13 +170,6 @@ const AdminHome = () => {
             id="adminPanelStudentListBtn"
           >
             View Student List
-          </button>
-          <button
-            className="adminPanelBtns"
-            onClick={() => setSeletedBtn("add_subject")}
-            id="adminPanelAddSubjectBtn"
-          >
-            Add Subject
           </button>
         </div>
         <div className="facultyShowArea" id="facultyShowArea">

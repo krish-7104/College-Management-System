@@ -33,12 +33,6 @@ const ProfileCard = (props) => {
             </span>
             &nbsp; {props.allData[0].email}
           </p>
-          <p className="infoText" id="department" title="Department">
-            <span className="cardDataIcons">
-              <MdClass />
-            </span>
-            &nbsp; {props.allData[0].post}
-          </p>
           <p className="infoText" id="phoneNo" title="Phone Number">
             <span className="cardDataIcons">
               <MdCall />
@@ -50,6 +44,13 @@ const ProfileCard = (props) => {
               <MdCalendarToday />
             </span>
             &nbsp; {props.allData[0].dob}
+          </p>
+          <p className="infoText" id="department" title="Department">
+            <span className="cardDataIcons">
+              <MdClass />
+            </span>
+            &nbsp;{" "}
+            {props.allData[0].post + " (" + props.allData[0].department + ")"}
           </p>
           <p className="infoText" id="gender" title="Gender">
             <span className="cardDataIcons">

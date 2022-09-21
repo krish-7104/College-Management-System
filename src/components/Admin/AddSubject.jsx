@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
 import { db } from "../../backend/firebase";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
   collection,
   query,
@@ -38,37 +40,58 @@ const AddSubject = () => {
           name: sName,
           updated: Timestamp.now(),
         });
-        alert("Subject Added Successfully!");
+        toast.success("Subject Added Successfully!", {
+          position: "bottom-right",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
       } catch (err) {
-        alert(err);
+        toast.warn("Something Went Wrong!", {
+          position: "bottom-right",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
       }
     }
   };
   return (
-    <div className="addSubjectArea">
-      <div className="subjectsList">
-        <p className="subjectListTitle">Subject ID And Name</p>
-        {subjectName.map((name, index) => {
-          return <li key={index}>{subjectId[index] + " - " + name} </li>;
-        })}
-      </div>
-      <div className="addSubjectSection">
-        <div className="addSubjectInputArea">
-          <label htmlFor="subjectId">Subject ID</label>
-          <input type="number" name="subjectId" id="subjectId" />
+    <>
+      <div className="addSubjectArea">
+        <div className="subjectsList">
+          <p className="subjectListTitle">Subject ID And Name</p>
+          {subjectName.map((name, index) => {
+            return <li key={index}>{subjectId[index] + " - " + name} </li>;
+          })}
         </div>
-        <div className="addSubjectInputArea">
-          <label htmlFor="subjectName">Subject Name</label>
-          <input type="text" name="subjectName" id="subjectName" />
+        <div className="addSubjectSection">
+          <div className="addSubjectInputArea">
+            <label htmlFor="subjectId">Subject ID</label>
+            <input type="number" name="subjectId" id="subjectId" />
+          </div>
+          <div className="addSubjectInputArea">
+            <label htmlFor="subjectName">Subject Name</label>
+            <input type="text" name="subjectName" id="subjectName" />
+          </div>
+          <button
+            className="submitAddSubjectDetails"
+            onClick={addSubjectSubmitBtnHandler}
+          >
+            Add Subject
+          </button>
         </div>
-        <button
-          className="submitAddSubjectDetails"
-          onClick={addSubjectSubmitBtnHandler}
-        >
-          Add Subject
-        </button>
       </div>
-    </div>
+      <ToastContainer />
+    </>
   );
 };
 

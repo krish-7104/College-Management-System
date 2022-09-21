@@ -27,30 +27,29 @@ const AddStudent = () => {
           photo: document.getElementById("photoStu").value,
           email: document.getElementById("e_no").value + "@cms.ac.in",
           category: document.getElementById("category").value,
-          midsem: {
-            1: {},
-            2: {},
-            3: {},
-            4: {},
-            5: {},
-            6: {},
-            7: {},
-            8: {},
-          },
-          external: {
-            1: {},
-            2: {},
-            3: {},
-            4: {},
-            5: {},
-            6: {},
-            7: {},
-            8: {},
-          },
         }
       );
+      toast.success("Data Uploaded Successfully!", {
+        position: "bottom-right",
+        autoClose: 4000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
     } catch (err) {
-      alert(err);
+      toast.warn("Something Went Wrong!", {
+        position: "bottom-right",
+        autoClose: 4000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
     }
     try {
       await setDoc(
@@ -62,7 +61,7 @@ const AddStudent = () => {
         }
       );
       toast.success("Data Uploaded Successfully!", {
-        position: "bottom-center",
+        position: "bottom-right",
         autoClose: 4000,
         hideProgressBar: false,
         closeOnClick: true,
@@ -72,7 +71,16 @@ const AddStudent = () => {
         theme: "dark",
       });
     } catch (err) {
-      alert(err);
+      toast.warn("Something Went Wrong!", {
+        position: "bottom-right",
+        autoClose: 4000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
     }
   };
   return (
@@ -122,7 +130,7 @@ const AddStudent = () => {
               <input required type="text" name="photo" id="photoStu" />
             </div>
             <button onClick={handleSubmit} id="submitDataAdmin">
-              Upload Student
+              Upload Student Details
             </button>
           </form>
         </div>

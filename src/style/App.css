@@ -25,3 +25,6 @@ input {
   background-color: #e5e4e4 !important;
   font-weight: 600;
 }
+.disable {
+  display: none;
+}

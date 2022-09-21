@@ -71,11 +71,7 @@ const Login = () => {
           console.log(userId);
           localStorage.setItem("loginid", userId);
           localStorage.setItem("department", department);
-          if (userId.includes("admin")) {
-            navigate("/admin");
-          } else {
-            navigate("/faculty-home");
-          }
+          navigate("/faculty-home");
           k = 0;
         } else {
           notifyAlert("Incorrect Credentials!");

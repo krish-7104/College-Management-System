@@ -1,13 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { db } from "../../backend/firebase";
-import {
-  collection,
-  query,
-  onSnapshot,
-  setDoc,
-  doc,
-  Timestamp,
-} from "firebase/firestore";
+import { collection, query, onSnapshot, setDoc, doc } from "firebase/firestore";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const UploadMarks = () => {
   const [branches, setBranches] = useState([]);
   const [selectedBranch, setSelectedBranch] = useState(null);
@@ -77,8 +72,17 @@ const UploadMarks = () => {
           }
         );
       }
+      toast.success("Marks Added Successfully!", {
+        position: "bottom-right",
+        autoClose: 4000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
     }
-    alert("Marks Uploaded");
   };
 
   const callStudentListDataFromDatabase = () => {
@@ -194,6 +198,7 @@ const UploadMarks = () => {
           Upload Marks Of Student
         </button>
       </div>
+      <ToastContainer />
     </section>
   );
 };

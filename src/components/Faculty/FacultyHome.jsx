@@ -31,7 +31,7 @@ const FacultyHome = () => {
   ]);
   useEffect(() => {
     const q1 = query(
-      collection(db, `faculty_details/${department}/faculty_info`)
+      collection(db, `faculty_details/${department}/individual_faculty`)
     );
     onSnapshot(q1, (querySnapshot) => {
       querySnapshot.docs.forEach((data) => {
@@ -45,15 +45,13 @@ const FacultyHome = () => {
                 " " +
                 data.data().last_name,
               email: loginId,
-              experience: data.data().experience,
               department: department,
               dob: data.data().birth_date,
               post: data.data().post,
-              joining_date: data.data().joining_date,
               gender: data.data().gender,
               phoneno: data.data().phone_no,
               photo: data.data().photo,
-              emp_id: data.data().emp_id,
+              emp_id: data.data().emp_no,
             },
           ]);
         }

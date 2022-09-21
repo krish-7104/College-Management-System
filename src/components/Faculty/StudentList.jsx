@@ -52,13 +52,7 @@ const StudentList = () => {
         </p>
         <p class="studentListShowName">
         <small>Full Name</small>
-        ${
-          data.data().first_name +
-          " " +
-          data.data().middle_name +
-          " " +
-          data.data().last_name
-        }</p>
+        ${data.data().first_name + " " + data.data().last_name}</p>
         <p class="studentListShowPhoneNo">
         <small>Phone No.</small>
         ${data.data().phone_no}
