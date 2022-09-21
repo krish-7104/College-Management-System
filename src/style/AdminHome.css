@@ -1,5 +1,10 @@
+.mainAdminPanelContainer {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
 .adminCards {
-  margin-top: 15px;
   padding: 20px;
   display: flex;
   justify-content: center;
@@ -10,8 +15,7 @@
   background-color: whitesmoke;
   box-shadow: rgba(0, 0, 0, 0.2) 1.95px 1.95px 2.6px;
   margin: 20px;
-  width: 20%;
-  padding: 15px;
+  padding: 30px 15px;
   border-radius: 6px;
 }
 .adminCardLabel {
@@ -21,7 +25,6 @@
   text-align: center;
 }
 .mainAdminArea {
-  margin: 0px 100px;
   padding: 20px;
   display: flex;
   justify-content: space-between;
@@ -30,11 +33,8 @@
 .adminBtnArea {
   margin-top: 30px;
   display: flex;
-  width: 100%;
   justify-content: center;
   align-items: center;
-  flex-wrap: wrap;
-  align-self: flex-end;
   background-color: whitesmoke;
   box-shadow: rgba(0, 0, 0, 0.2) 1.95px 1.95px 2.6px;
   padding: 8px;
@@ -123,4 +123,50 @@
 
 .addStudentInputs label {
   margin: 2px !important;
+}
+.addSubjectArea {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  width: 100%;
+}
+.subjectsList,
+.addSubjectSection {
+  background-color: whitesmoke;
+  box-shadow: rgba(0, 0, 0, 0.2) 1.95px 1.95px 2.6px;
+  padding: 20px;
+  border-radius: 5px;
+  width: 30%;
+}
+.subjectListTitle {
+  font-weight: 600;
+  text-transform: uppercase;
+  text-align: center;
+  letter-spacing: 1px;
+  padding: 5px;
+  border-bottom: 1.4px solid black;
+  margin-bottom: 10px;
+  background-color: #1f1f1f1a;
+}
+.addSubjectSection {
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+}
+.subjectsList li {
+  color: black !important;
+  list-style: none;
+  padding: 5px;
+  font-size: 16px;
+}
+.addSubjectInputArea {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+.submitAddSubjectDetails {
+  background-color: #1f1f1f;
+  padding: 10px;
+  margin-top: 12px;
+  color: whitesmoke;
 }

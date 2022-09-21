@@ -1,5 +1,4 @@
 import React from "react";
-import "../../style/Admin.css";
 import { db } from "../../backend/firebase";
 import { setDoc, doc } from "firebase/firestore";
 import { ToastContainer, toast } from "react-toastify";
