@@ -97,6 +97,12 @@
   padding: 10px;
   font-size: 14px;
 }
+.facultyListViewFaculty {
+  width: 90%;
+  background-color: white;
+  padding: 20px;
+  box-shadow: rgba(0, 0, 0, 0.2) 1.95px 1.95px 2.6px;
+}
 .studentListViewFaculty,
 .uploadMarksSection {
   background-color: white;
@@ -173,6 +179,14 @@ select {
   grid-template-columns: auto repeat(4, 1fr);
   border-bottom: 1.4px solid #1f1f1f;
 }
+.facultyListShowCardStudentView {
+  background-color: white;
+  display: grid;
+  padding: 10px;
+  width: 100%;
+  grid-template-columns: auto repeat(4, 1fr);
+  border-bottom: 1.4px solid #1f1f1f;
+}
 .studentMarksUploadCard {
   background-color: white;
   display: flex;
@@ -190,19 +204,30 @@ select {
 .studentListShowName {
   grid-column: 3 / span 2;
 }
-.studentlistViewProfile {
+.studentlistViewProfile,
+.facultylistViewProfile {
   height: 60px !important;
   width: 60px !important;
   object-fit: cover !important;
   margin: 0px !important;
   border-radius: 10%;
   margin-right: 20px !important;
+  place-items: center;
 }
 .studentListShowEnrollment,
 .studentListShowName,
 .studentListShowPhoneNo {
   display: grid;
   place-items: center start;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.facultyListShowEnrollment,
+.facultyListShowName,
+.facultyListShowPhoneNo {
+  display: grid;
+  place-items: center;
   font-weight: 600;
   letter-spacing: 1px;
 }

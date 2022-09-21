@@ -10,6 +10,7 @@ import { db } from "../../backend/firebase";
 import { collection, query, onSnapshot } from "firebase/firestore";
 import { CgDanger } from "react-icons/cg";
 import AddFaculty from "./AddFaculty";
+import FacultyList from "./FacultyList";
 
 const AdminHome = () => {
   const [selectedBtn, setSeletedBtn] = useState("");
@@ -83,6 +84,11 @@ const AdminHome = () => {
       let btn = document.getElementById("adminPanelAddSubjectBtn");
       btn.classList.add("active");
       return <AddSubject />;
+    } else if (selectedBtn === "view_faculty") {
+      ResetActiveMenu();
+      let btn = document.getElementById("adminPanelFacultyListBtn");
+      btn.classList.add("active");
+      return <FacultyList />;
     }
   };
   return (
@@ -171,6 +177,13 @@ const AdminHome = () => {
             id="adminPanelStudentListBtn"
           >
             View Student List
+          </button>
+          <button
+            className="adminPanelBtns"
+            onClick={() => setSeletedBtn("view_faculty")}
+            id="adminPanelFacultyListBtn"
+          >
+            View Faculty List
           </button>
         </div>
         <div className="facultyShowArea" id="facultyShowArea">

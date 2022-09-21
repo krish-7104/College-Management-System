@@ -80,7 +80,7 @@ const AdminLogin = () => {
         <div className="loginCard">
           <img id="loginImg" src={require("../../assets/admin.png")} alt="" />
           <div className="login">
-            <label htmlFor="loginid">Login Id</label>
+            <label htmlFor="loginid">Admin Login Id</label>
             <input
               type="text"
               id="loginid"
@@ -88,7 +88,7 @@ const AdminLogin = () => {
               required
               autoComplete="off"
             />
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">Admin Password</label>
             <input type="password" name="password" id="password" required />
             <button className="submitBtn" onClick={loginValidate}>
               Login
