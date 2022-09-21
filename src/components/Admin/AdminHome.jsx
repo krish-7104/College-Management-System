@@ -89,6 +89,7 @@ const AdminHome = () => {
     <>
       <Navbar
         title={`Admin Panel - CMS | ${localStorage.getItem("rights")} Access`}
+        route="admin"
       />
       <section className="mainAdminPanelContainer">
         <div className="adminCards">
@@ -125,7 +126,7 @@ const AdminHome = () => {
           <span id="rightIcon">
             <CgDanger />
           </span>
-          You Admin Rights Are Limited!
+          Your Admin Rights Are Limited!
         </p>
         <div className="adminBtnArea" id="adminBtnArea">
           <button

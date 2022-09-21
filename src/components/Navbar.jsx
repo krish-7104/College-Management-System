@@ -7,7 +7,11 @@ const Navbar = (props) => {
   const navigate = useNavigate();
   const logoutHandler = () => {
     localStorage.clear();
-    navigate("/");
+    if (props.route !== "admin") {
+      navigate("/");
+    } else {
+      navigate("/admin");
+    }
   };
   if (props.showText !== "") {
     return (
