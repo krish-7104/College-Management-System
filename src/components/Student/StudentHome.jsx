@@ -13,12 +13,6 @@ const StudentHome = () => {
   let loginId = localStorage.getItem("loginid");
   let branch = localStorage.getItem("branch");
   const [timetable, setTimeTable] = useState("");
-  const [studentMarks, setStudentMarks] = useState([
-    {
-      midsem: [],
-      external: [],
-    },
-  ]);
   const [details, setDetails] = useState([
     {
       fullname: "",
@@ -72,21 +66,6 @@ const StudentHome = () => {
         }
       });
     });
-    const q3 = query(
-      collection(db, `students_details/${branch}/student_marks/`)
-    );
-    onSnapshot(q3, (querySnapshot) => {
-      querySnapshot.docs.forEach((data) => {
-        if (data.id === loginId) {
-          setStudentMarks(() => [
-            {
-              midsem: data.data().midsem,
-              external: data.data().external,
-            },
-          ]);
-        }
-      });
-    });
   }, []);
 
   const ResetActiveMenu = () => {
@@ -110,8 +89,9 @@ const StudentHome = () => {
       btn.classList.add("active");
       return (
         <Marks
-          internal={studentMarks[0].midsem}
-          external={studentMarks[0].external}
+          semester={"Semester" + " " + details[0].semester.toString()}
+          branch={branch}
+          enrollment={loginId}
         />
       );
     } else if (selectedBtn === "notice") {

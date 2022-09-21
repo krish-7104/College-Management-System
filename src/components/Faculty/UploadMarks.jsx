@@ -49,39 +49,42 @@ const UploadMarks = () => {
   const semesterSelectHandler = (e) => {
     setSelectedSemester(e.target.value);
   };
-  const submitMarksOnDatabase = async () => {};
-  //   let allbtns = document.getElementsByClassName("submitMarksUploadMarksSec");
-  //   for (let i = 0; i < allbtns.length - 1; i++) {
-  //     let mark = document.getElementById(allbtns[i].id + "mark").value;
-  //     console.count("hey");
-  //     if (examTypeSemester === "midsem") {
-  //       try {
-  //         await setDoc(
-  //           doc(
-  //             db,
-  //             `students_details/${selectedBranch}/individual_student/`,
-  //             allbtns[i].id
-  //           ),
-  //           {
-  //             midsem: {
-  //               `${selectedSemester}`: {
-  //                 selectedSemester: mark,
-  //               },
-  //             },
-  //             updated: Timestamp.now(),
-  //           }
-  //         );
-  //       } catch (err) {
-  //         alert(err);
-  //       }
-  //     }
-  //   }
-  // };
+  const submitMarksOnDatabase = async () => {
+    if (
+      selectedBranch !== null &&
+      selectedSemester !== null &&
+      selectedSubject !== null &&
+      examTypeSemester !== null
+    ) {
+      let allbtns = document.getElementsByClassName(
+        "studentMarksUploadCardMarksUpload"
+      );
+
+      for (let i = 0; i < allbtns.length; i++) {
+        let inputId = allbtns[i].childNodes[5].id;
+        let mark = document.getElementById(inputId).value;
+        console.log(inputId.replace("mark", ""));
+        await setDoc(
+          doc(
+            db,
+            `/students_details/${selectedBranch}/${examTypeSemester}/${inputId.replace(
+              "mark",
+              ""
+            )}/Semester ${selectedSemester}/`,
+            `${selectedSubject}`
+          ),
+          {
+            marks: mark,
+          }
+        );
+      }
+    }
+  };
+
   const callStudentListDataFromDatabase = () => {
     const q2 = query(
       collection(db, `students_details/${selectedBranch}/individual_student/`)
     );
-    console.log(selectedBranch);
     onSnapshot(q2, (querySnapshot) => {
       let data = document.getElementById("showStudentMarkUploadSec");
       let html = `<div class="studentListTable">
@@ -89,7 +92,6 @@ const UploadMarks = () => {
       Upload Marks Of ${selectedSubject} - ${selectedBranch}
       </p>`;
       querySnapshot.docs.forEach((data) => {
-        console.log(data);
         if (
           data.data().current_sem.toString() === selectedSemester.toString()
         ) {
@@ -105,7 +107,7 @@ const UploadMarks = () => {
           " " +
           data.data().last_name
         }</p>
-        <input type="number" name="marks" id='${
+        <input type="number" className='allMarksInput' name="marks" id='${
           data.data().e_no + "mark"
         }' placeholder="Enter Marks" />
       </div>`;
@@ -186,7 +188,7 @@ const UploadMarks = () => {
       ></div>
       <div className="uploadMarksSubmitArea">
         <button
-          className="submitMarksUploadMarksSec"
+          className="submitMarksUploadMarksSecMain"
           onClick={submitMarksOnDatabase}
         >
           Upload Marks Of Student

@@ -1,46 +1,58 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { db } from "../../backend/firebase";
+import { collection, query, onSnapshot } from "firebase/firestore";
 
 const Marks = (props) => {
-  const [midMarks, setmidMarks] = useState([]);
-  const [external, setExternal] = useState([]);
-  const [subjectsMid, setSubjectsMid] = useState([]);
-  const [subjectsExternal, setSubjectsExternal] = useState([]);
-
+  const [midsemMarks, setMidSemMarks] = useState([]);
+  const [midsemSubject, setMidSemSubject] = useState([]);
+  const [externalMarks, setExternalMarks] = useState([]);
+  const [externalSubject, setExternalSubject] = useState([]);
   useEffect(() => {
-    props.internal[0].split(",").forEach((ele) => {
-      setSubjectsMid((prev) => [...prev, ele.split("+")[0]]);
+    const midsem = query(
+      collection(
+        db,
+        `/students_details/${props.branch}/midsem/${props.enrollment}/${props.semester}/`
+      )
+    );
+    onSnapshot(midsem, (querySnapshot) => {
+      querySnapshot.docs.forEach((data) => {
+        setMidSemSubject((prev) => [...prev, data.id]);
+        setMidSemMarks((prev) => [...prev, data.data().marks]);
+      });
     });
-    props.internal[0].split(",").forEach((ele) => {
-      setmidMarks((prev) => [...prev, ele.split("+")[1]]);
+    const external = query(
+      collection(
+        db,
+        `/students_details/${props.branch}/external/${props.enrollment}/${props.semester}/`
+      )
+    );
+    onSnapshot(external, (querySnapshot) => {
+      querySnapshot.docs.forEach((data) => {
+        setExternalSubject((prev) => [...prev, data.id]);
+        setExternalMarks((prev) => [...prev, data.data().marks]);
+      });
     });
-    props.external[0].split(",").forEach((ele) => {
-      setSubjectsExternal((prev) => [...prev, ele.split("+")[0]]);
-    });
-    props.external[0].split(",").forEach((ele) => {
-      setExternal((prev) => [...prev, ele.split("+")[1]]);
-    });
-  }, []);
+  }, [props.semester]);
+
   return (
-    // <div>Hi</div>
     <section className="marksShowArea">
       <div className="marksCard">
         <p className="marksTitle">Internal Exam Marks (40)</p>
         <hr />
         <div className="marksTable">
           <ul className="subjectList">
-            {subjectsMid.map((subject) => {
-              return <li>{subject}</li>;
+            {midsemSubject.map((subject) => {
+              return <li key={subject}>{subject}</li>;
             })}
             <li className="totalMarkShow">Total Marks</li>
           </ul>
           <ul className="marksList">
-            {midMarks.map((marks) => {
-              return <li>{marks}</li>;
+            {midsemMarks.map((marks) => {
+              return <li key={marks}>{marks}</li>;
             })}
             <li className="totalMarkShow">
-              {midMarks.length !== 0
-                ? midMarks.reduce((x, y) => parseInt(x) + parseInt(y))
+              {midsemMarks.length !== 0
+                ? midsemMarks.reduce((x, y) => parseInt(x) + parseInt(y))
                 : 0}
             </li>
           </ul>
@@ -51,18 +63,18 @@ const Marks = (props) => {
         <hr />
         <div className="marksTable">
           <ul className="subjectList">
-            {subjectsExternal.map((subjects) => {
-              return <li>{subjects}</li>;
+            {externalSubject.map((subjects) => {
+              return <li key={subjects}>{subjects}</li>;
             })}
             <li className="totalMarkShow">Total Marks</li>
           </ul>
           <ul className="marksList">
-            {external.map((marks) => {
-              return <li>{marks}</li>;
+            {externalMarks.map((marks) => {
+              return <li key={marks}>{marks}</li>;
             })}
             <li className="totalMarkShow">
-              {external.length !== 0
-                ? external.reduce((x, y) => parseInt(x) + parseInt(y))
+              {externalMarks.length !== 0
+                ? externalMarks.reduce((x, y) => parseInt(x) + parseInt(y))
                 : 0}
             </li>
           </ul>
