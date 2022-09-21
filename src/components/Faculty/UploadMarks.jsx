@@ -59,7 +59,6 @@ const UploadMarks = () => {
       let allbtns = document.getElementsByClassName(
         "studentMarksUploadCardMarksUpload"
       );
-
       for (let i = 0; i < allbtns.length; i++) {
         let inputId = allbtns[i].childNodes[5].id;
         let mark = document.getElementById(inputId).value;
@@ -79,6 +78,7 @@ const UploadMarks = () => {
         );
       }
     }
+    alert("Marks Uploaded");
   };
 
   const callStudentListDataFromDatabase = () => {
@@ -188,7 +188,7 @@ const UploadMarks = () => {
       ></div>
       <div className="uploadMarksSubmitArea">
         <button
-          className="submitMarksUploadMarksSecMain"
+          className="submitMarksUploadMarksSec"
           onClick={submitMarksOnDatabase}
         >
           Upload Marks Of Student
