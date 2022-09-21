@@ -78,11 +78,7 @@ const AdminLogin = () => {
       <Navbar title="College Management System - Admin Login" showText="" />
       <section className="loginContainer">
         <div className="loginCard">
-          <img
-            id="loginImg"
-            src={require("../../assets/classPng.png")}
-            alt=""
-          />
+          <img id="loginImg" src={require("../../assets/admin.png")} alt="" />
           <div className="login">
             <label htmlFor="loginid">Login Id</label>
             <input
