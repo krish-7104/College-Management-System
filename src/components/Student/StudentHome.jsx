@@ -32,41 +32,47 @@ const StudentHome = () => {
   ]);
 
   useEffect(() => {
-    if (localStorage.getItem("loginid").includes("@")) {
+    if (localStorage.getItem("loginid") !== null) {
+      if (localStorage.getItem("loginid").includes("@")) {
+        localStorage.clear();
+        navigate("/");
+      } else {
+        const q1 = query(
+          collection(db, `students_details/${branch}/individual_student/`)
+        );
+        onSnapshot(q1, (querySnapshot) => {
+          querySnapshot.docs.forEach((data) => {
+            if (data.data().e_no === loginId) {
+              setDetails(() => [
+                {
+                  fullname:
+                    data.data().first_name + " " + data.data().last_name,
+                  e_no: loginId,
+                  gender: data.data().gender,
+                  phoneno: data.data().phone_no,
+                  branch: branch,
+                  semester: data.data().current_sem,
+                  category: data.data().category,
+                  photo: data.data().photo,
+                  email: data.data().email,
+                  dob: data.data().birth_date,
+                },
+              ]);
+            }
+          });
+        });
+        const q2 = query(collection(db, `students_details/`));
+        onSnapshot(q2, (querySnapshot) => {
+          querySnapshot.docs.forEach((data) => {
+            if (data.id === branch) {
+              setTimeTable(data.data().timetable);
+            }
+          });
+        });
+      }
+    } else {
       localStorage.clear();
       navigate("/");
-    } else {
-      const q1 = query(
-        collection(db, `students_details/${branch}/individual_student/`)
-      );
-      onSnapshot(q1, (querySnapshot) => {
-        querySnapshot.docs.forEach((data) => {
-          if (data.data().e_no === loginId) {
-            setDetails(() => [
-              {
-                fullname: data.data().first_name + " " + data.data().last_name,
-                e_no: loginId,
-                gender: data.data().gender,
-                phoneno: data.data().phone_no,
-                branch: branch,
-                semester: data.data().current_sem,
-                category: data.data().category,
-                photo: data.data().photo,
-                email: data.data().email,
-                dob: data.data().birth_date,
-              },
-            ]);
-          }
-        });
-      });
-      const q2 = query(collection(db, `students_details/`));
-      onSnapshot(q2, (querySnapshot) => {
-        querySnapshot.docs.forEach((data) => {
-          if (data.id === branch) {
-            setTimeTable(data.data().timetable);
-          }
-        });
-      });
     }
   }, [branch]);
 

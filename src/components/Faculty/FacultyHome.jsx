@@ -31,37 +31,42 @@ const FacultyHome = () => {
     },
   ]);
   useEffect(() => {
-    if (!localStorage.getItem("loginid").includes("@")) {
+    if (localStorage.getItem("loginid") !== null) {
+      if (!localStorage.getItem("loginid").includes("@")) {
+        localStorage.clear();
+        navigate("/");
+      } else {
+        const q1 = query(
+          collection(db, `faculty_details/${department}/individual_faculty`)
+        );
+        onSnapshot(q1, (querySnapshot) => {
+          querySnapshot.docs.forEach((data) => {
+            if (data.data().email === loginId) {
+              setDetails(() => [
+                {
+                  fullname:
+                    data.data().first_name +
+                    " " +
+                    data.data().middle_name +
+                    " " +
+                    data.data().last_name,
+                  email: loginId,
+                  department: department,
+                  dob: data.data().birth_date,
+                  post: data.data().post,
+                  gender: data.data().gender,
+                  phoneno: data.data().phone_no,
+                  photo: data.data().photo,
+                  emp_id: data.data().emp_no,
+                },
+              ]);
+            }
+          });
+        });
+      }
+    } else {
       localStorage.clear();
       navigate("/");
-    } else {
-      const q1 = query(
-        collection(db, `faculty_details/${department}/individual_faculty`)
-      );
-      onSnapshot(q1, (querySnapshot) => {
-        querySnapshot.docs.forEach((data) => {
-          if (data.data().email === loginId) {
-            setDetails(() => [
-              {
-                fullname:
-                  data.data().first_name +
-                  " " +
-                  data.data().middle_name +
-                  " " +
-                  data.data().last_name,
-                email: loginId,
-                department: department,
-                dob: data.data().birth_date,
-                post: data.data().post,
-                gender: data.data().gender,
-                phoneno: data.data().phone_no,
-                photo: data.data().photo,
-                emp_id: data.data().emp_no,
-              },
-            ]);
-          }
-        });
-      });
     }
   }, [department, loginId]);
 
