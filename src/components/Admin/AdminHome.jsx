@@ -20,6 +20,7 @@ const AdminHome = () => {
   const [branchCount, setbranchCount] = useState(0);
   const [subjectCount, setsubjectCount] = useState(0);
   const [facultyCount, setfacultyCount] = useState(0);
+  const [studentCount, setstudentCount] = useState(0);
   const [totalStudent, setTotalStudents] = useState(0);
   const [adminDetails, setAdminDetials] = useState([]);
   const rights = sessionStorage.getItem("rights");
@@ -31,6 +32,10 @@ const AdminHome = () => {
       const faculty = query(collection(db, `faculty_credentials/`));
       onSnapshot(faculty, (querySnapshot) => {
         setfacultyCount(querySnapshot.docs.length);
+      });
+      const students = query(collection(db, `students_credentials/`));
+      onSnapshot(students, (querySnapshot) => {
+        setstudentCount(querySnapshot.docs.length);
       });
       const subjects = query(collection(db, `subjects/`));
       onSnapshot(subjects, (querySnapshot) => {
@@ -114,7 +119,7 @@ const AdminHome = () => {
       <section className="mainAdminPanelContainer">
         <div className="adminCards">
           <div className="adminCard">
-            <p className="adminCardLabel">Total Students - {totalStudent}</p>
+            <p className="adminCardLabel">Total Students - {studentCount}</p>
           </div>
           <div className="adminCard">
             <p className="adminCardLabel">Total Faculty - {facultyCount}</p>

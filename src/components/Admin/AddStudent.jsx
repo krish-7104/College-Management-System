@@ -17,7 +17,6 @@ const AddStudent = () => {
         ),
         {
           first_name: document.getElementById("FirstName").value,
-          middle_name: document.getElementById("LastName").value,
           e_no: document.getElementById("e_no").value,
           last_name: document.getElementById("LastName").value,
           birth_date: document.getElementById("DOB").value,
@@ -29,16 +28,6 @@ const AddStudent = () => {
           category: document.getElementById("category").value,
         }
       );
-      toast.success("Data Uploaded Successfully!", {
-        position: "bottom-right",
-        autoClose: 4000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: false,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
     } catch (err) {
       toast.warn("Something Went Wrong!", {
         position: "bottom-right",
@@ -70,6 +59,7 @@ const AddStudent = () => {
         progress: undefined,
         theme: "dark",
       });
+      // document.getElementById("adminForm").reset();
     } catch (err) {
       toast.warn("Something Went Wrong!", {
         position: "bottom-right",
@@ -88,7 +78,7 @@ const AddStudent = () => {
       <section className="MainAdmin">
         <div className="adminContainer">
           <p className="adminTitle">Add Students</p>
-          <form className="adminForm" name="adminForm">
+          <form className="adminForm" id="adminForm" name="adminForm">
             <div className="addStudentInputs">
               <label htmlFor="FirstName">First Name</label>
               <input required type="text" id="FirstName" />
