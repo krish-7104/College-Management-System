@@ -183,8 +183,8 @@ select {
   background-color: white;
   display: grid;
   padding: 10px;
-  width: 100%;
-  grid-template-columns: auto repeat(4, 1fr);
+  width: 98%;
+  grid-template-columns: auto repeat(5, 1fr);
   border-bottom: 1.4px solid #1f1f1f;
 }
 .studentMarksUploadCard {
@@ -225,11 +225,17 @@ select {
 
 .facultyListShowEnrollment,
 .facultyListShowName,
-.facultyListShowPhoneNo {
+.facultyListShowPhoneNo,
+.facultyListShowEmail {
   display: grid;
   place-items: center;
   font-weight: 600;
+  font-size: 14px;
   letter-spacing: 1px;
+}
+a {
+  color: black !important;
+  text-decoration: none;
 }
 #getStudentDataBtn {
   background-color: #1f1f1f;
@@ -238,7 +244,7 @@ select {
 }
 small {
   margin-bottom: -18px;
-  font-weight: 400 !important;
+  font-weight: 500 !important;
   text-transform: uppercase;
   letter-spacing: 1px;
   font-size: 11.5px;

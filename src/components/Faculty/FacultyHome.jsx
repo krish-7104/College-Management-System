@@ -8,8 +8,9 @@ import UploadNotice from "./UploadNotice";
 import UploadMaterial from "./UploadMaterial";
 import UploadMarks from "./UploadMarks";
 import StudentList from "./StudentList";
-
+import { useNavigate } from "react-router-dom";
 const FacultyHome = () => {
+  const navigate = useNavigate();
   let loginId = localStorage.getItem("loginid");
   let department = localStorage.getItem("department");
   const [selectedBtn, setSeletedBtn] = useState("");
@@ -30,33 +31,38 @@ const FacultyHome = () => {
     },
   ]);
   useEffect(() => {
-    const q1 = query(
-      collection(db, `faculty_details/${department}/individual_faculty`)
-    );
-    onSnapshot(q1, (querySnapshot) => {
-      querySnapshot.docs.forEach((data) => {
-        if (data.data().email === loginId) {
-          setDetails(() => [
-            {
-              fullname:
-                data.data().first_name +
-                " " +
-                data.data().middle_name +
-                " " +
-                data.data().last_name,
-              email: loginId,
-              department: department,
-              dob: data.data().birth_date,
-              post: data.data().post,
-              gender: data.data().gender,
-              phoneno: data.data().phone_no,
-              photo: data.data().photo,
-              emp_id: data.data().emp_no,
-            },
-          ]);
-        }
+    if (!localStorage.getItem("loginid").includes("@")) {
+      localStorage.clear();
+      navigate("/");
+    } else {
+      const q1 = query(
+        collection(db, `faculty_details/${department}/individual_faculty`)
+      );
+      onSnapshot(q1, (querySnapshot) => {
+        querySnapshot.docs.forEach((data) => {
+          if (data.data().email === loginId) {
+            setDetails(() => [
+              {
+                fullname:
+                  data.data().first_name +
+                  " " +
+                  data.data().middle_name +
+                  " " +
+                  data.data().last_name,
+                email: loginId,
+                department: department,
+                dob: data.data().birth_date,
+                post: data.data().post,
+                gender: data.data().gender,
+                phoneno: data.data().phone_no,
+                photo: data.data().photo,
+                emp_id: data.data().emp_no,
+              },
+            ]);
+          }
+        });
       });
-    });
+    }
   }, [department, loginId]);
 
   const ResetActiveMenu = () => {

@@ -14,7 +14,7 @@ import { useState } from "react";
 const AddSubject = () => {
   const [SubjectData, setSubjectData] = useState([]);
   useEffect(() => {
-    const q1 = query(collection(db, `subjects`));
+    const q1 = query(collection(db, `subjects`), orderBy("id", "desc"));
     onSnapshot(q1, (querySnapshot) => {
       setSubjectData(
         querySnapshot.docs.map((doc) => ({

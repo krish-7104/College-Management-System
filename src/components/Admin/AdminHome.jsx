@@ -11,8 +11,9 @@ import { collection, query, onSnapshot } from "firebase/firestore";
 import { CgDanger } from "react-icons/cg";
 import AddFaculty from "./AddFaculty";
 import FacultyList from "./FacultyList";
-
+import { useNavigate } from "react-router-dom";
 const AdminHome = () => {
+  const navigate = useNavigate();
   const [selectedBtn, setSeletedBtn] = useState("");
   const [branchWiseData, SetbranchWiseData] = useState([]);
   const [branchWiseStudentData, SetbranchWiseStudentData] = useState([]);
@@ -22,34 +23,39 @@ const AdminHome = () => {
   const [totalStudent, setTotalStudents] = useState(0);
   const rights = localStorage.getItem("rights");
   useEffect(() => {
-    const faculty = query(collection(db, `faculty_credentials/`));
-    onSnapshot(faculty, (querySnapshot) => {
-      setfacultyCount(querySnapshot.docs.length);
-    });
-    const subjects = query(collection(db, `subjects/`));
-    onSnapshot(subjects, (querySnapshot) => {
-      setsubjectCount(querySnapshot.docs.length);
-    });
-    const branches = query(collection(db, `students_details/`));
-    onSnapshot(branches, (querySnapshot) => {
-      setbranchCount(querySnapshot.docs.length);
-    });
-    const branchWiseDetail = query(collection(db, `students_details/`));
-    onSnapshot(branchWiseDetail, (querySnapshot) => {
-      querySnapshot.forEach((data) => {
-        SetbranchWiseData((prev) => [...prev, data.id]);
-        const detailOfStudents = query(
-          collection(db, `students_details/${data.id}/individual_student`)
-        );
-        onSnapshot(detailOfStudents, (querySnapshot) => {
-          setTotalStudents(totalStudent + querySnapshot.docs.length);
-          SetbranchWiseStudentData((prev) => [
-            ...prev,
-            querySnapshot.docs.length,
-          ]);
+    if (localStorage.getItem("rights") === null) {
+      localStorage.clear();
+      navigate("/admin");
+    } else {
+      const faculty = query(collection(db, `faculty_credentials/`));
+      onSnapshot(faculty, (querySnapshot) => {
+        setfacultyCount(querySnapshot.docs.length);
+      });
+      const subjects = query(collection(db, `subjects/`));
+      onSnapshot(subjects, (querySnapshot) => {
+        setsubjectCount(querySnapshot.docs.length);
+      });
+      const branches = query(collection(db, `students_details/`));
+      onSnapshot(branches, (querySnapshot) => {
+        setbranchCount(querySnapshot.docs.length);
+      });
+      const branchWiseDetail = query(collection(db, `students_details/`));
+      onSnapshot(branchWiseDetail, (querySnapshot) => {
+        querySnapshot.forEach((data) => {
+          SetbranchWiseData((prev) => [...prev, data.id]);
+          const detailOfStudents = query(
+            collection(db, `students_details/${data.id}/individual_student`)
+          );
+          onSnapshot(detailOfStudents, (querySnapshot) => {
+            setTotalStudents(totalStudent + querySnapshot.docs.length);
+            SetbranchWiseStudentData((prev) => [
+              ...prev,
+              querySnapshot.docs.length,
+            ]);
+          });
         });
       });
-    });
+    }
   }, []);
 
   const ResetActiveMenu = () => {

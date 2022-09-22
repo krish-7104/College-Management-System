@@ -14,7 +14,9 @@ const Error = () => {
           alt=""
         />
         <button className="errorHomeBtn">
-          <Link to="/">Go To Home Page</Link>
+          <Link className="errorLink" to="/">
+            Go To Home Page
+          </Link>
         </button>
       </div>
     </section>

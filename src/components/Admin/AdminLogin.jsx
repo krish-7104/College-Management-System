@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Navbar from "../../components/Navbar";
 import { useNavigate } from "react-router-dom";
 const AdminLogin = () => {
+  localStorage.clear();
   const navigate = useNavigate();
   const notifyAlert = (text) => {
     toast.warn(text, {

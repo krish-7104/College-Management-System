@@ -8,7 +8,9 @@ import Notice from "./Notice";
 import Material from "./Material";
 import Timetable from "./Timetable";
 import Marks from "./Marks";
+import { useNavigate } from "react-router-dom";
 const StudentHome = () => {
+  const navigate = useNavigate();
   const [selectedBtn, setSeletedBtn] = useState("");
   let loginId = localStorage.getItem("loginid");
   let branch = localStorage.getItem("branch");
@@ -30,37 +32,42 @@ const StudentHome = () => {
   ]);
 
   useEffect(() => {
-    const q1 = query(
-      collection(db, `students_details/${branch}/individual_student/`)
-    );
-    onSnapshot(q1, (querySnapshot) => {
-      querySnapshot.docs.forEach((data) => {
-        if (data.data().e_no === loginId) {
-          setDetails(() => [
-            {
-              fullname: data.data().first_name + " " + data.data().last_name,
-              e_no: loginId,
-              gender: data.data().gender,
-              phoneno: data.data().phone_no,
-              branch: branch,
-              semester: data.data().current_sem,
-              category: data.data().category,
-              photo: data.data().photo,
-              email: data.data().email,
-              dob: data.data().birth_date,
-            },
-          ]);
-        }
+    if (localStorage.getItem("loginid").includes("@")) {
+      localStorage.clear();
+      navigate("/");
+    } else {
+      const q1 = query(
+        collection(db, `students_details/${branch}/individual_student/`)
+      );
+      onSnapshot(q1, (querySnapshot) => {
+        querySnapshot.docs.forEach((data) => {
+          if (data.data().e_no === loginId) {
+            setDetails(() => [
+              {
+                fullname: data.data().first_name + " " + data.data().last_name,
+                e_no: loginId,
+                gender: data.data().gender,
+                phoneno: data.data().phone_no,
+                branch: branch,
+                semester: data.data().current_sem,
+                category: data.data().category,
+                photo: data.data().photo,
+                email: data.data().email,
+                dob: data.data().birth_date,
+              },
+            ]);
+          }
+        });
       });
-    });
-    const q2 = query(collection(db, `students_details/`));
-    onSnapshot(q2, (querySnapshot) => {
-      querySnapshot.docs.forEach((data) => {
-        if (data.id === branch) {
-          setTimeTable(data.data().timetable);
-        }
+      const q2 = query(collection(db, `students_details/`));
+      onSnapshot(q2, (querySnapshot) => {
+        querySnapshot.docs.forEach((data) => {
+          if (data.id === branch) {
+            setTimeTable(data.data().timetable);
+          }
+        });
       });
-    });
+    }
   }, [branch]);
 
   const ResetActiveMenu = () => {

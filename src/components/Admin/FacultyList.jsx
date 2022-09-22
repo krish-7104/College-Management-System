@@ -50,8 +50,12 @@ const FacultyList = () => {
         </p>
         <p class="facultyListShowPhoneNo">
         <small>Post</small>
-        ${data.data().post}
+        ${data.data().post === "Head Of Department" ? "HOD" : data.data().post}
         </p>
+        <a class="facultyListShowEmail" href="mailto:${data.data().email}">
+        <small>Email</small>
+        ${data.data().email}
+        </a>
       </div>`;
       });
       if (html.endsWith("</p>")) {
