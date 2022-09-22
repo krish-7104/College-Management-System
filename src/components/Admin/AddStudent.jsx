@@ -59,7 +59,7 @@ const AddStudent = () => {
         progress: undefined,
         theme: "dark",
       });
-      // document.getElementById("adminForm").reset();
+      document.getElementById("adminForm").reset();
     } catch (err) {
       toast.warn("Something Went Wrong!", {
         position: "bottom-right",
