@@ -28,7 +28,7 @@ const FacultyList = () => {
       let data = document.getElementById("showListSec");
       let html = `<div class="studentListTable">
         <p class="studentBranchShowTitle">
-        Students Of ${selectedBranch} Branch
+        Faculty Of ${selectedBranch}
         </p>`;
       querySnapshot.docs.forEach((data) => {
         html += ` <div class="facultyListShowCardStudentView">
@@ -38,6 +38,7 @@ const FacultyList = () => {
           alt="faculty list data"
         />
         <p class="facultyListShowEnrollment">
+        <span class="enolabelMobile">E No:&nbsp;</span>
         <small>Emp No.</small>
         ${data.data().emp_no}
         </p>
@@ -48,7 +49,7 @@ const FacultyList = () => {
         <small>Phone No.</small>
         ${data.data().phone_no}
         </p>
-        <p class="facultyListShowPhoneNo">
+        <p class="facultyListShowPost">
         <small>Post</small>
         ${data.data().post === "Head Of Department" ? "HOD" : data.data().post}
         </p>

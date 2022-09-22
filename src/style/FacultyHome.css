@@ -226,7 +226,8 @@ select {
 .facultyListShowEnrollment,
 .facultyListShowName,
 .facultyListShowPhoneNo,
-.facultyListShowEmail {
+.facultyListShowEmail,
+.facultyListShowPost {
   display: grid;
   place-items: center;
   font-weight: 600;

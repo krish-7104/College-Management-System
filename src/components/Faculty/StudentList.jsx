@@ -34,7 +34,7 @@ const StudentList = () => {
       let data = document.getElementById("showListSec");
       let html = `<div class="studentListTable">
         <p class="studentBranchShowTitle">
-        Students Of ${selectedBranch} Branch
+        Students Of ${selectedBranch}
         </p>`;
       querySnapshot.docs.forEach((data) => {
         if (
@@ -48,6 +48,7 @@ const StudentList = () => {
         />
         <p class="studentListShowEnrollment">
         <small>E No.</small>
+        <span class="enolabelMobile">E No:&nbsp;</span>
         ${data.data().e_no}
         </p>
         <p class="studentListShowName">

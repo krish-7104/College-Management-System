@@ -21,10 +21,11 @@ const AdminHome = () => {
   const [subjectCount, setsubjectCount] = useState(0);
   const [facultyCount, setfacultyCount] = useState(0);
   const [totalStudent, setTotalStudents] = useState(0);
-  const rights = localStorage.getItem("rights");
+  const [adminDetails, setAdminDetials] = useState([]);
+  const rights = sessionStorage.getItem("rights");
   useEffect(() => {
-    if (localStorage.getItem("rights") === null) {
-      localStorage.clear();
+    if (sessionStorage.getItem("rights") === null) {
+      sessionStorage.clear();
       navigate("/admin");
     } else {
       const faculty = query(collection(db, `faculty_credentials/`));
@@ -54,6 +55,15 @@ const AdminHome = () => {
             ]);
           });
         });
+      });
+      const adminDetails = query(collection(db, `admin_credentials/`));
+      onSnapshot(adminDetails, (querySnapshot) => {
+        setAdminDetials(
+          querySnapshot.docs.map((doc) => ({
+            allAdmins: doc.data(),
+            allId: doc.id,
+          }))
+        );
       });
     }
   }, []);
@@ -116,15 +126,30 @@ const AdminHome = () => {
             <p className="adminCardLabel">Total Branches - {branchCount}</p>
           </div>
         </div>
-        <div className="adminAllBranchData">
-          <p className="adminBranchDetailTitle">Branch And Students Detail</p>
-          {branchWiseData.map((branch, index) => {
-            return (
-              <p className="adminBranchDetailLabel">
-                {branch} Branch : {branchWiseStudentData[index]} Students
-              </p>
-            );
-          })}
+        <div className="middleAdminCards">
+          <div className="adminAllBranchData">
+            <p className="adminBranchDetailTitle">Branch And Students Detail</p>
+            {branchWiseData.map((branch, index) => {
+              return (
+                <p className="adminBranchDetailLabel" key={index}>
+                  {branch} Branch : {branchWiseStudentData[index]} Students
+                </p>
+              );
+            })}
+          </div>
+          <div className="adminAllAdminData">
+            <p className="adminDetailTitle">Admins Details</p>
+            {adminDetails.map((admin) => {
+              return (
+                <p className="adminDetailLabel" key={admin.allId}>
+                  <span className="adminEmail">{admin.allAdmins.name}</span>
+                  <span className="rightsInfo">
+                    {admin.allAdmins.rights} Access
+                  </span>
+                </p>
+              );
+            })}
+          </div>
         </div>
         <p
           className={
@@ -174,14 +199,14 @@ const AdminHome = () => {
             onClick={() => setSeletedBtn("view_student")}
             id="adminPanelStudentListBtn"
           >
-            View Student List
+            View Students
           </button>
           <button
             className="adminPanelBtns"
             onClick={() => setSeletedBtn("view_faculty")}
             id="adminPanelFacultyListBtn"
           >
-            View Faculty List
+            View Faculty
           </button>
         </div>
         <div className="facultyShowArea" id="facultyShowArea">

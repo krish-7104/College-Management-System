@@ -51,13 +51,21 @@
   color: white;
   border: 1.4px solid #1f1f1f;
 }
-.adminAllBranchData {
+.middleAdminCards {
+  width: 90%;
+  display: flex;
+  justify-content: space-evenly;
+}
+.adminAllBranchData,
+.adminAllAdminData {
   width: 40%;
   background-color: whitesmoke;
   box-shadow: rgba(0, 0, 0, 0.2) 1.95px 1.95px 2.6px;
   padding: 20px;
+  border-radius: 4px;
 }
-.adminBranchDetailTitle {
+.adminBranchDetailTitle,
+.adminDetailTitle {
   font-weight: bold;
   text-align: center;
   border-bottom: 1.4px solid black;
@@ -67,12 +75,33 @@
   padding: 8px;
   margin-bottom: 10px;
 }
-.adminBranchDetailLabel {
+.adminAllAdminData {
+  display: flex;
+  flex-direction: column;
+}
+.adminBranchDetailLabel,
+.adminDetailLabel {
   text-align: center;
   padding: 10px;
+  font-size: 14px;
   letter-spacing: 1px;
   text-transform: uppercase;
   font-weight: 500;
+}
+.adminDetailLabel {
+  display: flex;
+  justify-content: space-between;
+}
+.adminEmail {
+  width: 65%;
+  text-align: left;
+}
+.rightsInfo {
+  background-color: #1f1f1f21;
+  padding: 3px;
+  align-self: flex-end;
+  font-size: 12px;
+  border-radius: 2px;
 }
 /* Add Student Css */
 .MainAdmin {
@@ -123,6 +152,7 @@
   width: 100%;
   flex-direction: column;
 }
+
 .addStudentInputs input,
 .addFacultyInputs input {
   margin: 5px !important;
@@ -199,4 +229,147 @@
   justify-content: center;
   align-items: center;
   font-size: 20px !important;
+}
+.enolabelMobile {
+  display: none;
+}
+@media only screen and (max-width: 800px) {
+  .adminCards {
+    flex-direction: row;
+    padding: 5px;
+    margin-top: 20px;
+  }
+  .adminCard {
+    width: 45%;
+    margin: 5px;
+    padding: 15px;
+    font-size: 14px;
+  }
+  .middleAdminCards {
+    flex-direction: column;
+  }
+  .adminAllBranchData {
+    width: 100%;
+    margin: 20px 0px;
+  }
+  .MainAdmin {
+    width: 100% !important;
+  }
+  .adminAllAdminData {
+    width: 100%;
+  }
+  .adminEmail {
+    font-size: 12px;
+    width: auto;
+  }
+  .rightsInfo {
+    font-size: 10px;
+  }
+  .adminDetailTitle,
+  .adminBranchDetailTitle {
+    font-size: 14px;
+    padding: 6px;
+  }
+  .enolabelMobile {
+    display: block;
+    font-weight: bold;
+  }
+  .adminPanelBtns {
+    width: 120px;
+  }
+  .adminBtnArea {
+    flex-wrap: wrap;
+    width: 90%;
+  }
+  .adminShowArea {
+    width: 90%;
+  }
+  .adminForm input {
+    width: 100%;
+  }
+  .addStudentInputs:nth-child(even) {
+    margin-left: 5px;
+  }
+  .addStudentInputs:nth-child(odd) {
+    margin-left: -5px;
+  }
+  .addFacultyInputs:nth-child(even) {
+    margin-left: 5px;
+  }
+  .addFacultyInputs:nth-child(odd) {
+    margin-left: -5px;
+  }
+  #submitDataAdmin {
+    padding: 10px;
+  }
+  .addSubjectArea {
+    flex-direction: column-reverse;
+  }
+  .subjectsList {
+    width: 100%;
+  }
+  .addSubjectSection {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  .noticeAddForm {
+    width: 100%;
+  }
+  .leaveBlankMessage {
+    text-align: center;
+    font-size: 10px;
+  }
+  .studentListViewFaculty,
+  .facultyListViewFaculty {
+    width: 100%;
+  }
+  .studentListShowCardStudentView,
+  .facultyListShowCardStudentView {
+    display: grid;
+    grid-template-columns: 80px auto;
+    grid-template-rows: repeat(3, 1fr);
+  }
+  .studentBranchShowTitle {
+    font-size: 14px;
+  }
+  .studentlistViewProfile,
+  .facultylistViewProfile {
+    margin: 0 !important;
+    grid-area: 1 / 1 / 4 / 2;
+    place-items: center;
+  }
+  .studentListShowEnrollment,
+  .facultyListShowEnrollment {
+    grid-area: 1 / 2 / 2 / 3;
+    font-weight: 500;
+    width: 100%;
+    font-size: 14px;
+    display: flex;
+    margin-bottom: 5px;
+  }
+  .studentListShowName,
+  .facultyListShowName {
+    grid-area: 2 / 2 / 3 / 3;
+    font-weight: 500;
+    font-size: 14px;
+    place-items: start;
+    margin-bottom: 3px;
+  }
+  .studentListShowPhoneNo,
+  .facultyListShowPhoneNo {
+    grid-area: 3 / 2 / 4 / 3;
+    font-weight: 500;
+    font-size: 14px;
+    margin-bottom: 3px;
+    place-items: start;
+  }
+  small {
+    display: none;
+  }
+  .facultyListShowEmail {
+    display: none;
+  }
+  .facultyListShowPost {
+    display: none;
+  }
 }
