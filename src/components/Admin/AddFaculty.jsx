@@ -28,16 +28,6 @@ const AddStudent = () => {
           email: document.getElementById("email").value,
         }
       );
-      toast.success("Data Uploaded Successfully!", {
-        position: "bottom-right",
-        autoClose: 4000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: false,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
     } catch (err) {
       toast.warn("Something Went Wrong!", {
         position: "bottom-right",
@@ -52,11 +42,11 @@ const AddStudent = () => {
     }
     try {
       await setDoc(
-        doc(db, `faculty_credentials`, document.getElementById("e_no").value),
+        doc(db, `faculty_credentials`, document.getElementById("emp_no").value),
         {
-          password: "123456",
+          password: "654321",
           department: document.getElementById("department").value,
-          loginid: document.getElementById("emp_no").value,
+          loginid: document.getElementById("email").value,
         }
       );
       toast.success("Data Uploaded Successfully!", {
