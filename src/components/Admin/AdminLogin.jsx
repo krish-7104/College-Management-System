@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Navbar from "../../components/Navbar";
 import { useNavigate } from "react-router-dom";
 const AdminLogin = () => {
-  localStorage.clear();
+  sessionStorage.clear();
   const navigate = useNavigate();
   const notifyAlert = (text) => {
     toast.warn(text, {
@@ -42,8 +42,8 @@ const AdminLogin = () => {
         }
       });
       if (k === 1) {
-        localStorage.setItem("loginid", userId);
-        localStorage.setItem("rights", rightData);
+        sessionStorage.setItem("loginid", userId);
+        sessionStorage.setItem("rights", rightData);
         navigate("/admin-home");
         k = 0;
       } else {

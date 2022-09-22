@@ -12,8 +12,8 @@ import { useNavigate } from "react-router-dom";
 const StudentHome = () => {
   const navigate = useNavigate();
   const [selectedBtn, setSeletedBtn] = useState("");
-  let loginId = localStorage.getItem("loginid");
-  let branch = localStorage.getItem("branch");
+  let loginId = sessionStorage.getItem("loginid");
+  let branch = sessionStorage.getItem("branch");
   const [timetable, setTimeTable] = useState("");
   const [details, setDetails] = useState([
     {
@@ -32,9 +32,9 @@ const StudentHome = () => {
   ]);
 
   useEffect(() => {
-    if (localStorage.getItem("loginid") !== null) {
-      if (localStorage.getItem("loginid").includes("@")) {
-        localStorage.clear();
+    if (sessionStorage.getItem("loginid") !== null) {
+      if (sessionStorage.getItem("loginid").includes("@")) {
+        sessionStorage.clear();
         navigate("/");
       } else {
         const q1 = query(
@@ -71,7 +71,7 @@ const StudentHome = () => {
         });
       }
     } else {
-      localStorage.clear();
+      sessionStorage.clear();
       navigate("/");
     }
   }, [branch]);

@@ -36,7 +36,7 @@ const Login = () => {
   ]);
   let k = 0;
   const loginValidate = () => {
-    localStorage.clear();
+    sessionStorage.clear();
     let userId = document.getElementById("loginid").value;
     let userPass = document.getElementById("password").value;
     let branch = "";
@@ -50,9 +50,9 @@ const Login = () => {
           }
         });
         if (k === 1) {
-          localStorage.setItem("loginid", userId);
-          localStorage.setItem("branch", branch);
-          localStorage.setItem("type", "student");
+          sessionStorage.setItem("loginid", userId);
+          sessionStorage.setItem("branch", branch);
+          sessionStorage.setItem("type", "student");
           navigate("/students-home");
           k = 0;
         } else {
@@ -70,9 +70,9 @@ const Login = () => {
           }
         });
         if (k === 1) {
-          localStorage.setItem("loginid", userId);
-          localStorage.setItem("department", department);
-          localStorage.setItem("type", "faculty");
+          sessionStorage.setItem("loginid", userId);
+          sessionStorage.setItem("department", department);
+          sessionStorage.setItem("type", "faculty");
           navigate("/faculty-home");
           k = 0;
         } else {

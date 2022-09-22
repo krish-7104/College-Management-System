@@ -11,8 +11,8 @@ import StudentList from "./StudentList";
 import { useNavigate } from "react-router-dom";
 const FacultyHome = () => {
   const navigate = useNavigate();
-  let loginId = localStorage.getItem("loginid");
-  let department = localStorage.getItem("department");
+  let loginId = sessionStorage.getItem("loginid");
+  let department = sessionStorage.getItem("department");
   const [selectedBtn, setSeletedBtn] = useState("");
   const [details, setDetails] = useState([
     {
@@ -31,9 +31,9 @@ const FacultyHome = () => {
     },
   ]);
   useEffect(() => {
-    if (localStorage.getItem("loginid") !== null) {
-      if (!localStorage.getItem("loginid").includes("@")) {
-        localStorage.clear();
+    if (sessionStorage.getItem("loginid") !== null) {
+      if (!sessionStorage.getItem("loginid").includes("@")) {
+        sessionStorage.clear();
         navigate("/");
       } else {
         const q1 = query(
@@ -45,11 +45,7 @@ const FacultyHome = () => {
               setDetails(() => [
                 {
                   fullname:
-                    data.data().first_name +
-                    " " +
-                    data.data().middle_name +
-                    " " +
-                    data.data().last_name,
+                    data.data().first_name + " " + data.data().last_name,
                   email: loginId,
                   department: department,
                   dob: data.data().birth_date,
@@ -65,7 +61,7 @@ const FacultyHome = () => {
         });
       }
     } else {
-      localStorage.clear();
+      sessionStorage.clear();
       navigate("/");
     }
   }, [department, loginId]);
