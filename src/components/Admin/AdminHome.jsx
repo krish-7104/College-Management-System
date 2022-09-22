@@ -20,6 +20,7 @@ const AdminHome = () => {
   const [subjectCount, setsubjectCount] = useState(0);
   const [facultyCount, setfacultyCount] = useState(0);
   const [totalStudent, setTotalStudents] = useState(0);
+  const rights = localStorage.getItem("rights");
   useEffect(() => {
     const faculty = query(collection(db, `faculty_credentials/`));
     onSnapshot(faculty, (querySnapshot) => {
@@ -93,10 +94,7 @@ const AdminHome = () => {
   };
   return (
     <>
-      <Navbar
-        title={`Admin Panel - CMS | ${localStorage.getItem("rights")} Access`}
-        route="admin"
-      />
+      <Navbar title={`Admin Panel - CMS | ${rights} Access`} route="admin" />
       <section className="mainAdminPanelContainer">
         <div className="adminCards">
           <div className="adminCard">
@@ -124,9 +122,7 @@ const AdminHome = () => {
         </div>
         <p
           className={
-            localStorage.getItem("rights") === "limited"
-              ? "rightsMessage "
-              : "rightsMessage disable"
+            rights === "limited" ? "rightsMessage " : "rightsMessage disable"
           }
         >
           <span id="rightIcon">
@@ -137,7 +133,7 @@ const AdminHome = () => {
         <div className="adminBtnArea" id="adminBtnArea">
           <button
             className={
-              localStorage.getItem("rights") === "limited"
+              rights === "limited"
                 ? "adminPanelBtns disable "
                 : "adminPanelBtns"
             }
@@ -147,11 +143,7 @@ const AdminHome = () => {
             Add Student
           </button>
           <button
-            className={
-              localStorage.getItem("rights") === "limited"
-                ? "disable"
-                : "adminPanelBtns"
-            }
+            className={rights === "limited" ? "disable" : "adminPanelBtns"}
             onClick={() => setSeletedBtn("add_faculty")}
             id="adminPanelAddFacultyBtm"
           >

@@ -61,7 +61,7 @@ const StudentHome = () => {
         }
       });
     });
-  }, []);
+  }, [branch]);
 
   const ResetActiveMenu = () => {
     let btnsCont = document.getElementById("studentList");
