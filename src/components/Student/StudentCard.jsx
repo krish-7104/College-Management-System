@@ -10,7 +10,7 @@ import {
   MdMale,
 } from "react-icons/md";
 const ProfileCard = (props) => {
-  let e_no = localStorage.getItem("loginid");
+  let e_no = sessionStorage.getItem("loginid");
   return (
     <>
       <section className="mainCard">
