@@ -250,6 +250,39 @@ small {
   letter-spacing: 1px;
   font-size: 11.5px;
 }
+.AddTimetableSec {
+  width: 40%;
+  display: flex;
+  padding: 20px;
+  border-radius: 4px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  flex-direction: column;
+  background-color: whitesmoke;
+  box-shadow: rgba(0, 0, 0, 0.2) 1.95px 1.95px 2.6px;
+}
+.timetableAdd {
+  font-weight: 600;
+  padding: 6px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  width: 70%;
+  text-align: center;
+  color: black;
+  margin: 10px 0px;
+  border-bottom: 1.4px solid black;
+}
+.addTimetableBtn {
+  background-color: #1f1f1f;
+  padding: 10px;
+  margin-top: 15px;
+}
+.addTimetableInputArea {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
 @media only screen and (max-width: 700px) {
   .addNoticeTitleInput,
   .addmaterialTitleInput {
@@ -268,5 +301,55 @@ small {
   .noticeLabel,
   .materialLabel {
     font-size: 12px;
+  }
+  .materialAddForm {
+    width: 100%;
+  }
+  #uploadMaterialSubmitBtn {
+    margin-top: 20px;
+  }
+  .uploadMarksSection {
+    width: 100%;
+  }
+  select {
+    width: 90%;
+  }
+  .studentMarksUploadCardMarksUpload {
+    flex-direction: column;
+  }
+  .studentMarksUploadEnrollment,
+  .studentMarksUploadName {
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding-top: 5px;
+    font-size: 14px;
+  }
+  .studentMarksUploadCardMarksUpload input {
+    margin-top: 10px;
+    padding: 5px;
+    width: 70%;
+  }
+  .studentMarksUploadCardMarksUpload input::placeholder {
+    font-size: 14px;
+  }
+  .studentBranchShowTitle {
+    font-size: 14px !important;
+  }
+  .AddTimetableSec {
+    width: 100%;
+  }
+  .addTimetableInputArea {
+    display: flex;
+    flex-direction: column;
+  }
+  .timetableAdd {
+    width: 100%;
+  }
+  .timetableInput {
+    width: 100%;
+  }
+  .timetableInput::placeholder {
+    font-size: 15px;
   }
 }

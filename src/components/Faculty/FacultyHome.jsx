@@ -9,6 +9,7 @@ import UploadMaterial from "./UploadMaterial";
 import UploadMarks from "./UploadMarks";
 import StudentList from "./StudentList";
 import { useNavigate } from "react-router-dom";
+import AddTimetable from "./AddTimetable";
 const FacultyHome = () => {
   const navigate = useNavigate();
   let loginId = sessionStorage.getItem("loginid");
@@ -94,6 +95,11 @@ const FacultyHome = () => {
       let btn = document.getElementById("viewStudentFacultyBtn");
       btn.classList.add("active");
       return <StudentList />;
+    } else if (selectedBtn === "add-timetable") {
+      ResetActiveMenu();
+      let btn = document.getElementById("addTimetableFacultyBtn");
+      btn.classList.add("active");
+      return <AddTimetable />;
     }
   };
   return (
@@ -130,6 +136,13 @@ const FacultyHome = () => {
               onClick={() => setSeletedBtn("student-list")}
             >
               Student List
+            </li>
+            <li
+              id="addTimetableFacultyBtn"
+              className="facultyMenuList"
+              onClick={() => setSeletedBtn("add-timetable")}
+            >
+              Add Timetable
             </li>
           </ul>
         </div>

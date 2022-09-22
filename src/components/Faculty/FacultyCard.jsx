@@ -50,7 +50,12 @@ const ProfileCard = (props) => {
               <MdClass />
             </span>
             &nbsp;{" "}
-            {props.allData[0].post + " (" + props.allData[0].department + ")"}
+            {(props.allData[0].post === "Head Of Department"
+              ? "HOD"
+              : props.allData[0].post) +
+              " (" +
+              props.allData[0].department +
+              ")"}
           </p>
           <p className="infoText" id="gender" title="Gender">
             <span className="cardDataIcons">

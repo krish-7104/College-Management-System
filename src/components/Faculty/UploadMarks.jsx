@@ -10,6 +10,7 @@ const UploadMarks = () => {
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [selectedSemester, setSelectedSemester] = useState(null);
   const [examTypeSemester, setExamTypeSemester] = useState(null);
+  const [uploadMarkView, setUploadMarkView] = useState(false);
 
   const callBranchDataFromDatabase = () => {
     const q2 = query(collection(db, `students_details/`));
@@ -33,15 +34,25 @@ const UploadMarks = () => {
   }, []);
 
   const branchSelectHandler = (e) => {
+    let data = document.getElementById("showStudentMarkUploadSec");
+    data.innerHTML = "";
     setSelectedBranch(e.target.value);
   };
   const selectExamTypeHandler = (e) => {
+    setUploadMarkView(false);
+    let data = document.getElementById("showStudentMarkUploadSec");
+    data.innerHTML = "";
     setExamTypeSemester(e.target.value);
   };
   const subjectSelectHandler = (e) => {
+    setUploadMarkView(false);
+    let data = document.getElementById("showStudentMarkUploadSec");
+    data.innerHTML = "";
     setSelectedSubject(e.target.value);
   };
   const semesterSelectHandler = (e) => {
+    let data = document.getElementById("showStudentMarkUploadSec");
+    data.innerHTML = "";
     setSelectedSemester(e.target.value);
   };
   const submitMarksOnDatabase = async () => {
@@ -86,6 +97,7 @@ const UploadMarks = () => {
   };
 
   const callStudentListDataFromDatabase = () => {
+    setUploadMarkView(!uploadMarkView);
     const q2 = query(
       collection(db, `students_details/${selectedBranch}/individual_student/`)
     );
@@ -93,7 +105,7 @@ const UploadMarks = () => {
       let data = document.getElementById("showStudentMarkUploadSec");
       let html = `<div class="studentListTable">
       <p class="studentBranchShowTitle">
-      Upload Marks Of ${selectedSubject} - ${selectedBranch}
+     ${selectedSubject} - ${selectedBranch}
       </p>`;
       querySnapshot.docs.forEach((data) => {
         if (
@@ -104,14 +116,8 @@ const UploadMarks = () => {
         ${data.data().e_no}
         </p>
         <p class="studentMarksUploadName">
-        ${
-          data.data().first_name +
-          " " +
-          data.data().middle_name +
-          " " +
-          data.data().last_name
-        }</p>
-        <input type="number" className='allMarksInput' name="marks" id='${
+        ${data.data().first_name + " " + data.data().last_name}</p>
+        <input type="number" className="allMarksInput" name="marks" id='${
           data.data().e_no + "mark"
         }' placeholder="Enter Marks" />
       </div>`;
@@ -192,7 +198,11 @@ const UploadMarks = () => {
       ></div>
       <div className="uploadMarksSubmitArea">
         <button
-          className="submitMarksUploadMarksSec"
+          className={
+            uploadMarkView
+              ? "submitMarksUploadMarksSec"
+              : "submitMarksUploadMarksSec disable"
+          }
           onClick={submitMarksOnDatabase}
         >
           Upload Marks Of Student
