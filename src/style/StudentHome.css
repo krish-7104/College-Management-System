@@ -160,6 +160,9 @@
   width: 80%;
   text-align: left;
 }
+.material {
+  flex-direction: column;
+}
 .marksList {
   width: 20%;
 }
@@ -194,6 +197,7 @@
     align-items: center;
     padding-right: 10px;
   }
+
   .itemShowCard {
     width: 100%;
     display: flex;

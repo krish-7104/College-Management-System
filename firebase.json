@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "site":"cmsbykrish",
+
     "public": "build",
     "ignore": [
       "firebase.json",
