@@ -69,7 +69,7 @@ const AddSubject = () => {
           <p className="subjectListTitle" id="subjectListTitle">
             Subject ID And Name
           </p>
-          {SubjectData.map(SubjectListView)}
+          <ol>{SubjectData.map(SubjectListView)}</ol>
         </div>
         {console.log(SubjectData)}
         <div className="addSubjectSection">

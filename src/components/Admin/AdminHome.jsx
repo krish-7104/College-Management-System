@@ -117,7 +117,7 @@ const AdminHome = () => {
   };
   return (
     <>
-      <Navbar title={`Admin Panel - CMS | ${rights} Access`} route="admin" />
+      <Navbar title={`Admin Panel - CMS`} route="admin" />
       <section className="mainAdminPanelContainer">
         <div className="adminCards">
           <div className="adminCard">
@@ -151,7 +151,7 @@ const AdminHome = () => {
                 <p className="adminDetailLabel" key={admin.allId}>
                   <span className="adminEmail">
                     {admin.allAdmins.name === currentadminName
-                      ? admin.allAdmins.name + " " + "(Current User)"
+                      ? admin.allAdmins.name + " " + "(Active)"
                       : admin.allAdmins.name}
                   </span>
                   <span className="rightsInfo">
