@@ -42,7 +42,7 @@
   margin: 20px 0px 10px 0px;
 }
 .errorLink {
-  color: whitesmoke;
+  color: whitesmoke !important;
   text-decoration: none;
 }
 @media only screen and (max-width: 800px) {
