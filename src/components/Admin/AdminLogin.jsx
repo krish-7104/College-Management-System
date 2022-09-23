@@ -26,6 +26,7 @@ const AdminLogin = () => {
       loginid: "",
       password: "",
       rights: "",
+      adminName: "",
     },
   ]);
 
@@ -34,16 +35,20 @@ const AdminLogin = () => {
     let userId = document.getElementById("loginid").value;
     let userPass = document.getElementById("password").value;
     let rightData = "";
+    let adminName = "";
     if (userId !== "" && userPass !== "") {
       Admins.forEach((user) => {
         if (user.loginid === userId && user.password === userPass) {
           k = 1;
           rightData = user.rights;
+          adminName = user.adminName;
         }
       });
       if (k === 1) {
         sessionStorage.setItem("loginid", userId);
         sessionStorage.setItem("rights", rightData);
+        sessionStorage.setItem("name", adminName);
+
         navigate("/admin-home");
         k = 0;
       } else {
@@ -64,6 +69,7 @@ const AdminLogin = () => {
             loginid: data.data().loginid,
             password: data.data().password,
             rights: data.data().rights,
+            adminName: data.data().name,
           },
         ]);
       });

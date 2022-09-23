@@ -89,19 +89,23 @@
   text-transform: uppercase;
   font-weight: 500;
 }
+.adminBranchDetailLabel {
+  text-align: left !important;
+}
 .adminDetailLabel {
   display: flex;
   justify-content: space-between;
 }
 .adminEmail {
   width: 65%;
+  font-size: 13px !important;
   text-align: left;
 }
 .rightsInfo {
   background-color: #1f1f1f21;
   padding: 3px;
   align-self: flex-end;
-  font-size: 12px;
+  font-size: 11px;
   border-radius: 2px;
 }
 /* Add Student Css */

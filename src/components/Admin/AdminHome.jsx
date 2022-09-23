@@ -24,6 +24,8 @@ const AdminHome = () => {
   const [totalStudent, setTotalStudents] = useState(0);
   const [adminDetails, setAdminDetials] = useState([]);
   const rights = sessionStorage.getItem("rights");
+  const currentadminName = sessionStorage.getItem("name");
+
   useEffect(() => {
     if (sessionStorage.getItem("rights") === null) {
       sessionStorage.clear();
@@ -137,7 +139,7 @@ const AdminHome = () => {
             {branchWiseData.map((branch, index) => {
               return (
                 <p className="adminBranchDetailLabel" key={index}>
-                  {branch} Branch : {branchWiseStudentData[index]} Students
+                  {branch} : {branchWiseStudentData[index]} Students
                 </p>
               );
             })}
@@ -147,15 +149,10 @@ const AdminHome = () => {
             {adminDetails.map((admin) => {
               return (
                 <p className="adminDetailLabel" key={admin.allId}>
-                  <span
-                    className={
-                      sessionStorage.getItem("loginid") ===
-                      admin.addAdmins.loginid
-                        ? "adminEmail activeAdmin"
-                        : "adminEmail"
-                    }
-                  >
-                    {admin.allAdmins.name}
+                  <span className="adminEmail">
+                    {admin.allAdmins.name === currentadminName
+                      ? admin.allAdmins.name + " " + "(Current User)"
+                      : admin.allAdmins.name}
                   </span>
                   <span className="rightsInfo">
                     {admin.allAdmins.rights} Access
