@@ -147,7 +147,16 @@ const AdminHome = () => {
             {adminDetails.map((admin) => {
               return (
                 <p className="adminDetailLabel" key={admin.allId}>
-                  <span className="adminEmail">{admin.allAdmins.name}</span>
+                  <span
+                    className={
+                      sessionStorage.getItem("loginid") ===
+                      admin.addAdmins.loginid
+                        ? "adminEmail activeAdmin"
+                        : "adminEmail"
+                    }
+                  >
+                    {admin.allAdmins.name}
+                  </span>
                   <span className="rightsInfo">
                     {admin.allAdmins.rights} Access
                   </span>

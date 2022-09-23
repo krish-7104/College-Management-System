@@ -38,7 +38,6 @@ const FacultyList = () => {
           alt="faculty list data"
         />
         <p class="facultyListShowEnrollment">
-        <span class="enolabelMobile">E No:&nbsp;</span>
         <small>Emp No.</small>
         ${data.data().emp_no}
         </p>

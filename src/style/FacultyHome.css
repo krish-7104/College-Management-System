@@ -175,8 +175,8 @@ select {
   background-color: white;
   display: grid;
   padding: 10px;
-  width: 100%;
-  grid-template-columns: auto repeat(4, 1fr);
+  width: 90%;
+  grid-template-columns: auto repeat(3, 1fr);
   border-bottom: 1.4px solid #1f1f1f;
 }
 .facultyListShowCardStudentView {
@@ -201,9 +201,6 @@ select {
   flex-direction: column;
   justify-content: center;
 }
-.studentListShowName {
-  grid-column: 3 / span 2;
-}
 .studentlistViewProfile,
 .facultylistViewProfile {
   height: 60px !important;
@@ -221,8 +218,12 @@ select {
   place-items: center start;
   font-weight: 600;
   letter-spacing: 1px;
+  font-size: 15px;
 }
-
+.studentListShowName {
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+}
 .facultyListShowEnrollment,
 .facultyListShowName,
 .facultyListShowPhoneNo,
@@ -283,7 +284,18 @@ small {
   align-items: center;
   flex-direction: column;
 }
-@media only screen and (max-width: 700px) {
+
+@media only screen and (max-width: 800px) {
+  .studentListShowCardStudentView {
+    width: 100%;
+  }
+  .studentListViewFaculty {
+    width: 98%;
+  }
+  .studentListShowName {
+    text-transform: none;
+    letter-spacing: 1px;
+  }
   .addNoticeTitleInput,
   .addmaterialTitleInput {
     width: 90%;

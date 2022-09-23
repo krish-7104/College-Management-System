@@ -169,7 +169,7 @@
 .marksCard li:last-child {
   background-color: #cacacabf;
 }
-@media only screen and (max-width: 700px) {
+@media only screen and (max-width: 800px) {
   .material,
   .notice {
     width: 90%;

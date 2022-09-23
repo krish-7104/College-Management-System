@@ -39,6 +39,7 @@
   box-shadow: rgba(0, 0, 0, 0.2) 1.95px 1.95px 2.6px;
   padding: 8px;
   border-radius: 6px;
+  flex-wrap: wrap;
 }
 .adminPanelBtns {
   background-color: #1f1f1f;
@@ -174,7 +175,10 @@
   box-shadow: rgba(0, 0, 0, 0.2) 1.95px 1.95px 2.6px;
   padding: 20px;
   border-radius: 5px;
-  width: 30%;
+  width: 35%;
+}
+.subjectsList {
+  width: 45%;
 }
 .subjectListTitle {
   font-weight: 600;
@@ -195,7 +199,7 @@
   color: black !important;
   list-style: none;
   padding: 5px;
-  font-size: 16px;
+  font-size: 14.5px;
 }
 .addSubjectInputArea {
   display: flex;
@@ -230,9 +234,7 @@
   align-items: center;
   font-size: 20px !important;
 }
-.enolabelMobile {
-  display: none;
-}
+
 @media only screen and (max-width: 800px) {
   .adminCards {
     flex-direction: row;
@@ -269,10 +271,6 @@
   .adminBranchDetailTitle {
     font-size: 14px;
     padding: 6px;
-  }
-  .enolabelMobile {
-    display: block;
-    font-weight: bold;
   }
   .adminPanelBtns {
     width: 120px;

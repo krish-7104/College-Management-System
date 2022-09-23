@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { db } from "../../backend/firebase";
 import { collection, query, onSnapshot } from "firebase/firestore";
-
 const StudentList = () => {
   const [branches, setBranches] = useState([]);
   const [selectedBranch, setSelectedBranch] = useState(null);
@@ -48,7 +47,6 @@ const StudentList = () => {
         />
         <p class="studentListShowEnrollment">
         <small>E No.</small>
-        <span class="enolabelMobile">E No:&nbsp;</span>
         ${data.data().e_no}
         </p>
         <p class="studentListShowName">

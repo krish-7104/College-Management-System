@@ -20,7 +20,16 @@ const UploadMaterial = () => {
         title.value = "";
         link.value = "";
         subject.value = "";
-        alert("Data Added Successfully!");
+        toast.success("Material Upload Successfully!", {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
       } catch (err) {
         toast.warn("Material Upload Failed, Try Again!", {
           position: "bottom-right",

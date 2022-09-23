@@ -139,6 +139,15 @@ const Login = () => {
             </button>
           </div>
         </div>
+        <div className="myProfile">
+          <a
+            className="portfolioLink"
+            href="https://krishjotaniya.netlify.app"
+            target="_blank"
+          >
+            <p className="profileTitle">Developed By Krish Jotaniya</p>
+          </a>
+        </div>
         <ToastContainer />
       </section>
     </>
