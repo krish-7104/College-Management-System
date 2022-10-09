@@ -144,6 +144,7 @@ const Login = () => {
             className="portfolioLink"
             href="https://krishjotaniya.netlify.app"
             target="_blank"
+            rel="noreferrer"
           >
             <p className="profileTitle">Developed By Krish Jotaniya</p>
           </a>

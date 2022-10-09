@@ -32,48 +32,47 @@ const StudentHome = () => {
   ]);
 
   useEffect(() => {
-    if (sessionStorage.getItem("loginid") !== null) {
-      if (sessionStorage.getItem("loginid").includes("@")) {
-        sessionStorage.clear();
-        navigate("/");
-      } else {
-        const q1 = query(
-          collection(db, `students_details/${branch}/individual_student/`)
-        );
-        onSnapshot(q1, (querySnapshot) => {
-          querySnapshot.docs.forEach((data) => {
-            if (data.data().e_no === loginId) {
-              setDetails(() => [
-                {
-                  fullname:
-                    data.data().first_name + " " + data.data().last_name,
-                  e_no: loginId,
-                  gender: data.data().gender,
-                  phoneno: data.data().phone_no,
-                  branch: branch,
-                  semester: data.data().current_sem,
-                  category: data.data().category,
-                  photo: data.data().photo,
-                  email: data.data().email,
-                  dob: data.data().birth_date,
-                },
-              ]);
-            }
-          });
-        });
-        const q2 = query(collection(db, `students_details/`));
-        onSnapshot(q2, (querySnapshot) => {
-          querySnapshot.docs.forEach((data) => {
-            if (data.id === branch) {
-              setTimeTable(data.data().timetable);
-            }
-          });
-        });
-      }
-    } else {
-      sessionStorage.clear();
-      navigate("/");
-    }
+    // if (sessionStorage.getItem("loginid") !== null) {
+    // if (sessionStorage.getItem("loginid").includes("@")) {
+    //   sessionStorage.clear();
+    //   navigate("/");
+    // } else {
+    const q1 = query(
+      collection(db, `students_details/${branch}/individual_student/`)
+    );
+    onSnapshot(q1, (querySnapshot) => {
+      querySnapshot.docs.forEach((data) => {
+        if (data.data().e_no === loginId) {
+          setDetails(() => [
+            {
+              fullname: data.data().first_name + " " + data.data().last_name,
+              e_no: loginId,
+              gender: data.data().gender,
+              phoneno: data.data().phone_no,
+              branch: branch,
+              semester: data.data().current_sem,
+              category: data.data().category,
+              photo: data.data().photo,
+              email: data.data().email,
+              dob: data.data().birth_date,
+            },
+          ]);
+        }
+      });
+    });
+    const q2 = query(collection(db, `students_details/`));
+    onSnapshot(q2, (querySnapshot) => {
+      querySnapshot.docs.forEach((data) => {
+        if (data.id === branch) {
+          setTimeTable(data.data().timetable);
+        }
+      });
+    });
+    // }
+    // } else {
+    //   sessionStorage.clear();
+    //   navigate("/");
+    // }
   }, [branch]);
 
   const ResetActiveMenu = () => {
