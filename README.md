@@ -1,21 +1,13 @@
-College Management System
+College Management System With Admin Panel
 
-Link: https://cms-krish.netlify.app/
+Tech Used: Reactjs, Javascript, Firebase (Backend)
 
-Video: https://youtu.be/Ad62m2PiTNM
+Website Link And Sample Credentials For Testing
 
-Sample Login Credentials: 
+https://lnkd.in/dRd4bFUA
 
-==> Faculty Login Details (Login id and Password):
-    sundarpichai@college.in
-    123456
+There are three different parts of the College Management System, One is Student Section, the Second Is Faculty Section and the Third Is Admin Panel. Student can view their profile, Marks uploaded by faculty and marks both internal and external. Students can access the material uploaded by the faculty and notices uploaded by the college.
 
-==> Student Login Details (Login id and Password):
-     121021105010
-     123456
-     
-About Project: 
+Now Faculty can see their all information and has many different features, faculty can upload material, notices, timetables, and marks of any student of any subject. Faculty can view the details of any student.
 
-Developed a college management system using ReactJS, HTML, CSS, And Database Firebase. It contains two different sections one is a student and the other is a faculty login. The student will have some features like showing notices, materials and timetables, etc and faculty will have features like adding notices, adding material, and registering new students in the database. You can test the website using the given sample credentials.
-
-Languages Used: HTML, CSS, JS, React And Database: Firebase
+Admin panel you will get the information on the total students, branches, faculty, and subjects in the college. Also, branch-wise students and admin can view students, and faculty and can add faculty to the server. Admin panel has two different access limited and full. Limited access admin can not add student and faculty.
