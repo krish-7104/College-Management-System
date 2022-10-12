@@ -34,31 +34,31 @@ The first is the full access admin, and the second is the limited access admin. 
 
 Website Link :- 
 
-Student And Faculty : https://cmsbykrish.web.app/
-Admin Panel: https://cmsbykrish.web.app/admin
-Video Preview : https://www.youtube.com/watch?v=RXXcHflYz70&feature=youtu.be&ab_channel=KrishJotaniya
+Student And Faculty : https://cmsbykrish.web.app/<br>
+Admin Panel: https://cmsbykrish.web.app/admin<br>
+Video Preview : https://www.youtube.com/watch?v=RXXcHflYz70&feature=youtu.be&ab_channel=KrishJotaniya<br>
 
 Testing Credentials (userid and password) :-
 
--> Student Login Details 
+-> Student Login Details <br>
 
-121021203001
-123456
-121021104004
-123456
-121021304002
-123456
+121021203001 <br>
+123456<br>
+121021104004<br>
+123456<br>
+121021304002<br>
+123456<br>
 
--> Faculty Login Details
+-> Faculty Login Details<br>
 
-sundarpichai@cms.ac.in
-654321
-alanwalker@cms.ac.in
-654321
+sundarpichai@cms.ac.in<br>
+654321<br>
+alanwalker@cms.ac.in<br>
+654321<br>
 
-0> Admin Login Details
+-> Admin Login Details<br>
 
-admin1@cms.ac.in
-admin1234
-admin2@cms.ac.in
-admin1234
+admin1@cms.ac.in<br>
+admin1234<br>
+admin2@cms.ac.in<br>
+admin1234<br>
