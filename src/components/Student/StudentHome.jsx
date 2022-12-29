@@ -64,16 +64,11 @@ const StudentHome = () => {
     onSnapshot(q2, (querySnapshot) => {
       querySnapshot.docs.forEach((data) => {
         if (data.id === branch) {
-          setTimeTable(data.data().timetable);
+          setTimeTable(data.data().timetable[details[0].semester - 1]);
         }
       });
     });
-    // }
-    // } else {
-    //   sessionStorage.clear();
-    //   navigate("/");
-    // }
-  }, [branch]);
+  }, [branch, details, loginId]);
 
   const ResetActiveMenu = () => {
     let btnsCont = document.getElementById("studentList");
@@ -90,13 +85,13 @@ const StudentHome = () => {
       ResetActiveMenu();
       let btn = document.getElementById("material");
       btn.classList.add("active");
-      return <Material />;
+      return <Material sem={details[0].semester} />;
     } else if (selectedBtn === "marks") {
       let btn = document.getElementById("marks");
       btn.classList.add("active");
       return (
         <Marks
-          semester={"Semester" + " " + details[0].semester.toString()}
+          semester={"Semester " + details[0].semester.toString()}
           branch={branch}
           enrollment={loginId}
         />

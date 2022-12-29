@@ -35,7 +35,8 @@ const Login = () => {
     },
   ]);
   let k = 0;
-  const loginValidate = () => {
+  const loginValidate = (e) => {
+    e.preventDefault();
     sessionStorage.clear();
     let userId = document.getElementById("loginid").value;
     let userPass = document.getElementById("password").value;
@@ -123,21 +124,27 @@ const Login = () => {
       <section className="loginContainer">
         <div className="loginCard">
           <img id="loginImg" src={require("../assets/classPng.png")} alt="" />
-          <div className="login">
-            <label htmlFor="loginid">Login Id</label>
-            <input
-              type="text"
-              id="loginid"
-              name="loginid"
-              required
-              autoComplete="off"
-            />
-            <label htmlFor="password">Password</label>
-            <input type="password" name="password" id="password" required />
-            <button className="submitBtn" onClick={loginValidate}>
-              Login
-            </button>
-          </div>
+          <form>
+            <div className="login">
+              <label htmlFor="loginid">Login Id</label>
+              <input
+                type="text"
+                id="loginid"
+                name="loginid"
+                required
+                autoComplete="off"
+              />
+              <label htmlFor="password">Password</label>
+              <input type="password" name="password" id="password" required />
+              <button
+                className="submitBtn"
+                onClick={loginValidate}
+                type="submit"
+              >
+                Login
+              </button>
+            </div>
+          </form>
         </div>
         <div className="myProfile">
           <a

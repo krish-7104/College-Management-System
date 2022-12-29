@@ -24,7 +24,9 @@ const UploadMarks = () => {
     const q2 = query(collection(db, `subjects/`));
     onSnapshot(q2, (querySnapshot) => {
       querySnapshot.docs.forEach((data) => {
-        setSubjects((prev) => [...prev, data.data().name]);
+        if (data.data().name !== "") {
+          setSubjects((prev) => [...prev, data.data().name]);
+        }
       });
     });
   };

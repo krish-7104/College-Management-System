@@ -1,20 +1,40 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { db } from "../../backend/firebase";
-import { collection, addDoc, Timestamp } from "firebase/firestore";
+import { collection, addDoc, Timestamp, getDocs } from "firebase/firestore";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useState } from "react";
 const UploadMaterial = () => {
+  const [subjects, setSubjects] = useState([]);
+  useEffect(() => {
+    getAllSubjects();
+  }, []);
+
+  let semester = [1, 2, 3, 4, 5, 6, 7, 8];
+
+  const getAllSubjects = async () => {
+    const querySnapshot = await getDocs(collection(db, "subjects"));
+    querySnapshot.forEach((doc) => {
+      if (doc.data().name !== "") {
+        setSubjects((subjects) => [...subjects, doc.data().name]);
+      }
+    });
+  };
+
   const submitBtnClickedMaterial = async () => {
     let uploadDate = Timestamp.now();
     let title = document.getElementById("materialTitleAdd");
     let link = document.getElementById("materialLinkAdd");
     let subject = document.getElementById("materialSubjectAdd");
+    let semester = document.getElementById("materialSemester");
+
     if (title.value !== "") {
       try {
         await addDoc(collection(db, "materials"), {
           title: title.value,
           link: link.value,
           subject: subject.value,
+          semester: semester.value,
           timestamp: uploadDate,
         });
         title.value = "";
@@ -75,7 +95,22 @@ const UploadMaterial = () => {
           <label htmlFor="materialSubjectAdd" className="materialLabel">
             Subject Name
           </label>
-          <input type="text" id="materialSubjectAdd" />
+          <select name="subjects" id="materialSubjectAdd">
+            {subjects &&
+              subjects.map((ele) => {
+                return <option value={ele}>{ele}</option>;
+              })}
+          </select>
+        </div>
+        <div className="addmaterialTitleInput">
+          <label htmlFor="materialSemester" className="materialLabel">
+            Semester
+          </label>
+          <select name="subjects" id="materialSemester">
+            {semester.map((ele) => {
+              return <option value={ele}>{ele}</option>;
+            })}
+          </select>
         </div>
         <button id="uploadMaterialSubmitBtn" onClick={submitBtnClickedMaterial}>
           Upload material
