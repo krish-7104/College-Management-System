@@ -12,7 +12,7 @@ app.use(express.json()); //to convert request data to json
 app.use("/api/student/auth", require("./routes/Student Api/studentCredential"));
 app.use("/api/faculty/auth", require("./routes/Faculty Api/facultyCredential"));
 app.use("/api/admin/auth", require("./routes/Admin Api/adminCredential"));
-// Detials Apis
+// Details Apis
 app.use("/api/student/details", require("./routes/Student Api/studentDetails"));
 app.use("/api/faculty/details", require("./routes/Faculty Api/facultyDetails"));
 app.use("/api/admin/details", require("./routes/Admin Api/adminDetails"));

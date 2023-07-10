@@ -6,6 +6,7 @@ import { setUserData } from "../../redux/actions";
 import { baseApiURL } from "../../baseUrl";
 import toast from "react-hot-toast";
 const Profile = () => {
+  const [showPass, setShowPass] = useState(false);
   const router = useLocation();
   const [data, setData] = useState();
   const dispatch = useDispatch();
@@ -116,36 +117,46 @@ const Profile = () => {
                 Email Address: {data.email}
               </p>
             </div>
-            <form
-              className="mt-4 border-t-2 border-blue-500 flex flex-col justify-center items-start"
-              onSubmit={checkPasswordHandler}
+            <button
+              className={`${
+                showPass ? "bg-red-100 text-red-600" : "bg-blue-600 text-white"
+              }  px-3 py-1 rounded mt-4`}
+              onClick={() => setShowPass(!showPass)}
             >
-              <input
-                type="password"
-                value={password.current}
-                onChange={(e) =>
-                  setPassword({ ...password, current: e.target.value })
-                }
-                placeholder="Current Password"
-                className="px-3 py-1 border-2 border-blue-500 outline-none rounded mt-4"
-              />
-              <input
-                type="password"
-                value={password.new}
-                onChange={(e) =>
-                  setPassword({ ...password, new: e.target.value })
-                }
-                placeholder="New Password"
-                className="px-3 py-1 border-2 border-blue-500 outline-none rounded mt-4"
-              />
-              <button
-                className="mt-4 hover:border-b-2 hover:border-blue-500"
-                onClick={checkPasswordHandler}
-                type="submit"
+              {!showPass ? "Change Password" : "Close Change Password"}
+            </button>
+            {showPass && (
+              <form
+                className="mt-4 border-t-2 border-blue-500 flex flex-col justify-center items-start"
+                onSubmit={checkPasswordHandler}
               >
-                Change Password
-              </button>
-            </form>
+                <input
+                  type="password"
+                  value={password.current}
+                  onChange={(e) =>
+                    setPassword({ ...password, current: e.target.value })
+                  }
+                  placeholder="Current Password"
+                  className="px-3 py-1 border-2 border-blue-500 outline-none rounded mt-4"
+                />
+                <input
+                  type="password"
+                  value={password.new}
+                  onChange={(e) =>
+                    setPassword({ ...password, new: e.target.value })
+                  }
+                  placeholder="New Password"
+                  className="px-3 py-1 border-2 border-blue-500 outline-none rounded mt-4"
+                />
+                <button
+                  className="mt-4 hover:border-b-2 hover:border-blue-500"
+                  onClick={checkPasswordHandler}
+                  type="submit"
+                >
+                  Change Password
+                </button>
+              </form>
+            )}
           </div>
           <img
             src={data.profile}
