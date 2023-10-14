@@ -43,7 +43,9 @@ Youtube Link: https://www.youtube.com/watch?v=LY4UhPadZCs&ab_channel=KrishJotani
 
 To run this project, you will need to add the following environment variables to your .env file
 
-First add the below given env data and run the frontend and backend then open Mongodb Compass and there you will see the name of your Collection open it and select Admin Details table and add this document (Change the name according to the data) 
+Backend And Frontend Both Folder Has One sample.env file you can replicate it and add you data and rename it to .env
+
+Add this doucment in your College Management Collection in MongoDB Compass in **admin detials** table
 
 ```
 {
@@ -58,7 +60,7 @@ First add the below given env data and run the frontend and backend then open Mo
 } 
 ```
 
-Then add below document without any changes in Admin Credentials
+Then add below document without any changes in **Admin Credentials**
 
 ```
 {
@@ -67,17 +69,6 @@ Then add below document without any changes in Admin Credentials
 }
 ```
 
-Now login into admin with Above mentioned login and password. You can add student and faculty from admin.
+Now login into admin with Above mentioned login and password. You need to add branches and faculty from admin and then after adding faculty to faculty login and add student.
 
-Frontend Side:
-`REACT_APP_API`
-`REACT_APP_AUTHDOMAIN`
-`REACT_APP_PROJECTID`
-`REACT_APP_STORAGE_BUCKET`
-`REACT_APP_SENDERID`
-`REACT_APP_APPID`
-
-Backend Side: 
-
-`MONGODB_URI`
 
