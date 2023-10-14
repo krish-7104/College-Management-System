@@ -43,9 +43,9 @@ Youtube Link: https://www.youtube.com/watch?v=LY4UhPadZCs&ab_channel=KrishJotani
 
 To run this project, you will need to add the following environment variables to your .env file
 
-Backend And Frontend Both Folder Has One sample.env file you can replicate it and add you data and rename it to .env
+Backend And Frontend Both Folder Has One sample.env file you can replicate it add you data and rename it to .env
 
-Add this doucment in your College Management Collection in MongoDB Compass in **admin detials** table
+Add this document in your College Management Collection in MongoDB Compass in **admin details** table
 
 ```
 {
@@ -60,7 +60,7 @@ Add this doucment in your College Management Collection in MongoDB Compass in **
 } 
 ```
 
-Then add below document without any changes in **Admin Credentials**
+Then add the below document without any changes in **Admin Credentials**
 
 ```
 {
