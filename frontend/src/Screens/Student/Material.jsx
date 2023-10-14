@@ -113,7 +113,13 @@ const Material = () => {
                     <span className="text-base mr-1">
                       <HiOutlineCalendar />
                     </span>{" "}
-                    {item.timestamp}
+                    {item.createdAt.split("T")[0].split("-")[2] +
+                      "/" +
+                      item.createdAt.split("T")[0].split("-")[1] +
+                      "/" +
+                      item.createdAt.split("T")[0].split("-")[0] +
+                      " " +
+                      item.createdAt.split("T")[1].split(".")[0]}
                   </p>
                 </div>
               );
