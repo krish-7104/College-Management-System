@@ -84,7 +84,6 @@ Then add below document without any changes in Admin Credentials
 Now login into admin with Above mentioned login and password. You can add student and faculty from admin.
 
 Frontend Side:
-(In src/firebase/config.js)
 `REACT_APP_API`
 `REACT_APP_AUTHDOMAIN`
 `REACT_APP_PROJECTID`
