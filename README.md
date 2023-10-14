@@ -14,6 +14,7 @@ The College Management System is a MERN Stack-based system with three different 
 
 Youtube Link: https://www.youtube.com/watch?v=LY4UhPadZCs&ab_channel=KrishJotaniya
 
+Setup Link: https://www.youtube.com/watch?v=aR0E_UrCzMI&t=6s
 
 ## Student Features
 
