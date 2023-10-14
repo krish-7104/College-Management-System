@@ -16,11 +16,7 @@ const Material = new mongoose.Schema({
   link: {
     type: String,
     required: true,
-  },
-  timestamp: {
-    type: Date,
-    default: Date.now,
-  },
-});
+  }
+}, { timestamps: true });
 
 module.exports = mongoose.model("Material", Material);

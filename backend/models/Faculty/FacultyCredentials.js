@@ -8,11 +8,7 @@ const facultyCredential = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-  },
-  timestamp: {
-    type: Date,
-    default: Date.now,
-  },
-});
+  }
+}, { timestamps: true });
 
 module.exports = mongoose.model("Faculty Credential", facultyCredential);

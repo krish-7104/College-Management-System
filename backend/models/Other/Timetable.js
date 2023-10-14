@@ -12,11 +12,7 @@ const TimeTable = new mongoose.Schema({
   semester: {
     type: Number,
     required: true,
-  },
-  timestamp: {
-    type: Date,
-    default: Date.now,
-  },
-});
+  }
+}, { timestamps: true });
 
 module.exports = mongoose.model("Timetable", TimeTable);

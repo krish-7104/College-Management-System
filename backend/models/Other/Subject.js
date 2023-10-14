@@ -8,11 +8,7 @@ const Subject = new mongoose.Schema({
   code: {
     type: Number,
     required: true,
-  },
-  timestamp: {
-    type: Date,
-    default: Date.now,
-  },
-});
+  }
+}, { timestamps: true });
 
 module.exports = mongoose.model("Subject", Subject);

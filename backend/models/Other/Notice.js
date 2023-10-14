@@ -14,11 +14,7 @@ const Notice = new mongoose.Schema({
   },
   link: {
     type: String,
-  },
-  timestamp: {
-    type: Date,
-    default: Date.now,
-  },
-});
+  }
+}, { timestamps: true });
 
 module.exports = mongoose.model("Notice", Notice);

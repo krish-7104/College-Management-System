@@ -40,11 +40,7 @@ const studentDetails = new mongoose.Schema({
   profile: {
     type: String,
     required: true,
-  },
-  timestamp: {
-    type: Date,
-    default: Date.now,
-  },
-});
+  }
+}, { timestamps: true });
 
 module.exports = mongoose.model("Student Detail", studentDetails);

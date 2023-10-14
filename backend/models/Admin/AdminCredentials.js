@@ -9,10 +9,6 @@ const adminCredential = new mongoose.Schema({
     type: String,
     required: true,
   },
-  timestamp: {
-    type: Date,
-    default: Date.now,
-  },
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model("Admin Credential", adminCredential);

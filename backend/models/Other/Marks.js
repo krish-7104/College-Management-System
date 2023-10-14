@@ -10,11 +10,7 @@ const Marks = new mongoose.Schema({
   },
   external: {
     type: Map,
-  },
-  timestamp: {
-    type: Date,
-    default: Date.now,
-  },
-});
+  }
+}, { timestamps: true });
 
 module.exports = mongoose.model("Mark", Marks);
