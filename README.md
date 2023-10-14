@@ -55,9 +55,6 @@ First add the below given env data and run the frontend and backend then open Mo
   "phoneNumber": YOUR_DATA,
   "gender": "Male",
   "profile": "https://cdn.britannica.com/42/193142-050-F69B1A23/Sundar-Pichai-Google.jpg",
-  "timestamp": {
-    "$date": "2023-10-01T10:39:33.903Z"
-  },
 } 
 ```
 
@@ -67,9 +64,6 @@ Then add below document without any changes in Admin Credentials
 {
   "loginid": 123123,
   "password": "112233",
-  "timestamp": {
-    "$date": "2023-10-01T10:39:33.921Z"
-  },
 }
 ```
 
