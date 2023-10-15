@@ -44,6 +44,20 @@ Setup Link: https://www.youtube.com/watch?v=aR0E_UrCzMI&t=6s
 
 To run this project, you will need to add the following environment variables to your .env file
 
+You also need to make Firebase Storage Rules to Public, paste the below given code and remove the default one from the Firebase Storage Rules.
+
+```
+rules_version = '2';
+
+service firebase.storage { 
+  match /b/(bucket}/o { 
+    match /(allPaths=**} {
+      allow read, write: if true;
+    }
+  }
+}
+```
+
 Backend And Frontend Both Folder Has One sample.env file you can replicate it add you data and rename it to .env
 
 Add this document in your College Management Collection in MongoDB Compass in **admin details** table
