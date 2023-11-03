@@ -40,11 +40,12 @@ Setup Link: https://www.youtube.com/watch?v=aR0E_UrCzMI&t=6s
 - Account Details Modification: Ability for admins to modify the details of each account
 - Subject Management: Ability for admins to add/edit subjects
 - Notices Management: Ability for admins to add/edit notices
-## Environment Variables
+- 
+## Installation Steps
 
 To run this project, you will need to add the following environment variables to your .env file
 
-You also need to make Firebase Storage Rules to Public, paste the below given code and remove the default one from the Firebase Storage Rules.
+Firstly go to https://console.firebase.google.com/ create one project and then on left side meny click on build and then storage. Now click on Get Started and click on Production Mode then Next and Done. Now click on rules and replace the code given below with actual code and click on publish
 
 ```
 rules_version = '2';
@@ -57,6 +58,7 @@ service firebase.storage {
   }
 }
 ```
+Now after this click on left side menu settings then project setting and scroll down, click on Create App and then Add you website name there and click on register app now you will get all api keys add that data in .env file in frontend side. 
 
 Backend And Frontend Both Folder Has One sample.env file you can replicate it add you data and rename it to .env
 
