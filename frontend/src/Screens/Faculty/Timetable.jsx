@@ -169,6 +169,7 @@ const Timetable = () => {
             type="file"
             name="upload"
             id="upload"
+            accept="image/*"
             hidden
             onChange={(e) => setFile(e.target.files[0])}
           />
