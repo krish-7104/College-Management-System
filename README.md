@@ -49,9 +49,8 @@ Firstly go to https://console.firebase.google.com/ create one project and then o
 
 ```
 rules_version = '2';
-
-service firebase.storage { 
-  match /b/(bucket}/o { 
+service firebase.storage {
+  match /b/{bucket}/o {
     match /{allPaths=**} {
       allow read, write: if true;
     }
