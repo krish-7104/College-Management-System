@@ -5,7 +5,12 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { baseApiURL } from "../baseUrl";
+import AddStudent from "../Screens/Admin/Student/AddStudent";
 const Login = () => {
+  const Register=()=>{
+    console.log("weo");
+    <AddStudent/>
+  }
   const navigate = useNavigate();
   const [selected, setSelected] = useState("Student");
   const { register, handleSubmit } = useForm();
@@ -80,7 +85,14 @@ const Login = () => {
               <FiLogIn />
             </span>
           </button>
+          
         </form>
+        <button onClick={Register} className="bg-blue-500 mt-5 text-white px-6 py-2 text-xl rounded-md hover:bg-blue-700 ease-linear duration-300 hover:ease-linear hover:duration-300 hover:transition-all transition-all flex justify-center items-center">
+            Register
+            <span className="ml-2">
+              <FiLogIn />
+            </span>
+          </button>
       </div>
       <div className="absolute top-4 right-4">
         <button

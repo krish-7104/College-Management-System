@@ -5,6 +5,7 @@ const adminDetails = require("../../models/Admin/AdminDetails");
 router.post("/getDetails", async (req, res) => {
   try {
     let user = await adminDetails.find(req.body);
+    console.log(user);
     if (!user) {
       return res
         .status(400)

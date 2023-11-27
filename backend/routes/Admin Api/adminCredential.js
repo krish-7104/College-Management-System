@@ -4,6 +4,7 @@ const adminCredential = require("../../models/Admin/AdminCredentials");
 
 router.post("/login", async (req, res) => {
   let { loginid, password } = req.body;
+  console.log(loginid);
   try {
     let user = await adminCredential.findOne({ loginid });
     if (!user) {
