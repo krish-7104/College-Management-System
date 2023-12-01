@@ -109,8 +109,8 @@ const EditFaculty = () => {
       )
       .then((response) => {
         toast.dismiss();
-        if (response.data.success) {
-          toast.success(response.data.message);
+        if (response?.data?.success) {
+          toast.success(response?.data?.message);
           setId(response.data.user[0]._id);
           setData({
             employeeId: response.data.user[0].employeeId,
