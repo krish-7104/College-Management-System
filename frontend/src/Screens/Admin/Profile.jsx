@@ -99,7 +99,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="w-[85%] mx-auto my-8 flex justify-between items-start">
+    <div className="w-full mx-auto my-8 flex justify-between items-start">
       {data && (
         <>
           <div>

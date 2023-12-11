@@ -34,6 +34,7 @@ const Timetable = () => {
         (error) => {
           console.error(error);
           toast.dismiss();
+          console.log("FIle Upload error", error);
           // toast.error("Something Went Wrong!");
         },
         () => {
@@ -42,7 +43,6 @@ const Timetable = () => {
             setFile();
             toast.success("Timetable Uploaded To Server");
             setAddSelected({ ...addselected, link: downloadURL });
-            addTimetableHandler();
           });
         }
       );
@@ -95,11 +95,13 @@ const Timetable = () => {
       })
       .catch((error) => {
         toast.dismiss();
+        console.log("FIle error", error);
+
         toast.error(error.response.data.message);
       });
   };
   return (
-    <div className="w-[85%] mx-auto mt-10 flex justify-center items-start flex-col mb-10">
+    <div className="w-full mx-auto mt-10 flex justify-center items-start flex-col mb-10">
       <div className="flex justify-between items-center w-full">
         <Heading title={`Upload Timetable`} />
       </div>

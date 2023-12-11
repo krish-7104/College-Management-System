@@ -55,7 +55,7 @@ const Material = () => {
   };
 
   return (
-    <div className="w-[85%] mx-auto mt-10 flex justify-center items-start flex-col mb-10">
+    <div className="w-full mx-auto mt-10 flex justify-center items-start flex-col mb-10">
       <Heading title="Material" />
       <div className="mt-8 w-full flex justify-center items-center flex-col">
         <div className="flex justify-center items-center w-[40%]">

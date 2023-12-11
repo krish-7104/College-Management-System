@@ -6,7 +6,7 @@ import Heading from "../../components/Heading";
 import { baseApiURL } from "../../baseUrl";
 
 const Marks = () => {
-  const { userData } = useSelector((state) => state);
+  const userData = useSelector((state) => state.userData);
   const [internal, setInternal] = useState();
   const [external, setExternal] = useState();
 
@@ -23,19 +23,20 @@ const Marks = () => {
         }
       )
       .then((response) => {
-        if (response.data) {
+        console.log(response);
+        if (response.data.length !== 0) {
           setInternal(response.data.Mark[0].internal);
           setExternal(response.data.Mark[0].external);
         }
       })
       .catch((error) => {
         toast.dismiss();
-        toast.error(error.response.data.message);
+        console.log(error);
       });
-  }, []);
+  }, [userData.enrollmentNo]);
 
   return (
-    <div className="w-[85%] mx-auto mt-10 flex justify-center items-start flex-col mb-10">
+    <div className="w-full mx-auto mt-10 flex justify-center items-start flex-col mb-10">
       <Heading title={`Marks of Semester ${userData.semester}`} />
       <div className="mt-14 w-full flex gap-20">
         {internal && (

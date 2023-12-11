@@ -85,8 +85,8 @@ const Home = () => {
       {load && (
         <>
           <Navbar />
-          <div className="w-[100%] mx-auto mt-8 flex justify-center items-start flex-col container">
-            <ul className="flex justify-evenly items-center gap-10 w-[90%] mx-auto">
+          <div className="max-w-6xl mx-auto">
+            <ul className="flex justify-evenly items-center gap-10 w-full mx-auto my-8">
               <li
                 className={`text-center rounded-sm px-4 py-2 w-1/5 cursor-pointer ease-linear duration-300 hover:ease-linear hover:duration-300 hover:transition-all transition-all ${
                   selectedMenu === "Profile"
@@ -158,16 +158,17 @@ const Home = () => {
                 Admins
               </li>
             </ul>
+
+            <>
+              {selectedMenu === "Branch" && <Branch />}
+              {selectedMenu === "Notice" && <Notice />}
+              {selectedMenu === "Student" && <Student />}
+              {selectedMenu === "Faculty" && <Faculty />}
+              {selectedMenu === "Subjects" && <Subjects />}
+              {selectedMenu === "Admin" && <Admin />}
+              {selectedMenu === "Profile" && <Profile />}
+            </>
           </div>
-          <>
-            {selectedMenu === "Branch" && <Branch />}
-            {selectedMenu === "Notice" && <Notice />}
-            {selectedMenu === "Student" && <Student />}
-            {selectedMenu === "Faculty" && <Faculty />}
-            {selectedMenu === "Subjects" && <Subjects />}
-            {selectedMenu === "Admin" && <Admin />}
-            {selectedMenu === "Profile" && <Profile />}
-          </>
         </>
       )}
       <Toaster position="bottom-center" />

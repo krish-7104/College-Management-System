@@ -99,7 +99,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="w-[85%] mx-auto my-8 flex justify-between items-start">
+    <div className="w-full mx-auto my-8 flex justify-between items-start">
       {data && (
         <>
           <div>
@@ -166,7 +166,7 @@ const Profile = () => {
           <img
             src={data.profile}
             alt="student profile"
-            className="h-[200px] w-[200px] object-cover rounded-lg shadow-md"
+            className="h-[240px] w-[240px] object-cover rounded-lg shadow-md"
           />
         </>
       )}

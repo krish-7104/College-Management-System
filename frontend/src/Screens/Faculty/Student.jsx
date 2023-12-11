@@ -77,7 +77,7 @@ const Student = () => {
   };
 
   return (
-    <div className="w-[85%] mx-auto mt-10 flex justify-center items-start flex-col mb-10">
+    <div className="w-full mx-auto mt-10 flex justify-center items-start flex-col mb-10">
       <div className="flex justify-between items-center w-full">
         <Heading title="Student Details" />
       </div>
