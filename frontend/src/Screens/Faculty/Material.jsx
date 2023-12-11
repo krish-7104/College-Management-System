@@ -87,7 +87,6 @@ const Material = () => {
             faculty: fullname.split(" ")[0] + " " + fullname.split(" ")[2],
           });
         } else {
-          console.log(response);
           toast.error(response.data.message);
         }
       })

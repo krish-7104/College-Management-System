@@ -16,14 +16,13 @@ const Marks = () => {
     };
     axios
       .post(
-        `${baseApiURL}/marks/getMarks`,
+        `${baseApiURL()}/marks/getMarks`,
         { enrollmentNo: userData.enrollmentNo },
         {
           headers: headers,
         }
       )
       .then((response) => {
-        console.log(response);
         if (response.data.length !== 0) {
           setInternal(response.data.Mark[0].internal);
           setExternal(response.data.Mark[0].external);

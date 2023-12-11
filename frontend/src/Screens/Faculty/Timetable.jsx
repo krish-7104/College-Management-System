@@ -89,7 +89,6 @@ const Timetable = () => {
           });
           setFile("");
         } else {
-          console.log(response);
           toast.error(response.data.message);
         }
       })
