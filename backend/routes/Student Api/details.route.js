@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { getDetails, addDetails, updateDetails, deleteDetails, getCount } = require("../../controllers/Student/details.controller.js");
 
-router.post("/getDetails", getDetails);
+router.get("/getDetails", getDetails);
 
 router.post("/addDetails", addDetails);
 

@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { getMaterial, addMaterial, updateMaterial, deleteMaterial } = require("../../controllers/Other/material.controller.js");
 
-router.post("/getMaterial", getMaterial);
+router.get("/getMaterial", getMaterial);
 router.post("/addMaterial", addMaterial);
 router.put("/updateMaterial/:id", updateMaterial);
 router.delete("/deleteMaterial/:id", deleteMaterial);

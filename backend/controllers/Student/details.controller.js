@@ -46,6 +46,7 @@ const addDetails = async (req, res) => {
 const updateDetails = async (req, res) => {
     try {
         let user = await studentDetails.findByIdAndUpdate(req.params.id, req.body);
+        console.log(user)
         if (!user) {
             return res.status(400).json({
                 success: false,
