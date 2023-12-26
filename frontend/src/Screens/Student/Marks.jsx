@@ -15,7 +15,7 @@ const Marks = () => {
       "Content-Type": "application/json",
     };
     axios
-      .post(
+      .get(
         `${baseApiURL()}/marks/getMarks`,
         { enrollmentNo: userData.enrollmentNo },
         {

@@ -3,9 +3,7 @@ import React, { useEffect, useState } from "react";
 import { FiUpload } from "react-icons/fi";
 import Heading from "../../components/Heading";
 import { AiOutlineClose } from "react-icons/ai";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import toast from "react-hot-toast";
-import { storage } from "../../firebase/config";
 import { baseApiURL } from "../../baseUrl";
 const Timetable = () => {
   const [addselected, setAddSelected] = useState({
@@ -19,36 +17,6 @@ const Timetable = () => {
   useEffect(() => {
     getBranchData();
   }, []);
-
-  useEffect(() => {
-    const uploadFileToStorage = async (file) => {
-      toast.loading("Upload Timetable To Server");
-      const storageRef = ref(
-        storage,
-        `Timetable/${addselected.branch}/Semester ${addselected.semester}`
-      );
-      const uploadTask = uploadBytesResumable(storageRef, file);
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {},
-        (error) => {
-          console.error(error);
-          toast.dismiss();
-          console.log("FIle Upload error", error);
-          // toast.error("Something Went Wrong!");
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            toast.dismiss();
-            setFile();
-            toast.success("Timetable Uploaded To Server");
-            setAddSelected({ ...addselected, link: downloadURL });
-          });
-        }
-      );
-    };
-    file && uploadFileToStorage(file);
-  }, [file]);
 
   const getBranchData = () => {
     const headers = {

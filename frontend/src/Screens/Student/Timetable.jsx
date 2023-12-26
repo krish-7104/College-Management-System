@@ -15,7 +15,7 @@ const Timetable = () => {
         "Content-Type": "application/json",
       };
       axios
-        .post(
+        .get(
           `${baseApiURL()}/timetable/getTimetable`,
           { semester: userData.semester, branch: userData.branch },
           {

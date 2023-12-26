@@ -75,7 +75,7 @@ const Profile = () => {
       "Content-Type": "application/json",
     };
     axios
-      .post(
+      .put(
         `${baseApiURL()}/faculty/auth/update/${id}`,
         { loginid: router.state.loginid, password: password.new },
         {

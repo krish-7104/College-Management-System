@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import { storage } from "../../../firebase/config";
 import { baseApiURL } from "../../../baseUrl";
 import { FiSearch, FiUpload, FiX } from "react-icons/fi";
 
@@ -25,35 +23,6 @@ const EditFaculty = () => {
   const [id, setId] = useState();
   const [search, setSearch] = useState();
 
-  useEffect(() => {
-    const uploadFileToStorage = async (file) => {
-      toast.loading("Upload Photo To Storage");
-      const storageRef = ref(
-        storage,
-        `Faculty Profile/${data.department}/${data.employeeId}`
-      );
-      const uploadTask = uploadBytesResumable(storageRef, file);
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {},
-        (error) => {
-          console.error(error);
-          toast.dismiss();
-          toast.error("Something Went Wrong!");
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            toast.dismiss();
-            setFile();
-            toast.success("Profile Uploaded To Faculty");
-            setData({ ...data, profile: downloadURL });
-          });
-        }
-      );
-    };
-    file && uploadFileToStorage(file);
-  }, [data, file]);
-
   const updateFacultyProfile = (e) => {
     e.preventDefault();
     toast.loading("Updating Faculty");
@@ -61,7 +30,7 @@ const EditFaculty = () => {
       "Content-Type": "application/json",
     };
     axios
-      .post(`${baseApiURL()}/faculty/details/updateDetails/${id}`, data, {
+      .put(`${baseApiURL()}/faculty/details/updateDetails/${id}`, data, {
         headers: headers,
       })
       .then((response) => {
@@ -130,6 +99,7 @@ const EditFaculty = () => {
         }
       })
       .catch((error) => {
+        toast.dismiss();
         toast.error(error.response.data.message);
         console.error(error);
       });

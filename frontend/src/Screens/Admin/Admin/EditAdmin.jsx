@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import { storage } from "../../../firebase/config";
 import { baseApiURL } from "../../../baseUrl";
 import { FiSearch, FiUpload, FiX } from "react-icons/fi";
 
@@ -21,34 +19,6 @@ const EditAdmin = () => {
   });
   const [id, setId] = useState();
   const [search, setSearch] = useState();
-  useEffect(() => {
-    const uploadFileToStorage = async (file) => {
-      toast.loading("Upload Photo To Storage");
-      const storageRef = ref(
-        storage,
-        `Admin Profile/${data.department}/${data.employeeId}`
-      );
-      const uploadTask = uploadBytesResumable(storageRef, file);
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {},
-        (error) => {
-          console.error(error);
-          toast.dismiss();
-          toast.error("Something Went Wrong!");
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            toast.dismiss();
-            setFile();
-            toast.success("Profile Uploaded To Admin");
-            setData({ ...data, profile: downloadURL });
-          });
-        }
-      );
-    };
-    file && uploadFileToStorage(file);
-  }, [data, file]);
 
   const updateAdminProfile = (e) => {
     e.preventDefault();
@@ -57,7 +27,7 @@ const EditAdmin = () => {
       "Content-Type": "application/json",
     };
     axios
-      .post(`${baseApiURL()}/admin/details/updateDetails/${id}`, data, {
+      .put(`${baseApiURL()}/admin/details/updateDetails/${id}`, data, {
         headers: headers,
       })
       .then((response) => {
