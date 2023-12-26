@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const router = express.Router();
 const Timetable = require("../models/Other/Timetable");
+const upload = require("../middlewares/multer.middleware")
 
 router.post("/getTimetable", async (req, res) => {
   try {
@@ -16,7 +17,7 @@ router.post("/getTimetable", async (req, res) => {
   }
 });
 
-router.post("/addTimetable", async (req, res) => {
+router.post("/addTimetable", upload.single("file"), async (req, res) => {
   let { link, semester, branch } = req.body;
   try {
     let timetable = await Timetable.findOne({ semester, branch });
@@ -36,6 +37,7 @@ router.post("/addTimetable", async (req, res) => {
       res.json(data);
     }
   } catch (error) {
+    console.log(error)
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 });
