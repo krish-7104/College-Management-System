@@ -1,6 +1,6 @@
 const Branch = require("../../models/Other/branch.model");
 
-const getBranch = async () => {
+const getBranch = async (req, res) => {
     try {
         let branches = await Branch.find();
 

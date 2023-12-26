@@ -1,9 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const adminDetails = require("../../models/Admin/details.model.js");
 const { getDetails, addDetails, updateDetails, deleteDetails } = require("../../controllers/Admin/details.controller.js");
 
-router.get("/getDetails", getDetails);
+router.post("/getDetails", getDetails);
 
 router.post("/addDetails", addDetails);
 

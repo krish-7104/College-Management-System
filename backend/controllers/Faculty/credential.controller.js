@@ -3,7 +3,7 @@ const facultyCredential = require("../../models/Faculty/credential.model.js");
 const loginHandler = async (req, res) => {
     let { loginid, password } = req.body;
     try {
-        let user = await FacultyCredentials.findOne({ loginid });
+        let user = await facultyCredential.findOne({ loginid });
         if (!user) {
             return res
                 .status(400)
@@ -29,14 +29,14 @@ const loginHandler = async (req, res) => {
 const registerHandler = async (req, res) => {
     let { loginid, password } = req.body;
     try {
-        let user = await FacultyCredentials.findOne({ loginid });
+        let user = await facultyCredential.findOne({ loginid });
         if (user) {
             return res.status(400).json({
                 success: false,
                 message: "User With This LoginId Already Exists",
             });
         }
-        user = await FacultyCredentials.create({
+        user = await facultyCredential.create({
             loginid,
             password,
         });
@@ -53,7 +53,7 @@ const registerHandler = async (req, res) => {
 }
 const updateHandler = async (req, res) => {
     try {
-        let user = await FacultyCredentials.findByIdAndUpdate(
+        let user = await facultyCredential.findByIdAndUpdate(
             req.params.id,
             req.body
         );
@@ -75,7 +75,7 @@ const updateHandler = async (req, res) => {
 
 const deleteHandler = async (req, res) => {
     try {
-        let user = await FacultyCredentials.findByIdAndDelete(req.params.id);
+        let user = await facultyCredential.findByIdAndDelete(req.params.id);
         if (!user) {
             return res.status(400).json({
                 success: false,
