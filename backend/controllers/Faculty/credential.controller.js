@@ -1,4 +1,4 @@
-const facultyCredential = require("../../models/Faculty/credential.model.js.js");
+const facultyCredential = require("../../models/Faculty/credential.model.js");
 
 const loginHandler = async (req, res) => {
     let { loginid, password } = req.body;
