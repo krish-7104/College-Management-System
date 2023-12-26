@@ -56,7 +56,7 @@ const Subjects = () => {
   };
 
   const deleteSubjectHandler = (id) => {
-    toast.loading("Deleting Suject");
+    toast.loading("Deleting Subject");
     const headers = {
       "Content-Type": "application/json",
     };
