@@ -1,4 +1,5 @@
 const Timetable = require("../../models/Other/timetable.model");
+const uploadOnCloudinary = require("../../utils/cloudinary");
 
 const getTimetable = async (req, res) => {
     try {
@@ -14,18 +15,23 @@ const getTimetable = async (req, res) => {
 }
 
 const addTimetable = async (req, res) => {
-    let { link, semester, branch } = req.body;
+    let { semester, branch } = req.body;
     try {
+        const uploadTimetable = await uploadOnCloudinary(req.file.path)
         let timetable = await Timetable.findOne({ semester, branch });
         if (timetable) {
-            await Timetable.findByIdAndUpdate(timetable._id, req.body);
+            await Timetable.findByIdAndUpdate(timetable._id, {
+                semester, branch, link: uploadTimetable.url
+            });
             const data = {
                 success: true,
                 message: "Timetable Updated!",
             };
             res.json(data);
         } else {
-            await Timetable.create(req.body);
+            await Timetable.create({
+                semester, branch, link: uploadTimetable.url
+            });
             const data = {
                 success: true,
                 message: "Timetable Added!",
