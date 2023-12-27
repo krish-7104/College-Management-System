@@ -7,15 +7,17 @@ cloudinary.v2.config({
     secure: true,
 });
 
-const uploadOnCloudinary = async (localFilePath) => {
+const uploadOnCloudinary = async (localFilePath, folder) => {
     try {
         if (!localFilePath) return null;
         const response = await cloudinary.v2.uploader.upload(localFilePath, {
-            resource_type: "auto"
+            resource_type: "auto",
+            folder
         })
         fs.unlinkSync(localFilePath)
         return response;
     } catch (error) {
+        console.log(error)
         fs.unlinkSync(localFilePath)
         return null;
     }

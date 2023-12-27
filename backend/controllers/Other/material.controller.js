@@ -1,4 +1,5 @@
 const Material = require("../../models/Other/material.model");
+const uploadOnCloudinary = require("../../utils/cloudinary")
 
 const getMaterial = async (req, res) => {
     try {
@@ -16,11 +17,12 @@ const getMaterial = async (req, res) => {
 }
 
 const addMaterial = async (req, res) => {
-    let { faculty, link, subject, title } = req.body;
+    const uploadedMaterial = await uploadOnCloudinary(req.file.path, `Material/${req.body.subject}`)
+    let { faculty, subject, title } = req.body;
     try {
         await Material.create({
             faculty,
-            link,
+            link: uploadedMaterial.url,
             subject,
             title,
         });

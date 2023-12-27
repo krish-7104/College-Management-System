@@ -14,7 +14,6 @@ const Material = () => {
   const [selected, setSelected] = useState({
     title: "",
     subject: "",
-    link: "",
     faculty: fullname.split(" ")[0] + " " + fullname.split(" ")[2],
   });
 
@@ -39,10 +38,15 @@ const Material = () => {
   const addMaterialHandler = () => {
     toast.loading("Adding Material");
     const headers = {
-      "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
     };
+    const formData = new FormData();
+    formData.append("title", selected.title);
+    formData.append("subject", selected.subject);
+    formData.append("faculty", selected.faculty);
+    formData.append("material", file);
     axios
-      .post(`${baseApiURL()}/material/addMaterial`, selected, {
+      .post(`${baseApiURL()}/material/addMaterial`, formData, {
         headers: headers,
       })
       .then((response) => {
@@ -52,9 +56,9 @@ const Material = () => {
           setSelected({
             title: "",
             subject: "",
-            link: "",
             faculty: fullname.split(" ")[0] + " " + fullname.split(" ")[2],
           });
+          setFile("");
         } else {
           toast.error(response.data.message);
         }

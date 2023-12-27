@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const { getDetails, addDetails, updateDetails, deleteDetails, getCount } = require("../../controllers/Faculty/details.controller.js")
+const upload = require("../../middlewares/multer.middleware.js")
 
 router.post("/getDetails", getDetails);
 
-router.post("/addDetails", addDetails);
+router.post("/addDetails", upload.single("profile"), addDetails);
 
 router.put("/updateDetails/:id", updateDetails);
 

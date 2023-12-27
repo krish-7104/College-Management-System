@@ -17,11 +17,11 @@ const getTimetable = async (req, res) => {
 const addTimetable = async (req, res) => {
     let { semester, branch } = req.body;
     try {
-        const uploadTimetable = await uploadOnCloudinary(req.file.path)
+        const uploadedTimetable = await uploadOnCloudinary(req.file.path, `Timetable/${req.body.branch}`)
         let timetable = await Timetable.findOne({ semester, branch });
         if (timetable) {
             await Timetable.findByIdAndUpdate(timetable._id, {
-                semester, branch, link: uploadTimetable.url
+                semester, branch, link: uploadedTimetable.url
             });
             const data = {
                 success: true,
@@ -30,7 +30,7 @@ const addTimetable = async (req, res) => {
             res.json(data);
         } else {
             await Timetable.create({
-                semester, branch, link: uploadTimetable.url
+                semester, branch, link: uploadedTimetable.url
             });
             const data = {
                 success: true,
