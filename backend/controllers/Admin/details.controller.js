@@ -1,4 +1,5 @@
 const adminDetails = require("../../models/Admin/details.model.js")
+const uploadOnCloudinary = require("../../utils/cloudinary.js")
 
 const getDetails = async (req, res) => {
     try {
@@ -15,6 +16,7 @@ const getDetails = async (req, res) => {
         };
         res.json(data);
     } catch (error) {
+        console.log(error)
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 }
@@ -23,12 +25,14 @@ const addDetails = async (req, res) => {
     try {
         let user = await adminDetails.findOne(req.body);
         if (user) {
+            fs.unlinkSync(req.file.path)
             return res.status(400).json({
                 success: false,
                 message: "Admin With This EmployeeId Already Exists",
             });
         }
-        user = await adminDetails.create(req.body);
+        const uploadedProfile = await uploadOnCloudinary(req.file.path, `Admin/`)
+        user = await adminDetails.create({ ...req.body, profile: uploadedProfile.url });
         const data = {
             success: true,
             message: "Admin Details Added!",
@@ -36,14 +40,20 @@ const addDetails = async (req, res) => {
         };
         res.json(data);
     } catch (error) {
+        console.log(error)
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 }
 
-
 const updateDetails = async (req, res) => {
     try {
-        let user = await adminDetails.findByIdAndUpdate(req.params.id, req.body);
+        let user;
+        if (req.file) {
+            const uploadedProfile = await uploadOnCloudinary(req.file.path, `Admin/`)
+            user = await adminDetails.findByIdAndUpdate(req.params.id, { ...req.body, profile: uploadedProfile.url });
+        } else {
+            user = await adminDetails.findByIdAndUpdate(req.params.id, req.body);
+        }
         if (!user) {
             return res.status(400).json({
                 success: false,
@@ -56,9 +66,11 @@ const updateDetails = async (req, res) => {
         };
         res.json(data);
     } catch (error) {
+        console.log(error)
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 }
+
 
 const deleteDetails = async (req, res) => {
     try {
@@ -75,6 +87,7 @@ const deleteDetails = async (req, res) => {
         };
         res.json(data);
     } catch (error) {
+        console.log(error)
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 }

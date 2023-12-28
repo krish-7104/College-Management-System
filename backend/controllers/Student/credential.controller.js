@@ -22,6 +22,7 @@ const loginHandler = async (req, res) => {
         };
         res.json(data);
     } catch (error) {
+        console.log(error)
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 }
@@ -48,6 +49,7 @@ const registerHandler = async (req, res) => {
         };
         res.json(data);
     } catch (error) {
+        console.log(error)
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 }
@@ -70,6 +72,7 @@ const updateHandler = async (req, res) => {
         };
         res.json(data);
     } catch (error) {
+        console.log(error)
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 }
@@ -89,6 +92,7 @@ const deleteHandler = async (req, res) => {
         };
         res.json(data);
     } catch (error) {
+        console.log(error)
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 }

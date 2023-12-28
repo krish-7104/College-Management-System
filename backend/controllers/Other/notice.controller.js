@@ -9,6 +9,7 @@ const getNotice = async (req, res) => {
             res.status(404).json({ success: false, message: "No Notice Available!" });
         }
     } catch (error) {
+        console.log(error)
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 }
@@ -34,6 +35,7 @@ const addNotice = async (req, res) => {
         };
         res.json(data);
     } catch (error) {
+        console.log(error)
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 }
@@ -57,6 +59,7 @@ const updateNotice = async (req, res) => {
             message: "Notice Updated Successfully",
         });
     } catch (error) {
+        console.log(error)
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 }
@@ -74,6 +77,7 @@ const deleteNotice = async (req, res) => {
             message: "Notice Deleted Successfully",
         });
     } catch (error) {
+        console.log(error)
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 }

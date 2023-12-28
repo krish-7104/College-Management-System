@@ -16,6 +16,7 @@ const getMarks = async (req, res) => {
         res.json(data);
     } catch (error) {
         console.error(error.message);
+        console.log(error)
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 }
@@ -51,6 +52,7 @@ const addMarks = async (req, res) => {
         }
     } catch (error) {
         console.error(error.message);
+        console.log(error)
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 }
@@ -70,6 +72,7 @@ const deleteMarks = async (req, res) => {
         res.json(data);
     } catch (error) {
         console.error(error.message);
+        console.log(error)
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 }

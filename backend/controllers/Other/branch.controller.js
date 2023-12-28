@@ -12,6 +12,7 @@ const getBranch = async (req, res) => {
         res.json(data);
     } catch (error) {
         console.error(error.message);
+        console.log(error)
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 
@@ -37,6 +38,7 @@ const addBranch = async (req, res) => {
         }
     } catch (error) {
         console.error(error.message);
+        console.log(error)
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 }
@@ -56,6 +58,7 @@ const deleteBranch = async (req, res) => {
         res.json(data);
     } catch (error) {
         console.error(error.message);
+        console.log(error)
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 }

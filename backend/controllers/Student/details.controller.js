@@ -1,4 +1,6 @@
 const studentDetails = require("../../models/Students/details.model.js")
+const fs = require("fs")
+const uploadOnCloudinary = require("../../utils/cloudinary.js")
 
 const getDetails = async (req, res) => {
     try {
@@ -15,22 +17,26 @@ const getDetails = async (req, res) => {
         };
         res.json(data);
     } catch (error) {
+        console.log(error)
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 }
 
 const addDetails = async (req, res) => {
+    console.log(req.file)
     try {
         let user = await studentDetails.findOne({
             enrollmentNo: req.body.enrollmentNo,
         });
         if (user) {
+            fs.unlinkSync(req.file.path)
             return res.status(400).json({
                 success: false,
                 message: "Student With This Enrollment Already Exists",
             });
         }
-        user = await studentDetails.create(req.body);
+        const uploadedProfile = await uploadOnCloudinary(req.file.path, `Student/${req.body.branch}/`)
+        user = await studentDetails.create({ ...req.body, profile: uploadedProfile.url });
         const data = {
             success: true,
             message: "Student Details Added!",
@@ -38,6 +44,7 @@ const addDetails = async (req, res) => {
         };
         res.json(data);
     } catch (error) {
+        console.log(error)
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 }
@@ -45,8 +52,13 @@ const addDetails = async (req, res) => {
 
 const updateDetails = async (req, res) => {
     try {
-        let user = await studentDetails.findByIdAndUpdate(req.params.id, req.body);
-        console.log(user)
+        let user;
+        if (req.file) {
+            const uploadedProfile = await uploadOnCloudinary(req.file.path, `Student/${req.body.branch}/`)
+            user = await studentDetails.findByIdAndUpdate(req.params.id, { ...req.body, profile: uploadedProfile.url });
+        } else {
+            user = await studentDetails.findByIdAndUpdate(req.params.id, req.body);
+        }
         if (!user) {
             return res.status(400).json({
                 success: false,
@@ -59,7 +71,7 @@ const updateDetails = async (req, res) => {
         };
         res.json(data);
     } catch (error) {
-        console.log(error);
+        console.log(error)
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 }
@@ -80,6 +92,7 @@ const deleteDetails = async (req, res) => {
         };
         res.json(data);
     } catch (error) {
+        console.log(error)
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 }

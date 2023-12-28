@@ -10,6 +10,7 @@ const getTimetable = async (req, res) => {
             res.status(404).json({ success: false, message: "Timetable Not Found" });
         }
     } catch (error) {
+        console.log(error)
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 }
@@ -59,6 +60,7 @@ const deleteTimetable = async (req, res) => {
         res.json(data);
     } catch (error) {
         console.error(error.message);
+        console.log(error)
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 }
