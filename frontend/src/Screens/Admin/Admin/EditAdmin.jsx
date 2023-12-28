@@ -19,34 +19,40 @@ const EditAdmin = () => {
   });
   const [id, setId] = useState();
   const [search, setSearch] = useState();
+  const [previewImage, setPreviewImage] = useState("");
 
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    setFile(selectedFile);
+    const imageUrl = URL.createObjectURL(selectedFile);
+    setPreviewImage(imageUrl);
+  };
   const updateAdminProfile = (e) => {
     e.preventDefault();
     toast.loading("Updating Admin");
     const headers = {
-      "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
     };
+    const formData = new FormData();
+    formData.append("employeeId", data.employeeId);
+    formData.append("firstName", data.firstName);
+    formData.append("middleName", data.middleName);
+    formData.append("lastName", data.lastName);
+    formData.append("email", data.email);
+    formData.append("phoneNumber", data.phoneNumber);
+    formData.append("gender", data.gender);
+    if (file) {
+      formData.append("profile", file);
+    }
     axios
-      .put(`${baseApiURL()}/admin/details/updateDetails/${id}`, data, {
+      .put(`${baseApiURL()}/admin/details/updateDetails/${id}`, formData, {
         headers: headers,
       })
       .then((response) => {
         toast.dismiss();
         if (response.data.success) {
           toast.success(response.data.message);
-          setFile();
-          setSearch();
-          setId();
-          setData({
-            employeeId: "",
-            firstName: "",
-            middleName: "",
-            lastName: "",
-            email: "",
-            phoneNumber: "",
-            profile: "",
-            gender: "",
-          });
+          clearSearchHandler();
         } else {
           toast.error(response.data.message);
         }
@@ -103,6 +109,7 @@ const EditAdmin = () => {
     setSearchActive(false);
     setSearch("");
     setId("");
+    setPreviewImage();
     setData({
       employeeId: "",
       firstName: "",
@@ -254,10 +261,15 @@ const EditAdmin = () => {
               type="file"
               id="file"
               accept="image/*"
-              onChange={(e) => setFile(e.target.files[0])}
+              onChange={handleFileChange}
             />
           </div>
-          {data.profile && (
+          {previewImage && (
+            <div className="w-full flex justify-center items-center">
+              <img src={previewImage} alt="student" className="h-36" />
+            </div>
+          )}
+          {!previewImage && data.profile && (
             <div className="w-full flex justify-center items-center">
               <img src={data.profile} alt="student" className="h-36" />
             </div>

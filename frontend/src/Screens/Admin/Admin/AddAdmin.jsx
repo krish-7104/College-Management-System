@@ -14,17 +14,33 @@ const AddAdmin = () => {
     email: "",
     phoneNumber: "",
     gender: "",
-    profile: "",
   });
+  const [previewImage, setPreviewImage] = useState("");
+
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    setFile(selectedFile);
+    const imageUrl = URL.createObjectURL(selectedFile);
+    setPreviewImage(imageUrl);
+  };
 
   const addAdminProfile = (e) => {
     e.preventDefault();
     toast.loading("Adding Admin");
     const headers = {
-      "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
     };
+    const formData = new FormData();
+    formData.append("employeeId", data.employeeId);
+    formData.append("firstName", data.firstName);
+    formData.append("middleName", data.middleName);
+    formData.append("lastName", data.lastName);
+    formData.append("email", data.email);
+    formData.append("phoneNumber", data.phoneNumber);
+    formData.append("gender", data.gender);
+    formData.append("profile", file);
     axios
-      .post(`${baseApiURL()}/admin/details/addDetails`, data, {
+      .post(`${baseApiURL()}/admin/details/addDetails`, formData, {
         headers: headers,
       })
       .then((response) => {
@@ -183,12 +199,12 @@ const AddAdmin = () => {
           type="file"
           id="file"
           accept="image/*"
-          onChange={(e) => setFile(e.target.files[0])}
+          onChange={handleFileChange}
         />
       </div>
-      {data.profile && (
+      {previewImage && (
         <div className="w-full flex justify-center items-center">
-          <img src={data.profile} alt="student" className="h-36" />
+          <img src={previewImage} alt="student" className="h-36" />
         </div>
       )}
       <button
