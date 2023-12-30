@@ -37,4 +37,3 @@ The College Management System is a MERN Stack-based system with three different 
 - Account Details Modification: Ability for admins to modify the details of each account
 - Subject Management: Ability for admins to add/edit subjects
 - Notices Management: Ability for admins to add/edit notices
-- 
