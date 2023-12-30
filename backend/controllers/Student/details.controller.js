@@ -1,6 +1,5 @@
 const studentDetails = require("../../models/Students/details.model.js")
-const fs = require("fs")
-const uploadOnCloudinary = require("../../utils/cloudinary.js")
+const uploadOnAWS = require("../../utils/awss3upload.js")
 
 const getDetails = async (req, res) => {
     try {
@@ -23,20 +22,18 @@ const getDetails = async (req, res) => {
 }
 
 const addDetails = async (req, res) => {
-    console.log(req.file)
     try {
         let user = await studentDetails.findOne({
             enrollmentNo: req.body.enrollmentNo,
         });
         if (user) {
-            fs.unlinkSync(req.file.path)
             return res.status(400).json({
                 success: false,
                 message: "Student With This Enrollment Already Exists",
             });
         }
-        const uploadedProfile = await uploadOnCloudinary(req.file.path, `Student/${req.body.branch}/`)
-        user = await studentDetails.create({ ...req.body, profile: uploadedProfile.url });
+        const uploadedProfile = await uploadOnAWS(req.file, `Student/${req.body.branch}/${req.body.enrollmentNo}`)
+        user = await studentDetails.create({ ...req.body, profile: uploadedProfile });
         const data = {
             success: true,
             message: "Student Details Added!",
@@ -54,8 +51,8 @@ const updateDetails = async (req, res) => {
     try {
         let user;
         if (req.file) {
-            const uploadedProfile = await uploadOnCloudinary(req.file.path, `Student/${req.body.branch}/`)
-            user = await studentDetails.findByIdAndUpdate(req.params.id, { ...req.body, profile: uploadedProfile.url });
+            const uploadedProfile = await uploadOnAWS(req.file, `Student/${req.body.branch}/`)
+            user = await studentDetails.findByIdAndUpdate(req.params.id, { ...req.body, profile: uploadedProfile });
         } else {
             user = await studentDetails.findByIdAndUpdate(req.params.id, req.body);
         }

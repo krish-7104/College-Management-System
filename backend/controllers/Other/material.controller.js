@@ -1,5 +1,5 @@
 const Material = require("../../models/Other/material.model");
-const uploadOnCloudinary = require("../../utils/cloudinary")
+const uploadOnAWS = require("../../utils/awss3upload.js")
 
 const getMaterial = async (req, res) => {
     try {
@@ -17,12 +17,12 @@ const getMaterial = async (req, res) => {
 }
 
 const addMaterial = async (req, res) => {
-    const uploadedMaterial = await uploadOnCloudinary(req.file.path, `Material/${req.body.subject}`)
+    const uploadedMaterial = await uploadOnAWS(req.file, `Material/${req.body.subject}`)
     let { faculty, subject, title } = req.body;
     try {
         await Material.create({
             faculty,
-            link: uploadedMaterial.url,
+            link: uploadedMaterial,
             subject,
             title,
         });

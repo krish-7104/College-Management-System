@@ -1,5 +1,5 @@
 const adminDetails = require("../../models/Admin/details.model.js")
-const uploadOnCloudinary = require("../../utils/cloudinary.js")
+const uploadOnAWS = require("../../utils/awss3upload.js")
 
 const getDetails = async (req, res) => {
     try {
@@ -23,16 +23,15 @@ const getDetails = async (req, res) => {
 
 const addDetails = async (req, res) => {
     try {
-        let user = await adminDetails.findOne(req.body);
+        let user = await adminDetails.findOne({ employeeId: req.body.employeeId });
         if (user) {
-            fs.unlinkSync(req.file.path)
             return res.status(400).json({
                 success: false,
                 message: "Admin With This EmployeeId Already Exists",
             });
         }
-        const uploadedProfile = await uploadOnCloudinary(req.file.path, `Admin/`)
-        user = await adminDetails.create({ ...req.body, profile: uploadedProfile.url });
+        const uploadedProfile = await uploadOnAWS(req.file, `Admin/${req.body.employeeId}`)
+        user = await adminDetails.create({ ...req.body, profile: uploadedProfile });
         const data = {
             success: true,
             message: "Admin Details Added!",
@@ -49,8 +48,8 @@ const updateDetails = async (req, res) => {
     try {
         let user;
         if (req.file) {
-            const uploadedProfile = await uploadOnCloudinary(req.file.path, `Admin/`)
-            user = await adminDetails.findByIdAndUpdate(req.params.id, { ...req.body, profile: uploadedProfile.url });
+            const uploadedProfile = await uploadOnAWS(req.file, `Admin/${req.body.employeeId}`)
+            user = await adminDetails.findByIdAndUpdate(req.params.id, { ...req.body, profile: uploadedProfile });
         } else {
             user = await adminDetails.findByIdAndUpdate(req.params.id, req.body);
         }
