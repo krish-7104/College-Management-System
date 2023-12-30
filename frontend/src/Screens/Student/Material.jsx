@@ -32,7 +32,7 @@ const Material = () => {
       "Content-Type": "application/json",
     };
     axios
-      .get(
+      .post(
         `${baseApiURL()}/material/getMaterial`,
         { subject: selected },
         { headers }

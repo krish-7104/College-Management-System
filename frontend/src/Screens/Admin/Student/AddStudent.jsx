@@ -54,7 +54,6 @@ const AddStudent = () => {
     const headers = {
       "Content-Type": "multipart/form-data",
     };
-
     const formData = new FormData();
     formData.append("enrollmentNo", data.enrollmentNo);
     formData.append("firstName", data.firstName);
@@ -67,21 +66,20 @@ const AddStudent = () => {
     formData.append("gender", data.gender);
     formData.append("profile", file);
     axios
-      .post(`${baseApiURL()}/student/details/addDetails`, data, {
+      .post(`${baseApiURL()}/student/details/addDetails`, formData, {
         headers: headers,
       })
       .then((response) => {
         toast.dismiss();
         if (response.data.success) {
           toast.success(response.data.message);
+          const formData = new FormData();
+          formData.append("employeeId", data.enrollmentNo);
+          formData.append("password", "123456");
           axios
-            .post(
-              `${baseApiURL()}/student/auth/register`,
-              { loginid: data.enrollmentNo, password: 112233 },
-              {
-                headers: headers,
-              }
-            )
+            .post(`${baseApiURL()}/student/auth/register`, formData, {
+              headers: headers,
+            })
             .then((response) => {
               toast.dismiss();
               if (response.data.success) {

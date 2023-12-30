@@ -47,14 +47,13 @@ const AddAdmin = () => {
         toast.dismiss();
         if (response.data.success) {
           toast.success(response.data.message);
+          const formData = new FormData();
+          formData.append("employeeId", data.employeeId);
+          formData.append("password", "123456");
           axios
-            .post(
-              `${baseApiURL()}/Admin/auth/register`,
-              { loginid: data.employeeId, password: 112233 },
-              {
-                headers: headers,
-              }
-            )
+            .post(`${baseApiURL()}/Admin/auth/register`, formData, {
+              headers: headers,
+            })
             .then((response) => {
               toast.dismiss();
               if (response.data.success) {
