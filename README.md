@@ -9,12 +9,9 @@ The College Management System is a MERN Stack-based system with three different 
 
 **Server:** Node, Express
 
+**Storage:** AWS S3
+
 **Database:** MongoDB
-
-
-Youtube Link: https://www.youtube.com/watch?v=LY4UhPadZCs&ab_channel=KrishJotaniya
-
-Setup Link: https://www.youtube.com/watch?v=aR0E_UrCzMI&t=6s
 
 ## Student Features
 
@@ -41,48 +38,3 @@ Setup Link: https://www.youtube.com/watch?v=aR0E_UrCzMI&t=6s
 - Subject Management: Ability for admins to add/edit subjects
 - Notices Management: Ability for admins to add/edit notices
 - 
-## Installation Steps
-
-To run this project, you will need to add the following environment variables to your .env file
-
-Firstly go to https://console.firebase.google.com/ create one project and then on left side meny click on build and then storage. Now click on Get Started and click on Production Mode then Next and Done. Now click on rules and replace the code given below with actual code and click on publish
-
-```
-rules_version = '2';
-service firebase.storage {
-  match /b/{bucket}/o {
-    match /{allPaths=**} {
-      allow read, write: if true;
-    }
-  }
-}
-```
-Now after this click on left side menu settings then project setting and scroll down, click on Create App and then Add you website name there and click on register app now you will get all api keys add that data in .env file in frontend side. 
-
-Backend And Frontend Both Folder Has One sample.env file you can replicate it add you data and rename it to .env
-
-Add this document in your College Management Collection in MongoDB Compass in **admin details** table
-
-```
-{
-  "employeeId": 123123,
-  "firstName": "YOUR_DATA",
-  "middleName": "YOUR_DATA",
-  "lastName": "YOUR_DATA",
-  "email": "test@admin.com",
-  "phoneNumber": YOUR_DATA,
-  "gender": "Male",
-  "profile": "https://cdn.britannica.com/42/193142-050-F69B1A23/Sundar-Pichai-Google.jpg",
-} 
-```
-
-Then add the below document without any changes in **Admin Credentials**
-
-```
-{
-  "loginid": 123123,
-  "password": "112233",
-}
-```
-
-Now login into admin with Above mentioned login and password. You need to add branches and faculty from admin and then after adding faculty to faculty login and add student.
