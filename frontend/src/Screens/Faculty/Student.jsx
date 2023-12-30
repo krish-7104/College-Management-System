@@ -49,6 +49,7 @@ const Student = () => {
         toast.dismiss();
         if (response.data.success) {
           if (response.data.user.length === 0) {
+            toast.dismiss();
             toast.error("No Student Found!");
           } else {
             toast.success(response.data.message);
@@ -67,10 +68,12 @@ const Student = () => {
             setId(response.data.user[0]._id);
           }
         } else {
+          toast.dismiss();
           toast.error(response.data.message);
         }
       })
       .catch((error) => {
+        toast.dismiss();
         toast.error(error.response.data.message);
         console.error(error);
       });

@@ -3,52 +3,20 @@ import React, { useEffect, useState } from "react";
 import { FiUpload } from "react-icons/fi";
 import Heading from "../../components/Heading";
 import { AiOutlineClose } from "react-icons/ai";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import toast from "react-hot-toast";
-import { storage } from "../../firebase/config";
 import { baseApiURL } from "../../baseUrl";
 const Timetable = () => {
   const [addselected, setAddSelected] = useState({
     branch: "",
     semester: "",
-    link: "",
   });
   const [file, setFile] = useState();
   const [branch, setBranch] = useState();
+  const [previewUrl, setPreviewUrl] = useState("");
 
   useEffect(() => {
     getBranchData();
   }, []);
-
-  useEffect(() => {
-    const uploadFileToStorage = async (file) => {
-      toast.loading("Upload Timetable To Server");
-      const storageRef = ref(
-        storage,
-        `Timetable/${addselected.branch}/Semester ${addselected.semester}`
-      );
-      const uploadTask = uploadBytesResumable(storageRef, file);
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {},
-        (error) => {
-          console.error(error);
-          toast.dismiss();
-          console.log("FIle Upload error", error);
-          // toast.error("Something Went Wrong!");
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            toast.dismiss();
-            setFile();
-            toast.success("Timetable Uploaded To Server");
-            setAddSelected({ ...addselected, link: downloadURL });
-          });
-        }
-      );
-    };
-    file && uploadFileToStorage(file);
-  }, [file]);
 
   const getBranchData = () => {
     const headers = {
@@ -69,13 +37,24 @@ const Timetable = () => {
       });
   };
 
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    setFile(selectedFile);
+    const imageUrl = URL.createObjectURL(selectedFile);
+    setPreviewUrl(imageUrl);
+  };
+
   const addTimetableHandler = () => {
     toast.loading("Adding Timetable");
     const headers = {
-      "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
     };
+    const formData = new FormData();
+    formData.append("branch", addselected.branch);
+    formData.append("semester", addselected.semester);
+    formData.append("timetable", file);
     axios
-      .post(`${baseApiURL()}/timetable/addTimetable`, addselected, {
+      .post(`${baseApiURL()}/timetable/addTimetable`, formData, {
         headers: headers,
       })
       .then((response) => {
@@ -85,7 +64,6 @@ const Timetable = () => {
           setAddSelected({
             branch: "",
             semester: "",
-            link: "",
           });
           setFile("");
         } else {
@@ -149,16 +127,19 @@ const Timetable = () => {
               htmlFor="upload"
               className="px-2 bg-blue-50 py-3 rounded-sm text-base w-[80%] mt-4 flex justify-center items-center cursor-pointer"
             >
-              Upload Timetable
+              Select Timetable
               <span className="ml-2">
                 <FiUpload />
               </span>
             </label>
           )}
-          {addselected.link && (
+          {previewUrl && (
             <p
               className="px-2 border-2 border-blue-500 py-2 rounded text-base w-[80%] mt-4 flex justify-center items-center cursor-pointer"
-              onClick={() => setAddSelected({ ...addselected, link: "" })}
+              onClick={() => {
+                setFile("");
+                setPreviewUrl("");
+              }}
             >
               Remove Selected Timetable
               <span className="ml-2">
@@ -172,7 +153,7 @@ const Timetable = () => {
             id="upload"
             accept="image/*"
             hidden
-            onChange={(e) => setFile(e.target.files[0])}
+            onChange={handleFileChange}
           />
           <button
             className="bg-blue-500 text-white mt-8 px-4 py-2 rounded-sm"
@@ -180,6 +161,9 @@ const Timetable = () => {
           >
             Add Timetable
           </button>
+          {previewUrl && (
+            <img className="mt-6" src={previewUrl} alt="timetable" />
+          )}
         </div>
       </div>
     </div>

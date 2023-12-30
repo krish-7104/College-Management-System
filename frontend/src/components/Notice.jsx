@@ -38,7 +38,7 @@ const Notice = () => {
       "Content-Type": "application/json",
     };
     axios
-      .post(`${baseApiURL()}/notice/getNotice`, data, {
+      .get(`${baseApiURL()}/notice/getNotice`, data, {
         headers: headers,
       })
       .then((response) => {
@@ -69,7 +69,7 @@ const Notice = () => {
       "Content-Type": "application/json",
     };
     axios
-      .post(`${baseApiURL()}/notice/getNotice`, data, {
+      .get(`${baseApiURL()}/notice/getNotice`, data, {
         headers: headers,
       })
       .then((response) => {
@@ -141,7 +141,7 @@ const Notice = () => {
       "Content-Type": "application/json",
     };
     axios
-      .post(`${baseApiURL()}/notice/updateNotice/${id}`, data, {
+      .put(`${baseApiURL()}/notice/updateNotice/${id}`, data, {
         headers: headers,
       })
       .then((response) => {

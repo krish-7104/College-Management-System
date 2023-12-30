@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import { storage } from "../../../firebase/config";
 import { baseApiURL } from "../../../baseUrl";
 import { FiSearch, FiUpload, FiX } from "react-icons/fi";
 const EditStudent = () => {
@@ -10,6 +8,7 @@ const EditStudent = () => {
   const [branch, setBranch] = useState();
   const [search, setSearch] = useState();
   const [searchActive, setSearchActive] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
   const [data, setData] = useState({
     enrollmentNo: "",
     firstName: "",
@@ -42,67 +41,44 @@ const EditStudent = () => {
   };
 
   useEffect(() => {
-    const uploadFileToStorage = async (file) => {
-      toast.loading("Upload Photo To Storage");
-      const storageRef = ref(
-        storage,
-        `Student Profile/${data.branch}/${data.semester} Semester/${data.enrollmentNo}`
-      );
-      const uploadTask = uploadBytesResumable(storageRef, file);
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {},
-        (error) => {
-          console.error(error);
-          toast.dismiss();
-          toast.error("Something Went Wrong!");
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            toast.dismiss();
-            setFile();
-            toast.success("Profile Uploaded To Storage");
-            setData({ ...data, profile: downloadURL });
-          });
-        }
-      );
-    };
-    file && uploadFileToStorage(file);
-  }, [data, file]);
-
-  useEffect(() => {
     getBranchData();
   }, []);
+
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    setFile(selectedFile);
+    const imageUrl = URL.createObjectURL(selectedFile);
+    setPreviewImage(imageUrl);
+  };
 
   const updateStudentProfile = (e) => {
     e.preventDefault();
     toast.loading("Updating Student");
+    const formData = new FormData();
+    formData.append("enrollmentNo", data.enrollmentNo);
+    formData.append("firstName", data.firstName);
+    formData.append("middleName", data.middleName);
+    formData.append("lastName", data.lastName);
+    formData.append("email", data.email);
+    formData.append("phoneNumber", data.phoneNumber);
+    formData.append("semester", data.semester);
+    formData.append("branch", data.branch);
+    formData.append("gender", data.gender);
+    if (file) {
+      formData.append("profile", file);
+    }
     const headers = {
-      "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
     };
     axios
-      .post(`${baseApiURL()}/student/details/updateDetails/${id}`, data, {
+      .put(`${baseApiURL()}/student/details/updateDetails/${id}`, formData, {
         headers: headers,
       })
       .then((response) => {
         toast.dismiss();
         if (response.data.success) {
           toast.success(response.data.message);
-          setFile("");
-          setSearch("");
-          setId("");
-          setData({
-            enrollmentNo: "",
-            firstName: "",
-            middleName: "",
-            lastName: "",
-            email: "",
-            phoneNumber: "",
-            semester: "",
-            branch: "",
-            gender: "",
-            profile: "",
-          });
+          clearSearchHandler();
         } else {
           toast.error(response.data.message);
         }
@@ -143,8 +119,8 @@ const EditStudent = () => {
               semester: response.data.user[0].semester,
               branch: response.data.user[0].branch,
               gender: response.data.user[0].gender,
-              profile: response.data.user[0].profile,
             });
+            setPreviewImage(response.data.user[0].profile);
             setId(response.data.user[0]._id);
           }
         } else {
@@ -152,6 +128,7 @@ const EditStudent = () => {
         }
       })
       .catch((error) => {
+        toast.dismiss();
         toast.error(error.response.data.message);
         console.error(error);
       });
@@ -161,6 +138,7 @@ const EditStudent = () => {
     setSearchActive(false);
     setSearch("");
     setId("");
+    setPreviewImage("");
     setData({
       enrollmentNo: "",
       firstName: "",
@@ -171,7 +149,6 @@ const EditStudent = () => {
       semester: "",
       branch: "",
       gender: "",
-      profile: "",
     });
   };
 
@@ -359,10 +336,15 @@ const EditStudent = () => {
               type="file"
               id="file"
               accept="image/*"
-              onChange={(e) => setFile(e.target.files[0])}
+              onChange={handleFileChange}
             />
           </div>
-          {data.profile && (
+          {previewImage && (
+            <div className="w-full flex justify-center items-center">
+              <img src={previewImage} alt="student" className="h-36" />
+            </div>
+          )}
+          {!previewImage && data.profile && (
             <div className="w-full flex justify-center items-center">
               <img src={data.profile} alt="student" className="h-36" />
             </div>

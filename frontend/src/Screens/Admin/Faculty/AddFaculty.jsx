@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import { storage } from "../../../firebase/config";
 import { baseApiURL } from "../../../baseUrl";
 import { FiUpload } from "react-icons/fi";
 
@@ -20,8 +18,8 @@ const AddFaculty = () => {
     gender: "",
     experience: "",
     post: "",
-    profile: "",
   });
+  const [previewImage, setPreviewImage] = useState("");
   const getBranchData = () => {
     const headers = {
       "Content-Type": "application/json",
@@ -41,65 +39,55 @@ const AddFaculty = () => {
   };
 
   useEffect(() => {
-    const uploadFileToStorage = async (file) => {
-      toast.loading("Upload Photo To Storage");
-      const storageRef = ref(
-        storage,
-        `Faculty Profile/${data.department}/${data.employeeId}`
-      );
-      const uploadTask = uploadBytesResumable(storageRef, file);
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {},
-        (error) => {
-          console.error(error);
-          toast.dismiss();
-          toast.error("Something Went Wrong!");
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            toast.dismiss();
-            setFile();
-            toast.success("Profile Uploaded To Faculty");
-            setData({ ...data, profile: downloadURL });
-          });
-        }
-      );
-    };
-    file && uploadFileToStorage(file);
-  }, [data, file]);
-
-  useEffect(() => {
     getBranchData();
   }, []);
+
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    setFile(selectedFile);
+    const imageUrl = URL.createObjectURL(selectedFile);
+    setPreviewImage(imageUrl);
+  };
 
   const addFacultyProfile = (e) => {
     e.preventDefault();
     toast.loading("Adding Faculty");
     const headers = {
-      "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
     };
+    const formData = new FormData();
+    formData.append("employeeId", data.employeeId);
+    formData.append("firstName", data.firstName);
+    formData.append("middleName", data.middleName);
+    formData.append("lastName", data.lastName);
+    formData.append("email", data.email);
+    formData.append("phoneNumber", data.phoneNumber);
+    formData.append("department", data.department);
+    formData.append("experience", data.experience);
+    formData.append("gender", data.gender);
+    formData.append("post", data.post);
+    formData.append("profile", file);
     axios
-      .post(`${baseApiURL()}/faculty/details/addDetails`, data, {
+      .post(`${baseApiURL()}/faculty/details/addDetails`, formData, {
         headers: headers,
       })
       .then((response) => {
         toast.dismiss();
         if (response.data.success) {
           toast.success(response.data.message);
+          const formData = new FormData();
+          formData.append("employeeId", data.employeeId);
+          formData.append("password", "123456");
           axios
-            .post(
-              `${baseApiURL()}/faculty/auth/register`,
-              { loginid: data.employeeId, password: 112233 },
-              {
-                headers: headers,
-              }
-            )
+            .post(`${baseApiURL()}/faculty/auth/register`, formData, {
+              headers: headers,
+            })
             .then((response) => {
               toast.dismiss();
               if (response.data.success) {
                 toast.success(response.data.message);
                 setFile();
+                setPreviewImage();
                 setData({
                   employeeId: "",
                   firstName: "",
@@ -111,7 +99,6 @@ const AddFaculty = () => {
                   gender: "",
                   experience: "",
                   post: "",
-                  profile: "",
                 });
               } else {
                 toast.error(response.data.message);
@@ -286,13 +273,13 @@ const AddFaculty = () => {
             type="file"
             id="file"
             accept="image/*"
-            onChange={(e) => setFile(e.target.files[0])}
+            onChange={handleFileChange}
           />
         </div>
       </div>
-      {data.profile && (
+      {previewImage && (
         <div className="w-full flex justify-center items-center">
-          <img src={data.profile} alt="student" className="h-36" />
+          <img src={previewImage} alt="student" className="h-36" />
         </div>
       )}
       <button

@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import { storage } from "../../../firebase/config";
 import { baseApiURL } from "../../../baseUrl";
 import { FiSearch, FiUpload, FiX } from "react-icons/fi";
 
@@ -24,66 +22,44 @@ const EditFaculty = () => {
   });
   const [id, setId] = useState();
   const [search, setSearch] = useState();
+  const [previewImage, setPreviewImage] = useState("");
 
-  useEffect(() => {
-    const uploadFileToStorage = async (file) => {
-      toast.loading("Upload Photo To Storage");
-      const storageRef = ref(
-        storage,
-        `Faculty Profile/${data.department}/${data.employeeId}`
-      );
-      const uploadTask = uploadBytesResumable(storageRef, file);
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {},
-        (error) => {
-          console.error(error);
-          toast.dismiss();
-          toast.error("Something Went Wrong!");
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            toast.dismiss();
-            setFile();
-            toast.success("Profile Uploaded To Faculty");
-            setData({ ...data, profile: downloadURL });
-          });
-        }
-      );
-    };
-    file && uploadFileToStorage(file);
-  }, [data, file]);
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    setFile(selectedFile);
+    const imageUrl = URL.createObjectURL(selectedFile);
+    setPreviewImage(imageUrl);
+  };
 
   const updateFacultyProfile = (e) => {
     e.preventDefault();
     toast.loading("Updating Faculty");
     const headers = {
-      "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
     };
+    const formData = new FormData();
+    formData.append("employeeId", data.employeeId);
+    formData.append("firstName", data.firstName);
+    formData.append("middleName", data.middleName);
+    formData.append("lastName", data.lastName);
+    formData.append("email", data.email);
+    formData.append("phoneNumber", data.phoneNumber);
+    formData.append("department", data.department);
+    formData.append("experience", data.experience);
+    formData.append("gender", data.gender);
+    formData.append("post", data.post);
+    if (file) {
+      formData.append("profile", file);
+    }
     axios
-      .post(`${baseApiURL()}/faculty/details/updateDetails/${id}`, data, {
+      .put(`${baseApiURL()}/faculty/details/updateDetails/${id}`, formData, {
         headers: headers,
       })
       .then((response) => {
         toast.dismiss();
         if (response.data.success) {
           toast.success(response.data.message);
-          setFile();
-          setSearch();
-          setId();
-          setData({
-            employeeId: "",
-            firstName: "",
-            middleName: "",
-            lastName: "",
-            email: "",
-            phoneNumber: "",
-            department: "",
-            gender: "",
-            experience: "",
-            post: "",
-            profile: "",
-          });
+          clearSearchHandler();
         } else {
           toast.error(response.data.message);
         }
@@ -130,6 +106,7 @@ const EditFaculty = () => {
         }
       })
       .catch((error) => {
+        toast.dismiss();
         toast.error(error.response.data.message);
         console.error(error);
       });
@@ -139,6 +116,7 @@ const EditFaculty = () => {
     setSearchActive(false);
     setSearch("");
     setId("");
+    setPreviewImage();
     setData({
       employeeId: "",
       firstName: "",
@@ -302,10 +280,15 @@ const EditFaculty = () => {
               type="file"
               id="file"
               accept="image/*"
-              onChange={(e) => setFile(e.target.files[0])}
+              onChange={handleFileChange}
             />
           </div>
-          {data.profile && (
+          {previewImage && (
+            <div className="w-full flex justify-center items-center">
+              <img src={previewImage} alt="student" className="h-36" />
+            </div>
+          )}
+          {!previewImage && data.profile && (
             <div className="w-full flex justify-center items-center">
               <img src={data.profile} alt="student" className="h-36" />
             </div>
