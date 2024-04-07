@@ -162,9 +162,8 @@ const Profile = () => {
               </form>
             )}
           </div>
-
           <img
-            src={data.profile}
+            src={process.env.REACT_APP_MEDIA_LINK + "/" + data.profile}
             alt="student profile"
             className="h-[240px] w-[240px] object-cover rounded-lg shadow-md"
           />

@@ -42,6 +42,7 @@ const EditAdmin = () => {
     formData.append("phoneNumber", data.phoneNumber);
     formData.append("gender", data.gender);
     if (file) {
+      formData.append("type", "profile");
       formData.append("profile", file);
     }
     axios

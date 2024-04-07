@@ -97,7 +97,12 @@ const Material = () => {
                     className={`text-xl font-medium flex justify-start items-center ${
                       item.link && "cursor-pointer"
                     } group`}
-                    onClick={() => item.link && window.open(item.link)}
+                    onClick={() =>
+                      item.link &&
+                      window.open(
+                        process.env.REACT_APP_MEDIA_LINK + "/" + item.link
+                      )
+                    }
                   >
                     {item.title}{" "}
                     {item.link && (

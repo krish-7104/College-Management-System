@@ -1,5 +1,4 @@
 const Timetable = require("../../models/Other/timetable.model");
-const uploadOnAWS = require("../../utils/awss3upload.js");
 
 const getTimetable = async (req, res) => {
     try {
@@ -18,11 +17,10 @@ const getTimetable = async (req, res) => {
 const addTimetable = async (req, res) => {
     let { semester, branch } = req.body;
     try {
-        const uploadedTimetable = await uploadOnAWS(req.file, `Timetable/${req.body.branch}`)
         let timetable = await Timetable.findOne({ semester, branch });
         if (timetable) {
             await Timetable.findByIdAndUpdate(timetable._id, {
-                semester, branch, link: uploadedTimetable
+                semester, branch, link: req.file.filename
             });
             const data = {
                 success: true,
@@ -31,7 +29,7 @@ const addTimetable = async (req, res) => {
             res.json(data);
         } else {
             await Timetable.create({
-                semester, branch, link: uploadedTimetable
+                semester, branch, link: req.file.filename
             });
             const data = {
                 success: true,

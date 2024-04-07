@@ -64,6 +64,7 @@ const AddStudent = () => {
     formData.append("semester", data.semester);
     formData.append("branch", data.branch);
     formData.append("gender", data.gender);
+    formData.append("type", "profile");
     formData.append("profile", file);
     axios
       .post(`${baseApiURL()}/student/details/addDetails`, formData, {
@@ -73,12 +74,10 @@ const AddStudent = () => {
         toast.dismiss();
         if (response.data.success) {
           toast.success(response.data.message);
-          const formData = new FormData();
-          formData.append("employeeId", data.enrollmentNo);
-          formData.append("password", "123456");
           axios
-            .post(`${baseApiURL()}/student/auth/register`, formData, {
-              headers: headers,
+            .post(`${baseApiURL()}/student/auth/register`, {
+              loginid: data.enrollmentNo,
+              password: data.enrollmentNo,
             })
             .then((response) => {
               toast.dismiss();

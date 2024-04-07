@@ -1,5 +1,4 @@
 const studentDetails = require("../../models/Students/details.model.js")
-const uploadOnAWS = require("../../utils/awss3upload.js")
 
 const getDetails = async (req, res) => {
     try {
@@ -32,8 +31,7 @@ const addDetails = async (req, res) => {
                 message: "Student With This Enrollment Already Exists",
             });
         }
-        const uploadedProfile = await uploadOnAWS(req.file, `Student/${req.body.branch}/${req.body.enrollmentNo}`)
-        user = await studentDetails.create({ ...req.body, profile: uploadedProfile });
+        user = await studentDetails.create({ ...req.body, profile: req.file.filename });
         const data = {
             success: true,
             message: "Student Details Added!",
@@ -52,7 +50,7 @@ const updateDetails = async (req, res) => {
         let user;
         if (req.file) {
             const uploadedProfile = await uploadOnAWS(req.file, `Student/${req.body.branch}/`)
-            user = await studentDetails.findByIdAndUpdate(req.params.id, { ...req.body, profile: uploadedProfile });
+            user = await studentDetails.findByIdAndUpdate(req.params.id, { ...req.body, profile: req.file.filename });
         } else {
             user = await studentDetails.findByIdAndUpdate(req.params.id, req.body);
         }

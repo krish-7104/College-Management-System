@@ -52,6 +52,7 @@ const Timetable = () => {
     const formData = new FormData();
     formData.append("branch", addselected.branch);
     formData.append("semester", addselected.semester);
+    formData.append("type", "timetable");
     formData.append("timetable", file);
     axios
       .post(`${baseApiURL()}/timetable/addTimetable`, formData, {

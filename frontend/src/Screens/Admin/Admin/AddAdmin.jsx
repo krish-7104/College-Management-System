@@ -38,6 +38,7 @@ const AddAdmin = () => {
     formData.append("email", data.email);
     formData.append("phoneNumber", data.phoneNumber);
     formData.append("gender", data.gender);
+    formData.append("type", "profile");
     formData.append("profile", file);
     axios
       .post(`${baseApiURL()}/admin/details/addDetails`, formData, {
@@ -47,12 +48,10 @@ const AddAdmin = () => {
         toast.dismiss();
         if (response.data.success) {
           toast.success(response.data.message);
-          const formData = new FormData();
-          formData.append("employeeId", data.employeeId);
-          formData.append("password", "123456");
           axios
-            .post(`${baseApiURL()}/Admin/auth/register`, formData, {
-              headers: headers,
+            .post(`${baseApiURL()}/Admin/auth/register`, {
+              loginid: data.employeeId,
+              password: data.employeeId,
             })
             .then((response) => {
               toast.dismiss();

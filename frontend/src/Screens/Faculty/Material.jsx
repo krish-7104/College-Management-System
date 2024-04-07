@@ -44,6 +44,7 @@ const Material = () => {
     formData.append("title", selected.title);
     formData.append("subject", selected.subject);
     formData.append("faculty", selected.faculty);
+    formData.append("type", "material");
     formData.append("material", file);
     axios
       .post(`${baseApiURL()}/material/addMaterial`, formData, {

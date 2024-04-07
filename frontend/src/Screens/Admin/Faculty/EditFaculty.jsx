@@ -49,6 +49,7 @@ const EditFaculty = () => {
     formData.append("gender", data.gender);
     formData.append("post", data.post);
     if (file) {
+      formData.append("type", "profile");
       formData.append("profile", file);
     }
     axios

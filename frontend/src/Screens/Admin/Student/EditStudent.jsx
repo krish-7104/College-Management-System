@@ -65,6 +65,7 @@ const EditStudent = () => {
     formData.append("branch", data.branch);
     formData.append("gender", data.gender);
     if (file) {
+      formData.append("type", "profile");
       formData.append("profile", file);
     }
     const headers = {
