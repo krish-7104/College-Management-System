@@ -9,8 +9,6 @@ The College Management System is a MERN Stack-based system with three different 
 
 **Server:** Node, Express
 
-**Storage:** AWS S3
-
 **Database:** MongoDB
 
 ## Student Features
