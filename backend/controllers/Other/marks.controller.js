@@ -27,16 +27,12 @@ const addMarks = async (req, res) => {
         let existingMarks = await Marks.findOne({ enrollmentNo });
         if (existingMarks) {
             if (internal) {
-                Object.keys(internal).forEach((key) => {
-                    existingMarks.internal.set(key, internal[key]);
-                });
+                existingMarks.internal = { ...existingMarks.internal, ...internal }
             }
             if (external) {
-                Object.keys(external).forEach((key) => {
-                    existingMarks.external.set(key, external[key]);
-                });
+                existingMarks.external = { ...existingMarks.external, ...external }
             }
-            await existingMarks.save();
+            await existingMarks.save()
             const data = {
                 success: true,
                 message: "Marks Added!",

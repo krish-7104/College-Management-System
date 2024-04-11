@@ -6,10 +6,10 @@ const Marks = new mongoose.Schema({
     required: true,
   },
   internal: {
-    type: Map,
+    type: {},
   },
   external: {
-    type: Map,
+    type: {},
   }
 }, { timestamps: true });
 
