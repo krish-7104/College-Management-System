@@ -35,3 +35,21 @@ The College Management System is a MERN Stack-based system with three different 
 - Account Details Modification: Ability for admins to modify the details of each account
 - Subject Management: Ability for admins to add/edit subjects
 - Notices Management: Ability for admins to add/edit notices
+
+## Setup
+
+Add one admin using postman and then you can login into admin panel and add student and faculty from admin section.
+
+1) Add Admin Credentials
+
+![image](https://github.com/krish-7104/College-Management-System/assets/95702005/c9560aff-0997-4ccc-96a1-7abe863d386f)
+ 
+2) Add Admin Details
+
+![image](https://github.com/krish-7104/College-Management-System/assets/95702005/1d7d25af-19ea-447d-b4b8-b7f8f341db98)
+
+## For Any Doubt Fell Free To Contact Me 🚀
+
+- [My Website](http://krishjotaniya.netlify.app/)
+- [Linkedin](https://www.linkedin.com/in/krishjotaniya/)
+- [krishjotaniya71@gmail.com](mailto:krishjotaniya71@gmail.com)
