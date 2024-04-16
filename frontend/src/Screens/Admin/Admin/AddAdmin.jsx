@@ -202,7 +202,7 @@ const AddAdmin = () => {
       </div>
       {previewImage && (
         <div className="w-full flex justify-center items-center">
-          <img src={previewImage} alt="student" className="h-36" />
+          <img src={previewImage} alt="admin" className="h-36" />
         </div>
       )}
       <button

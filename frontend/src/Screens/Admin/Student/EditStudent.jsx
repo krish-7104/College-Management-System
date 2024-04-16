@@ -120,17 +120,18 @@ const EditStudent = () => {
               semester: response.data.user[0].semester,
               branch: response.data.user[0].branch,
               gender: response.data.user[0].gender,
+              profile: response.data.user[0].profile,
             });
-            setPreviewImage(response.data.user[0].profile);
             setId(response.data.user[0]._id);
           }
         } else {
+          if (response?.data) toast.error(response.data.message);
           toast.error(response.data.message);
         }
       })
       .catch((error) => {
         toast.dismiss();
-        toast.error(error.response.data.message);
+        if (error?.response?.data) toast.error(error.response.data.message);
         console.error(error);
       });
   };
@@ -347,7 +348,11 @@ const EditStudent = () => {
           )}
           {!previewImage && data.profile && (
             <div className="w-full flex justify-center items-center">
-              <img src={data.profile} alt="student" className="h-36" />
+              <img
+                src={process.env.REACT_APP_MEDIA_LINK + "/" + data.profile}
+                alt="student"
+                className="h-36"
+              />
             </div>
           )}
           <button

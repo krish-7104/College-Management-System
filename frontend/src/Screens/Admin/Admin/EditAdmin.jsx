@@ -98,11 +98,11 @@ const EditAdmin = () => {
             toast.error("No Admin Found With ID");
           }
         } else {
-          toast.error(response.data.message);
+          if (response?.data) toast.error(response.data.message);
         }
       })
       .catch((error) => {
-        toast.error(error.response.data.message);
+        if (error?.response?.data) toast.error(error.response.data.message);
         console.error(error);
       });
   };
@@ -267,12 +267,20 @@ const EditAdmin = () => {
           </div>
           {previewImage && (
             <div className="w-full flex justify-center items-center">
-              <img src={previewImage} alt="student" className="h-36" />
+              <img
+                src={process.env.REACT_APP_MEDIA_LINK + "/" + previewImage}
+                alt="admin"
+                className="h-36"
+              />
             </div>
           )}
           {!previewImage && data.profile && (
             <div className="w-full flex justify-center items-center">
-              <img src={data.profile} alt="student" className="h-36" />
+              <img
+                src={process.env.REACT_APP_MEDIA_LINK + "/" + data.profile}
+                alt="admin"
+                className="h-36"
+              />
             </div>
           )}
           <button

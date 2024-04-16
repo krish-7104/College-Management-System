@@ -49,7 +49,6 @@ const updateDetails = async (req, res) => {
     try {
         let user;
         if (req.file) {
-            const uploadedProfile = await uploadOnAWS(req.file, `Student/${req.body.branch}/`)
             user = await studentDetails.findByIdAndUpdate(req.params.id, { ...req.body, profile: req.file.filename });
         } else {
             user = await studentDetails.findByIdAndUpdate(req.params.id, req.body);

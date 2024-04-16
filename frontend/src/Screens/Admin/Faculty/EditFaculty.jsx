@@ -86,8 +86,10 @@ const EditFaculty = () => {
       )
       .then((response) => {
         toast.dismiss();
-        if (response?.data?.success) {
-          toast.success(response?.data?.message);
+        if (response.data.user.length === 0) {
+          toast.error("No Faculty Found!");
+        } else {
+          toast.success(response.data.message);
           setId(response.data.user[0]._id);
           setData({
             employeeId: response.data.user[0].employeeId,
@@ -102,13 +104,11 @@ const EditFaculty = () => {
             profile: response.data.user[0].profile,
             experience: response.data.user[0].experience,
           });
-        } else {
-          toast.error(response.data.message);
         }
       })
       .catch((error) => {
         toast.dismiss();
-        toast.error(error.response.data.message);
+        if (error?.response?.data) toast.error(error.response.data.message);
         console.error(error);
       });
   };
@@ -286,12 +286,20 @@ const EditFaculty = () => {
           </div>
           {previewImage && (
             <div className="w-full flex justify-center items-center">
-              <img src={previewImage} alt="student" className="h-36" />
+              <img
+                src={process.env.REACT_APP_MEDIA_LINK + "/" + previewImage}
+                alt="faculty"
+                className="h-36"
+              />
             </div>
           )}
           {!previewImage && data.profile && (
             <div className="w-full flex justify-center items-center">
-              <img src={data.profile} alt="student" className="h-36" />
+              <img
+                src={process.env.REACT_APP_MEDIA_LINK + "/" + data.profile}
+                alt="faculty"
+                className="h-36"
+              />
             </div>
           )}
           <button
