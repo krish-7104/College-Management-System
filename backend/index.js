@@ -9,7 +9,12 @@ var cors = require("cors");
 app.use(cors({
   origin: process.env.FRONTEND_API_LINK
 }));
+
 app.use(express.json()); //to convert request data to json
+
+app.get("/", (req, res) => {
+  res.send("Hello 👋 I am Working Fine 🚀")
+})
 
 app.use('/media', express.static(path.join(__dirname, 'media')));
 

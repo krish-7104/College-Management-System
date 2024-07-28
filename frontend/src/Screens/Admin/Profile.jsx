@@ -53,7 +53,7 @@ const Profile = () => {
     };
     axios
       .post(
-        `${baseApiURL()}/student/auth/login`,
+        `${baseApiURL()}/admin/auth/login`,
         { loginid: router.state.loginid, password: password.current },
         {
           headers: headers,
@@ -78,7 +78,7 @@ const Profile = () => {
     };
     axios
       .put(
-        `${baseApiURL()}/student/auth/update/${id}`,
+        `${baseApiURL()}/admin/auth/update/${id}`,
         { loginid: router.state.loginid, password: password.new },
         {
           headers: headers,
