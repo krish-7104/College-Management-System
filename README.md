@@ -66,6 +66,8 @@ The College Management System is a MERN Stack-based system with three different 
 
    - **Login ID:** `123456`
    - **Password:** `admin123`
+  
+   - Using this login to the admin account and from admin you can add new faculty, student and admins!
 
 5. **Run the backend server:**
 
