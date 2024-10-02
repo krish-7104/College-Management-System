@@ -36,19 +36,52 @@ The College Management System is a MERN Stack-based system with three different 
 - Subject Management: Ability for admins to add/edit subjects
 - Notices Management: Ability for admins to add/edit notices
 
-## Setup
+## Setup Instructions
 
-Add one admin using postman and then you can login into admin panel and add student and faculty from admin section.
+1. **Clone the repository:**
 
-1) Add Admin Credentials
+   ```bash
+   git clone https://github.com/krish-7104/College-Management-System
+   ```
 
-![image](https://github.com/krish-7104/College-Management-System/assets/95702005/c9560aff-0997-4ccc-96a1-7abe863d386f)
- 
-2) Add Admin Details
+2. **Install dependencies:**
 
-![image](https://github.com/krish-7104/College-Management-System/assets/95702005/1d7d25af-19ea-447d-b4b8-b7f8f341db98)
+   ```bash
+   cd backend
+   npm install
+   cd ../frontend
+   npm install
+   ```
 
-## For Any Doubt Fell Free To Contact Me 🚀
+3. **Setup environment variables:**
+
+  - I have provided .env.sample in both frontend and backend using that create .env file
+
+4. **Run the admin seeder:**
+
+   ```bash
+   cd backend
+   npm run seed
+   ```
+
+   - **Login ID:** `123456`
+   - **Password:** `admin123`
+
+5. **Run the backend server:**
+
+   ```bash
+   cd backend
+   npm start
+   ```
+
+6. **Run the frontend server:**
+
+   ```bash
+   cd ../frontend
+   npm start
+   ```
+
+## For Any Doubt Feel Free To Contact Me 🚀
 
 - [My Website](http://krishjotaniya.netlify.app/)
 - [Linkedin](https://www.linkedin.com/in/krishjotaniya/)
