@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "seed": "node admin-seeder.js"
   },
   "author": "Krish Jotaniya",
   "license": "ISC",
