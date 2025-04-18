@@ -20,24 +20,9 @@ app.get("/", (req, res) => {
 
 app.use("/media", express.static(path.join(__dirname, "media")));
 
-// app.use("/api/auth", require("./routes/credential.route"));
-// app.use(
-//   "/api/student/details",
-//   require("./routes/details/student-details.route")
-// );
-// app.use(
-//   "/api/faculty/details",
-//   require("./routes/details/faculty-details.route")
-// );
-// app.use(
-//   "/api/admin/details",
-//   require("./routes/details/admin-details.route")
-// );
-// Other Apis
-// app.use("/api/timetable", require("./routes/timetable.route"));
-// app.use("/api/material", require("./routes/material.route"));
-// app.use("/api/notice", require("./routes/notice.route"));
-// app.use("/api/marks", require("./routes/marks.route"));
+app.use("/api/auth/credential", require("./routes/credential.route"));
+app.use("/api/admin/details", require("./routes/details/admin-details.route"));
+
 app.use("/api/branch", require("./routes/branch.route"));
 app.use("/api/subject", require("./routes/subject.route"));
 

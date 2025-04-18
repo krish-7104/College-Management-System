@@ -1,15 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const {
-  getCredentials,
-  addCredential,
-  updateCredential,
-  deleteCredential,
+  addCredentialController,
+  updateCredentialController,
+  deleteCredentialController,
 } = require("../controllers/credential.controller");
 
-router.get("/:type", getCredentials);
-router.post("/:type", addCredential);
-router.put("/:type/:id", updateCredential);
-router.delete("/:type/:id", deleteCredential);
+router.post("/:type", addCredentialController);
+router.put("/:type/:id", updateCredentialController);
+router.delete("/:type/:id", deleteCredentialController);
 
 module.exports = router;

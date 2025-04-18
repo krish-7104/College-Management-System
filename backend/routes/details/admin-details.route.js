@@ -1,18 +1,18 @@
 const express = require("express");
 const router = express.Router();
 const {
-  getDetails,
-  addDetails,
-  updateDetails,
-  deleteDetails,
-} = require("../../controllers/Admin/details.controller");
+  getDetailsController,
+  getDetailsByIdController,
+  addDetailsController,
+  updateDetailsController,
+  deleteDetailsController,
+} = require("../../controllers/admin-details.controller");
 const upload = require("../../middlewares/multer.middleware");
-router.post("/getDetails", getDetails);
 
-router.post("/addDetails", upload.single("profile"), addDetails);
-
-router.put("/updateDetails/:id", upload.single("profile"), updateDetails);
-
-router.delete("/deleteDetails/:id", deleteDetails);
+router.get("/", getDetailsController);
+router.get("/:id", getDetailsByIdController);
+router.post("/", upload.single("file"), addDetailsController);
+router.put("/:id", upload.single("file"), updateDetailsController);
+router.delete("/:id", deleteDetailsController);
 
 module.exports = router;

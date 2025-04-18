@@ -1,27 +1,7 @@
 const Credential = require("../models/credential.model");
+const ApiResponse = require("../utils/ApiResponse");
 
-const getCredentials = async (req, res) => {
-  try {
-    const { type } = req.params;
-    let credentials = await Credential.find({ ...req.body, role: type });
-    if (!credentials || credentials.length === 0) {
-      return res
-        .status(400)
-        .json({ success: false, message: "No Credentials Found" });
-    }
-    const data = {
-      success: true,
-      message: "Credentials Found!",
-      credentials,
-    };
-    res.json(data);
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ success: false, message: "Internal Server Error" });
-  }
-};
-
-const addCredential = async (req, res) => {
+const addCredentialController = async (req, res) => {
   try {
     const { type } = req.params;
     let credential = await Credential.findOne({
@@ -29,25 +9,22 @@ const addCredential = async (req, res) => {
       role: type,
     });
     if (credential) {
-      return res.status(400).json({
-        success: false,
-        message: "Credential With This LoginId Already Exists",
-      });
+      return ApiResponse.badRequest(
+        "Credential with this login ID already exists"
+      ).send(res);
     }
-    credential = await Credential.create(req.body);
-    const data = {
-      success: true,
-      message: "Credential Added!",
+    credential = await Credential.create({ ...req.body, role: type });
+    return ApiResponse.created(
       credential,
-    };
-    res.json(data);
+      "Credential added successfully"
+    ).send(res);
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ success: false, message: "Internal Server Error" });
+    console.error(error);
+    return ApiResponse.internalServerError().send(res);
   }
 };
 
-const updateCredential = async (req, res) => {
+const updateCredentialController = async (req, res) => {
   try {
     const { type } = req.params;
     let credential = await Credential.findByIdAndUpdate(
@@ -56,48 +33,31 @@ const updateCredential = async (req, res) => {
       { new: true }
     );
     if (!credential) {
-      return res.status(400).json({
-        success: false,
-        message: "No Credential Found",
-      });
+      return ApiResponse.notFound("No credential found").send(res);
     }
-    const data = {
-      success: true,
-      message: "Updated Successfully!",
-    };
-    res.json(data);
+    return ApiResponse.success(credential, "Updated successfully").send(res);
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ success: false, message: "Internal Server Error" });
+    console.error(error);
+    return ApiResponse.internalServerError().send(res);
   }
 };
 
-const deleteCredential = async (req, res) => {
+const deleteCredentialController = async (req, res) => {
   try {
     const { type } = req.params;
-    let credential = await Credential.findByIdAndDelete(req.params.id, {
-      role: type,
-    });
-    if (!credential) {
-      return res.status(400).json({
-        success: false,
-        message: "No Credential Found",
-      });
+    let credential = await Credential.findByIdAndDelete(req.params.id);
+    if (!credential || credential.role !== type) {
+      return ApiResponse.notFound("No credential found").send(res);
     }
-    const data = {
-      success: true,
-      message: "Deleted Successfully!",
-    };
-    res.json(data);
+    return ApiResponse.success(null, "Deleted successfully").send(res);
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ success: false, message: "Internal Server Error" });
+    console.error(error);
+    return ApiResponse.internalServerError().send(res);
   }
 };
 
 module.exports = {
-  getCredentials,
-  addCredential,
-  updateCredential,
-  deleteCredential,
+  addCredentialController,
+  updateCredentialController,
+  deleteCredentialController,
 };
