@@ -1,4 +1,4 @@
-const Branch = require("../models/branch.model.js");
+const Branch = require("../models/branch.model");
 const ApiResponse = require("../utils/ApiResponse");
 
 const getBranchController = async (req, res, next) => {

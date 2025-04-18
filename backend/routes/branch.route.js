@@ -5,7 +5,7 @@ const {
   addBranchController,
   updateBranchController,
   deleteBranchController,
-} = require("../controllers/branch.controller.js");
+} = require("../controllers/branch.controller");
 
 router.get("/", getBranchController);
 router.post("/", addBranchController);

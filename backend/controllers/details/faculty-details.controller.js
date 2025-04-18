@@ -1,4 +1,4 @@
-const facultyDetails = require("../models/Faculty/details.model.js");
+const facultyDetails = require("../models/Faculty/details.model");
 
 const getDetails = async (req, res) => {
   try {

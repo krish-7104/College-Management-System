@@ -5,8 +5,8 @@ const {
   addDetails,
   updateDetails,
   deleteDetails,
-} = require("../../controllers/Admin/details.controller.js");
-const upload = require("../../middlewares/multer.middleware.js");
+} = require("../../controllers/Admin/details.controller");
+const upload = require("../../middlewares/multer.middleware");
 router.post("/getDetails", getDetails);
 
 router.post("/addDetails", upload.single("profile"), addDetails);

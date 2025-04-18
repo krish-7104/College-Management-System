@@ -1,4 +1,4 @@
-const Credential = require("../models/credential.model.js");
+const Credential = require("../models/credential.model");
 
 const getCredentials = async (req, res) => {
   try {

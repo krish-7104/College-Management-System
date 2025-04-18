@@ -5,8 +5,8 @@ const {
   addMaterial,
   updateMaterial,
   deleteMaterial,
-} = require("../controllers/Other/material.controller.js");
-const upload = require("../middlewares/multer.middleware.js");
+} = require("../controllers/Other/material.controller");
+const upload = require("../middlewares/multer.middleware");
 
 router.post("/getMaterial", getMaterial);
 router.post("/addMaterial", upload.single("material"), addMaterial);

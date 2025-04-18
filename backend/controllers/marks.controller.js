@@ -1,4 +1,4 @@
-const Marks = require("../../models/marks.model.js");
+const Marks = require("../../models/marks.model");
 
 const getMarks = async (req, res) => {
   try {

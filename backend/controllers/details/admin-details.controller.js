@@ -1,5 +1,5 @@
-const adminDetails = require("../../models/details/admin-details.model.js");
-const Credential = require("../../models/credential.model.js");
+const adminDetails = require("../../models/details/admin-details.model");
+const Credential = require("../../models/credential.model");
 const bcrypt = require("bcryptjs");
 
 const getDetails = async (req, res) => {

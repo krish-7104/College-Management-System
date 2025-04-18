@@ -5,7 +5,7 @@ const {
   addCredential,
   updateCredential,
   deleteCredential,
-} = require("../controllers/credential.controller.js");
+} = require("../controllers/credential.controller");
 
 router.get("/:type", getCredentials);
 router.post("/:type", addCredential);

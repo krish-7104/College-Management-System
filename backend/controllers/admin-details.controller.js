@@ -1,5 +1,5 @@
-const adminDetails = require("../models/admin-details.model.js");
-const Credential = require("../models/credential.model.js");
+const adminDetails = require("../models/admin-details.model");
+const Credential = require("../models/credential.model");
 const bcrypt = require("bcryptjs");
 const ApiResponse = require("../utils/ApiResponse");
 const ApiError = require("../utils/ApiError");
