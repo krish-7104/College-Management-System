@@ -1,18 +1,22 @@
 const express = require("express");
 const router = express.Router();
 const {
-  getDetailsController,
-  getDetailsByIdController,
-  addDetailsController,
+  getAllDetailsController,
+  registerAdminController,
   updateDetailsController,
   deleteDetailsController,
-} = require("../../controllers/admin-details.controller");
+  loginAdminController,
+  getMyDetailsController,
+} = require("../../controllers/details/admin-details.controller");
 const upload = require("../../middlewares/multer.middleware");
+const auth = require("../../middlewares/auth.middleware");
 
-router.get("/", getDetailsController);
-router.get("/:id", getDetailsByIdController);
-router.post("/", upload.single("file"), addDetailsController);
-router.put("/:id", upload.single("file"), updateDetailsController);
-router.delete("/:id", deleteDetailsController);
+router.post("/register", upload.single("file"), registerAdminController);
+router.post("/login", loginAdminController);
+router.get("/my-details", auth, getMyDetailsController);
+
+router.get("/", auth, getAllDetailsController);
+router.put("/:id", auth, upload.single("file"), updateDetailsController);
+router.delete("/:id", auth, deleteDetailsController);
 
 module.exports = router;

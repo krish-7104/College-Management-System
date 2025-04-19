@@ -1,12 +1,7 @@
 const mongoose = require("mongoose");
-
-const adminDetails = new mongoose.Schema(
+const bcrypt = require("bcryptjs");
+const adminDetailsSchema = new mongoose.Schema(
   {
-    credential: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Credential",
-      required: true,
-    },
     employeeId: {
       type: Number,
       required: true,
@@ -59,10 +54,6 @@ const adminDetails = new mongoose.Schema(
       type: Date,
       required: true,
     },
-    department: {
-      type: String,
-      required: true,
-    },
     designation: {
       type: String,
       required: true,
@@ -93,8 +84,26 @@ const adminDetails = new mongoose.Schema(
       type: String,
       enum: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
     },
+    password: {
+      type: String,
+      required: true,
+    },
+    branch: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Branch",
+      required: true,
+    },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("AdminDetail", adminDetails);
+adminDetailsSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) {
+    next();
+  }
+  this.password = await bcrypt.hash(this.password, 10);
+});
+
+const adminDetails = mongoose.model("AdminDetail", adminDetailsSchema);
+
+module.exports = adminDetails;

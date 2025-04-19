@@ -7,7 +7,7 @@ const Navbar = () => {
   const router = useLocation();
   const navigate = useNavigate();
   return (
-    <div className="shadow-md px-6 py-4">
+    <div className="shadow-md px-6 py-4 mb-6">
       <div className="max-w-6xl flex justify-between items-center mx-auto">
         <p
           className="font-semibold text-2xl flex justify-center items-center cursor-pointer"

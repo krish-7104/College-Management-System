@@ -20,11 +20,11 @@ app.get("/", (req, res) => {
 
 app.use("/media", express.static(path.join(__dirname, "media")));
 
-app.use("/api/auth/credential", require("./routes/credential.route"));
-app.use("/api/admin/details", require("./routes/details/admin-details.route"));
+app.use("/api/admin", require("./routes/details/admin-details.route"));
 
 app.use("/api/branch", require("./routes/branch.route"));
 app.use("/api/subject", require("./routes/subject.route"));
+app.use("/api/notice", require("./routes/notice.route"));
 
 app.listen(port, () => {
   console.log(`Server Listening On http://localhost:${port}`);

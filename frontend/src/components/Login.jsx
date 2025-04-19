@@ -1,27 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { FiLogIn } from "react-icons/fi";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { baseApiURL } from "../baseUrl";
+import { setUserToken } from "../redux/actions";
+import { useDispatch, useSelector } from "react-redux";
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const userToken = localStorage.getItem("userToken");
+  useEffect(() => {
+    if (userToken) {
+      navigate(`/${selected.toLowerCase()}`);
+    }
+  }, [userToken]);
+
   const [selected, setSelected] = useState("Student");
   const { register, handleSubmit } = useForm();
   const onSubmit = (data) => {
-    if (data.login !== "" && data.password !== "") {
+    if (data.email !== "" && data.password !== "") {
       const headers = {
         "Content-Type": "application/json",
       };
       axios
-        .post(`${baseApiURL()}/${selected.toLowerCase()}/auth/login`, data, {
+        .post(`${baseApiURL()}/${selected.toLowerCase()}/login`, data, {
           headers: headers,
         })
         .then((response) => {
-          navigate(`/${selected.toLowerCase()}`, {
-            state: { type: selected, loginid: response.data.loginid },
-          });
+          localStorage.setItem("userToken", response.data.data.token);
+          dispatch(setUserToken(response.data.data.token));
+          navigate(`/${selected.toLowerCase()}`);
         })
         .catch((error) => {
           toast.dismiss();
@@ -47,15 +57,15 @@ const Login = () => {
           onSubmit={handleSubmit(onSubmit)}
         >
           <div className="flex flex-col w-[70%]">
-            <label className="mb-1" htmlFor="eno">
-              {selected && selected} Login ID
+            <label className="mb-1" htmlFor="email">
+              {selected && selected} Email
             </label>
             <input
-              type="number"
-              id="eno"
+              type="email"
+              id="email"
               required
               className="bg-white outline-none border-2 border-gray-400 py-2 px-4 rounded-md w-full focus:border-blue-500"
-              {...register("loginid")}
+              {...register("email")}
             />
           </div>
           <div className="flex flex-col w-[70%] mt-3">
@@ -70,10 +80,6 @@ const Login = () => {
               {...register("password")}
             />
           </div>
-          {/* <div className="flex w-[70%] mt-3 justify-start items-center">
-            <input type="checkbox" id="remember" className="accent-blue-500" />{" "}
-            Remember Me
-          </div> */}
           <button className="bg-blue-500 mt-5 text-white px-6 py-2 text-xl rounded-md hover:bg-blue-700 ease-linear duration-300 hover:ease-linear hover:duration-300 hover:transition-all transition-all flex justify-center items-center">
             Login
             <span className="ml-2">

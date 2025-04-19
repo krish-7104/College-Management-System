@@ -1,20 +1,25 @@
 const mongoose = require("mongoose");
 
-const Notice = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true,
+const Notice = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+      required: true,
+    },
+    type: {
+      type: String,
+      enum: ["student", "faculty", "both"],
+      required: true,
+    },
+    link: {
+      type: String,
+    },
   },
-  description: {
-    type: String,
-    required: true,
-  },
-  type: {
-    type: String,
-  },
-  link: {
-    type: String,
-  }
-}, { timestamps: true });
+  { timestamps: true }
+);
 
 module.exports = mongoose.model("Notice", Notice);

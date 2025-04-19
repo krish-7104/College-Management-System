@@ -1,16 +1,16 @@
-import { USER_DATA, USER_LOGIN_ID } from "./action";
+import { USER_DATA, USER_TOKEN } from "./action";
 
 let initialState = {
   userData: {},
-  userLoginId: "",
+  userToken: "",
 };
 
 export const reducers = (state = initialState, action) => {
   switch (action.type) {
     case USER_DATA:
       return { ...state, userData: action.payload };
-    case USER_LOGIN_ID:
-      return { ...state, userLoginId: action.payload };
+    case USER_TOKEN:
+      return { ...state, userToken: action.payload };
     default:
       return state;
   }

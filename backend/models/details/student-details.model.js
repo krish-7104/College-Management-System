@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
-
-const studentDetails = new mongoose.Schema(
+const bcrypt = require("bcryptjs");
+const studentDetailsSchema = new mongoose.Schema(
   {
     enrollmentNo: {
       type: Number,
@@ -42,8 +42,21 @@ const studentDetails = new mongoose.Schema(
       type: String,
       required: true,
     },
+    password: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("StudentDetail", studentDetails);
+studentDetailsSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) {
+    next();
+  }
+  this.password = await bcrypt.hash(this.password, 10);
+});
+
+const studentDetails = mongoose.model("StudentDetail", studentDetailsSchema);
+
+module.exports = studentDetails;

@@ -1,85 +1,110 @@
-const Notice = require("../../models/notice.model");
+const Notice = require("../models/notice.model");
+const ApiResponse = require("../utils/ApiResponse");
 
-const getNotice = async (req, res) => {
+const getNoticeController = async (req, res, next) => {
   try {
-    let notice = await Notice.find(req.body);
-    if (notice) {
-      res.json({ success: true, message: "Notice Get Successfully", notice });
-    } else {
-      res.status(404).json({ success: false, message: "No Notice Available!" });
+    const notices = await Notice.find().sort({ createdAt: -1 });
+
+    if (!notices || notices.length === 0) {
+      return ApiResponse.notFound("No notices found").send(res);
     }
+
+    return ApiResponse.success(notices, "Notices retrieved successfully").send(
+      res
+    );
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ success: false, message: "Internal Server Error" });
+    console.error("Get Notice Error: ", error);
+    return ApiResponse.internalServerError().send(res);
   }
 };
 
-const addNotice = async (req, res) => {
-  let { link, description, title, type } = req.body;
+const addNoticeController = async (req, res, next) => {
   try {
-    let notice = await Notice.findOne({ link, description, title, type });
-    if (notice) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Notice Already Exists!" });
+    const { title, description, type, link } = req.body;
+
+    if (!title || !description || !type) {
+      return ApiResponse.badRequest(
+        "Title, description and type are required"
+      ).send(res);
     }
-    await Notice.create({
-      link,
-      description,
+
+    if (!["student", "faculty", "both"].includes(type)) {
+      return ApiResponse.badRequest("Invalid notice type").send(res);
+    }
+
+    const notice = await Notice.create({
       title,
-      type,
-    });
-    const data = {
-      success: true,
-      message: "Notice Added Successfully",
-    };
-    res.json(data);
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ success: false, message: "Internal Server Error" });
-  }
-};
-
-const updateNotice = async (req, res) => {
-  let { link, description, title, type } = req.body;
-  try {
-    let notice = await Notice.findByIdAndUpdate(req.params.id, {
-      link,
       description,
-      title,
       type,
+      link: link || null,
     });
-    if (!notice) {
-      return res
-        .status(400)
-        .json({ success: false, message: "No Notice Available!" });
-    }
-    res.json({
-      success: true,
-      message: "Notice Updated Successfully",
-    });
+
+    return ApiResponse.created(notice, "Notice created successfully").send(res);
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ success: false, message: "Internal Server Error" });
+    console.error("Add Notice Error: ", error);
+    return ApiResponse.internalServerError().send(res);
   }
 };
 
-const deleteNotice = async (req, res) => {
+const updateNoticeController = async (req, res, next) => {
   try {
-    let notice = await Notice.findByIdAndDelete(req.params.id);
-    if (!notice) {
-      return res
-        .status(400)
-        .json({ success: false, message: "No Notice Available!" });
+    const { id } = req.params;
+    const { title, description, type, link } = req.body;
+
+    if (!id) {
+      return ApiResponse.badRequest("Notice ID is required").send(res);
     }
-    res.json({
-      success: true,
-      message: "Notice Deleted Successfully",
-    });
+
+    if (type && !["student", "faculty", "both"].includes(type)) {
+      return ApiResponse.badRequest("Invalid notice type").send(res);
+    }
+
+    const notice = await Notice.findByIdAndUpdate(
+      id,
+      {
+        title,
+        description,
+        type,
+        link,
+      },
+      { new: true }
+    );
+
+    if (!notice) {
+      return ApiResponse.notFound("Notice not found").send(res);
+    }
+
+    return ApiResponse.success(notice, "Notice updated successfully").send(res);
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ success: false, message: "Internal Server Error" });
+    console.error("Update Notice Error: ", error);
+    return ApiResponse.internalServerError().send(res);
   }
 };
 
-module.exports = { getNotice, addNotice, updateNotice, deleteNotice };
+const deleteNoticeController = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      return ApiResponse.badRequest("Notice ID is required").send(res);
+    }
+
+    const notice = await Notice.findByIdAndDelete(id);
+
+    if (!notice) {
+      return ApiResponse.notFound("Notice not found").send(res);
+    }
+
+    return ApiResponse.success(null, "Notice deleted successfully").send(res);
+  } catch (error) {
+    console.error("Delete Notice Error: ", error);
+    return ApiResponse.internalServerError().send(res);
+  }
+};
+
+module.exports = {
+  getNoticeController,
+  addNoticeController,
+  updateNoticeController,
+  deleteNoticeController,
+};

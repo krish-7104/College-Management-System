@@ -1,15 +1,16 @@
 const express = require("express");
 const {
-  getNotice,
-  addNotice,
-  updateNotice,
-  deleteNotice,
-} = require("../controllers/Other/notice.controller");
+  getNoticeController,
+  addNoticeController,
+  updateNoticeController,
+  deleteNoticeController,
+} = require("../controllers/notice.controller");
+const auth = require("../middlewares/auth.middleware");
 const router = express.Router();
 
-router.get("/getNotice", getNotice);
-router.post("/addNotice", addNotice);
-router.put("/updateNotice/:id", updateNotice);
-router.delete("/deleteNotice/:id", deleteNotice);
+router.get("/", auth, getNoticeController);
+router.post("/", auth, addNoticeController);
+router.put("/:id", auth, updateNoticeController);
+router.delete("/:id", auth, deleteNoticeController);
 
 module.exports = router;
