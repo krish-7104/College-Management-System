@@ -1,9 +1,8 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { MdOutlineDelete, MdEdit } from "react-icons/md";
 import { IoMdAdd, IoMdClose } from "react-icons/io";
-import { baseApiURL } from "../../baseUrl";
+import axiosWrapper from "../../utils/AxiosWrapper";
 import Heading from "../../components/Heading";
 import DeleteConfirm from "../../components/DeleteConfirm";
 
@@ -24,7 +23,7 @@ const Branch = () => {
 
   const getBranchHandler = async () => {
     try {
-      const response = await axios.get(`${baseApiURL()}/branch`);
+      const response = await axiosWrapper.get(`/branch`);
       if (response.data.success) {
         setBranch(response.data.data);
       } else {
@@ -44,15 +43,15 @@ const Branch = () => {
       };
       let response;
       if (isEditing) {
-        response = await axios.patch(
-          `${baseApiURL()}/branch/${selectedBranchId}`,
+        response = await axiosWrapper.patch(
+          `/branch/${selectedBranchId}`,
           data,
           {
             headers: headers,
           }
         );
       } else {
-        response = await axios.post(`${baseApiURL()}/branch`, data, {
+        response = await axiosWrapper.post(`/branch`, data, {
           headers: headers,
         });
       }
@@ -94,8 +93,8 @@ const Branch = () => {
       const headers = {
         "Content-Type": "application/json",
       };
-      const response = await axios.delete(
-        `${baseApiURL()}/branch/${selectedBranchId}`,
+      const response = await axiosWrapper.delete(
+        `/branch/${selectedBranchId}`,
         {
           headers: headers,
         }
@@ -172,29 +171,30 @@ const Branch = () => {
 
       {!showAddForm && (
         <div className="mt-8 w-full">
-          <table className="min-w-full bg-white">
+          <table className="text-sm min-w-full bg-white">
             <thead>
               <tr className="bg-blue-500 text-white">
-                <th className="py-3 px-6 text-left font-semibold">
+                <th className="py-4 px-6 text-left font-semibold">
                   Branch Name
                 </th>
-                <th className="py-3 px-6 text-left font-semibold">Branch ID</th>
-                <th className="py-3 px-6 text-left font-semibold">
+                <th className="py-4 px-6 text-left font-semibold">Branch ID</th>
+                <th className="py-4 px-6 text-left font-semibold">
                   Created At
                 </th>
-                <th className="py-3 px-6 text-center font-semibold">Actions</th>
+                <th className="py-4 px-6 text-center font-semibold">Actions</th>
               </tr>
             </thead>
             <tbody>
+              {" "}
               {branch &&
                 branch.map((item, index) => (
                   <tr key={index} className="border-b hover:bg-blue-50">
-                    <td className="py-3 px-6">{item.name}</td>
-                    <td className="py-3 px-6">{item.branchId}</td>
-                    <td className="py-3 px-6">
+                    <td className="py-4 px-6">{item.name}</td>
+                    <td className="py-4 px-6">{item.branchId}</td>
+                    <td className="py-4 px-6">
                       {new Date(item.createdAt).toLocaleDateString()}
                     </td>
-                    <td className="py-3 px-6 text-center flex justify-center gap-4">
+                    <td className="py-4 px-6 text-center flex justify-center gap-4">
                       <button
                         className="text-xl hover:text-blue-500"
                         onClick={() => editBranchHandler(item)}

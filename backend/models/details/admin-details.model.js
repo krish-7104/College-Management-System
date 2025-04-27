@@ -88,11 +88,6 @@ const adminDetailsSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    branch: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Branch",
-      required: true,
-    },
   },
   { timestamps: true }
 );

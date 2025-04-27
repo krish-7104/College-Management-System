@@ -172,31 +172,32 @@ const Student = () => {
 
       {!showAddForm && (
         <div className="mt-8 w-full">
-          <table className="min-w-full bg-white">
+          <table className="text-sm min-w-full bg-white">
             <thead>
               <tr className="bg-blue-500 text-white">
-                <th className="py-3 px-6 text-left font-semibold">
+                <th className="py-4 px-6 text-left font-semibold">
                   Student Name
                 </th>
-                <th className="py-3 px-6 text-left font-semibold">
+                <th className="py-4 px-6 text-left font-semibold">
                   Student ID
                 </th>
-                <th className="py-3 px-6 text-left font-semibold">
+                <th className="py-4 px-6 text-left font-semibold">
                   Created At
                 </th>
-                <th className="py-3 px-6 text-center font-semibold">Actions</th>
+                <th className="py-4 px-6 text-center font-semibold">Actions</th>
               </tr>
             </thead>
             <tbody>
+              {" "}
               {student &&
                 student.map((item, index) => (
                   <tr key={index} className="border-b hover:bg-blue-50">
-                    <td className="py-3 px-6">{item.name}</td>
-                    <td className="py-3 px-6">{item.studentId}</td>
-                    <td className="py-3 px-6">
+                    <td className="py-4 px-6">{item.name}</td>
+                    <td className="py-4 px-6">{item.studentId}</td>
+                    <td className="py-4 px-6">
                       {new Date(item.createdAt).toLocaleDateString()}
                     </td>
-                    <td className="py-3 px-6 text-center flex justify-center gap-4">
+                    <td className="py-4 px-6 text-center flex justify-center gap-4">
                       <button
                         className="text-xl hover:text-blue-500"
                         onClick={() => editStudentHandler(item)}

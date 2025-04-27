@@ -1,11 +1,10 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { MdOutlineDelete, MdEdit } from "react-icons/md";
 import { IoMdAdd, IoMdClose } from "react-icons/io";
-import { baseApiURL } from "../../baseUrl";
 import Heading from "../../components/Heading";
 import DeleteConfirm from "../../components/DeleteConfirm";
+import axiosWrapper from "../../utils/AxiosWrapper";
 
 const Subject = () => {
   const [data, setData] = useState({
@@ -27,7 +26,7 @@ const Subject = () => {
 
   const getSubjectHandler = async () => {
     try {
-      const response = await axios.get(`${baseApiURL()}/subject`);
+      const response = await axiosWrapper.get(`/subject`);
       if (response.data.success) {
         setSubject(response.data.data);
       } else {
@@ -47,15 +46,15 @@ const Subject = () => {
       };
       let response;
       if (isEditing) {
-        response = await axios.patch(
-          `${baseApiURL()}/subject/${selectedSubjectId}`,
+        response = await axiosWrapper.patch(
+          `/subject/${selectedSubjectId}`,
           data,
           {
             headers: headers,
           }
         );
       } else {
-        response = await axios.post(`${baseApiURL()}/subject`, data, {
+        response = await axiosWrapper.post(`/subject`, data, {
           headers: headers,
         });
       }
@@ -100,8 +99,8 @@ const Subject = () => {
       const headers = {
         "Content-Type": "application/json",
       };
-      const response = await axios.delete(
-        `${baseApiURL()}/subject/${selectedSubjectId}`,
+      const response = await axiosWrapper.delete(
+        `/subject/${selectedSubjectId}`,
         {
           headers: headers,
         }
@@ -220,27 +219,28 @@ const Subject = () => {
 
       {!showAddForm && (
         <div className="mt-8 w-full">
-          <table className="min-w-full bg-white">
+          <table className="text-sm min-w-full bg-white">
             <thead>
               <tr className="bg-blue-500 text-white">
-                <th className="py-3 px-6 text-left font-semibold">Name</th>
-                <th className="py-3 px-6 text-left font-semibold">Code</th>
-                <th className="py-3 px-6 text-left font-semibold">Branch</th>
-                <th className="py-3 px-6 text-left font-semibold">Semester</th>
-                <th className="py-3 px-6 text-left font-semibold">Credits</th>
-                <th className="py-3 px-6 text-center font-semibold">Actions</th>
+                <th className="py-4 px-6 text-left font-semibold">Name</th>
+                <th className="py-4 px-6 text-left font-semibold">Code</th>
+                <th className="py-4 px-6 text-left font-semibold">Branch</th>
+                <th className="py-4 px-6 text-left font-semibold">Semester</th>
+                <th className="py-4 px-6 text-left font-semibold">Credits</th>
+                <th className="py-4 px-6 text-center font-semibold">Actions</th>
               </tr>
             </thead>
             <tbody>
+              {" "}
               {subject &&
                 subject.map((item, index) => (
                   <tr key={index} className="border-b hover:bg-blue-50">
-                    <td className="py-3 px-6">{item.name}</td>
-                    <td className="py-3 px-6">{item.code}</td>
-                    <td className="py-3 px-6">{item.branch?.name}</td>
-                    <td className="py-3 px-6">{item.semester}</td>
-                    <td className="py-3 px-6">{item.credits}</td>
-                    <td className="py-3 px-6 text-center flex justify-center gap-4">
+                    <td className="py-4 px-6">{item.name}</td>
+                    <td className="py-4 px-6">{item.code}</td>
+                    <td className="py-4 px-6">{item.branch?.name}</td>
+                    <td className="py-4 px-6">{item.semester}</td>
+                    <td className="py-4 px-6">{item.credits}</td>
+                    <td className="py-4 px-6 text-center flex justify-center gap-4">
                       <button
                         className="text-xl hover:text-blue-500"
                         onClick={() => editSubjectHandler(item)}

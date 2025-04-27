@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import Heading from "./Heading";
-import axios from "axios";
+import axiosWrapper from "../utils/AxiosWrapper";
 import { IoMdLink } from "react-icons/io";
 import { HiOutlineCalendar } from "react-icons/hi";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -9,7 +9,6 @@ import { IoAddOutline } from "react-icons/io5";
 import { MdDeleteOutline, MdEditNote } from "react-icons/md";
 import { BiArrowBack } from "react-icons/bi";
 import toast from "react-hot-toast";
-import { baseApiURL } from "../baseUrl";
 
 const Notice = () => {
   const router = useLocation();
@@ -40,7 +39,7 @@ const Notice = () => {
         Authorization: `Bearer ${token}`,
       };
 
-      const response = await axios.get(`${baseApiURL()}/notice`, {
+      const response = await axiosWrapper.get(`/notice`, {
         headers: headers,
       });
 
@@ -64,7 +63,7 @@ const Notice = () => {
     try {
       toast.loading("Adding Notice");
 
-      const response = await axios.post(`${baseApiURL()}/notice`, data, {
+      const response = await axiosWrapper.post(`/notice`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -92,7 +91,7 @@ const Notice = () => {
         Authorization: `Bearer ${token}`,
       };
 
-      const response = await axios.delete(`${baseApiURL()}/notice/${id}`, {
+      const response = await axiosWrapper.delete(`/notice/${id}`, {
         headers: headers,
       });
 
@@ -117,7 +116,7 @@ const Notice = () => {
         Authorization: `Bearer ${token}`,
       };
 
-      const response = await axios.put(`${baseApiURL()}/notice/${id}`, data, {
+      const response = await axiosWrapper.put(`/notice/${id}`, data, {
         headers: headers,
       });
 

@@ -3,7 +3,7 @@ import React from "react";
 const ProfileCard = ({ profile, name, details }) => {
   return (
     <div className="">
-      <div className="max-w-6xl flex justify-between items-center mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
+      <div className="max-w-7xl flex justify-between items-center mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
         <div className="p-8 flex">
           <div className="flex-shrink-0">
             <img

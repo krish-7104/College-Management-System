@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import { toast, Toaster } from "react-hot-toast";
-import axios from "axios";
 import Notice from "../../components/Notice";
 import Student from "./Student";
 import Faculty from "./Faculty";
 import Subjects from "./Subject";
-import { baseApiURL } from "../../baseUrl";
 import Admin from "./Admin";
 import Branch from "./Branch";
 import ProfileCard from "../../components/ProfileCard";
 import { useDispatch } from "react-redux";
 import { setUserData } from "../../redux/actions";
-
+import axiosWrapper from "../../utils/AxiosWrapper";
 const MENU_ITEMS = [
   { id: "home", label: "Home", component: null },
   { id: "student", label: "Student", component: Student },
@@ -20,7 +18,7 @@ const MENU_ITEMS = [
   { id: "branch", label: "Branch", component: Branch },
   { id: "notice", label: "Notice", component: Notice },
   { id: "subjects", label: "Subjects", component: Subjects },
-  { id: "admin", label: "Admins", component: Admin },
+  { id: "admin", label: "Admin", component: Admin },
 ];
 
 const Home = () => {
@@ -33,7 +31,7 @@ const Home = () => {
   const fetchUserDetails = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get(`${baseApiURL()}/admin/my-details`, {
+      const response = await axiosWrapper.get(`/admin/my-details`, {
         headers: {
           Authorization: `Bearer ${userToken}`,
         },
@@ -107,7 +105,7 @@ const Home = () => {
   return (
     <>
       <Navbar />
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         <ul className="flex justify-evenly items-center gap-10 w-full mx-auto my-8">
           {MENU_ITEMS.map((item) => (
             <li

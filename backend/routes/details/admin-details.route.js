@@ -7,6 +7,8 @@ const {
   deleteDetailsController,
   loginAdminController,
   getMyDetailsController,
+  sendForgetPasswordEmail,
+  updatePasswordHandler,
 } = require("../../controllers/details/admin-details.controller");
 const upload = require("../../middlewares/multer.middleware");
 const auth = require("../../middlewares/auth.middleware");
@@ -16,7 +18,9 @@ router.post("/login", loginAdminController);
 router.get("/my-details", auth, getMyDetailsController);
 
 router.get("/", auth, getAllDetailsController);
-router.put("/:id", auth, upload.single("file"), updateDetailsController);
+router.patch("/:id", auth, upload.single("file"), updateDetailsController);
 router.delete("/:id", auth, deleteDetailsController);
+router.post("/forget-password", sendForgetPasswordEmail);
+router.post("/update-password/:resetId", updatePasswordHandler);
 
 module.exports = router;

@@ -25,7 +25,7 @@ const Home = () => {
       {load && (
         <>
           <Navbar />
-          <div className="max-w-6xl mx-auto">
+          <div className="max-w-7xl mx-auto">
             <ul className="flex justify-evenly items-center gap-10 w-full mx-auto my-8">
               <li
                 className={`text-center rounded-sm px-4 py-2 w-1/5 cursor-pointer ease-linear duration-300 hover:ease-linear hover:duration-300 hover:transition-all transition-all ${

@@ -2,18 +2,18 @@ import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { FiLogIn } from "react-icons/fi";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { baseApiURL } from "../baseUrl";
 import { setUserToken } from "../redux/actions";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userToken = localStorage.getItem("userToken");
   useEffect(() => {
     if (userToken) {
-      navigate(`/${selected.toLowerCase()}`);
+      navigate(`/${localStorage.getItem("userType")}`);
     }
   }, [userToken]);
 
@@ -30,6 +30,7 @@ const Login = () => {
         })
         .then((response) => {
           localStorage.setItem("userToken", response.data.data.token);
+          localStorage.setItem("userType", selected.toLowerCase());
           dispatch(setUserToken(response.data.data.token));
           navigate(`/${selected.toLowerCase()}`);
         })
@@ -80,7 +81,10 @@ const Login = () => {
               {...register("password")}
             />
           </div>
-          <button className="bg-blue-500 mt-5 text-white px-6 py-2 text-xl rounded-md hover:bg-blue-700 ease-linear duration-300 hover:ease-linear hover:duration-300 hover:transition-all transition-all flex justify-center items-center">
+          <Link className="text-right mt-3 w-[70%]" to={"/forget-password"}>
+            Forget Password?
+          </Link>
+          <button className="bg-blue-500 mt-3 text-white px-6 py-2 text-xl rounded-md hover:bg-blue-700 ease-linear duration-300 hover:ease-linear hover:duration-300 hover:transition-all transition-all flex justify-center items-center">
             Login
             <span className="ml-2">
               <FiLogIn />
