@@ -1,4 +1,4 @@
-const connectToMongo = require("./Database/db");
+const connectToMongo = require("./database/db");
 const express = require("express");
 const app = express();
 const path = require("path");
@@ -21,6 +21,8 @@ app.get("/", (req, res) => {
 app.use("/media", express.static(path.join(__dirname, "media")));
 
 app.use("/api/admin", require("./routes/details/admin-details.route"));
+app.use("/api/faculty", require("./routes/details/faculty-details.route"));
+app.use("/api/student", require("./routes/details/student-details.route"));
 
 app.use("/api/branch", require("./routes/branch.route"));
 app.use("/api/subject", require("./routes/subject.route"));

@@ -81,6 +81,7 @@ const registerAdminController = async (req, res, next) => {
       ...req.body,
       employeeId,
       profile,
+      password: "admin123",
     });
 
     const sanitizedUser = await adminDetails

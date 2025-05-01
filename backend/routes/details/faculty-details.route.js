@@ -1,22 +1,26 @@
 const express = require("express");
 const router = express.Router();
 const {
-  getDetails,
-  addDetails,
-  updateDetails,
-  deleteDetails,
-  getCount,
-} = require("../../controllers/Faculty/details.controller");
+  loginFacultyController,
+  registerFacultyController,
+  updateFacultyController,
+  deleteFacultyController,
+  getAllFacultyController,
+  getMyFacultyDetailsController,
+  sendFacultyResetPasswordEmail,
+  updateFacultyPasswordHandler,
+} = require("../../controllers/details/faculty-details.controller");
 const upload = require("../../middlewares/multer.middleware");
+const auth = require("../../middlewares/auth.middleware");
 
-router.post("/getDetails", getDetails);
+router.post("/register", upload.single("file"), registerFacultyController);
+router.post("/login", loginFacultyController);
+router.get("/my-details", auth, getMyFacultyDetailsController);
 
-router.post("/addDetails", upload.single("profile"), addDetails);
-
-router.put("/updateDetails/:id", upload.single("profile"), updateDetails);
-
-router.delete("/deleteDetails/:id", deleteDetails);
-
-router.get("/count", getCount);
+router.get("/", auth, getAllFacultyController);
+router.patch("/:id", auth, upload.single("file"), updateFacultyController);
+router.delete("/:id", auth, deleteFacultyController);
+router.post("/forget-password", sendFacultyResetPasswordEmail);
+router.post("/update-password/:resetId", updateFacultyPasswordHandler);
 
 module.exports = router;

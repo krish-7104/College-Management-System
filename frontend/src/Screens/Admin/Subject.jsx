@@ -15,6 +15,7 @@ const Subject = () => {
     credits: "",
   });
   const [subject, setSubject] = useState();
+  const [branch, setBranches] = useState([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const [selectedSubjectId, setSelectedSubjectId] = useState(null);
@@ -22,6 +23,7 @@ const Subject = () => {
 
   useEffect(() => {
     getSubjectHandler();
+    getBranchHandler();
   }, []);
 
   const getSubjectHandler = async () => {
@@ -29,6 +31,20 @@ const Subject = () => {
       const response = await axiosWrapper.get(`/subject`);
       if (response.data.success) {
         setSubject(response.data.data);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(error.response?.data?.message || "Error fetching subjects");
+    }
+  };
+
+  const getBranchHandler = async () => {
+    try {
+      const response = await axiosWrapper.get(`/branch`);
+      if (response.data.success) {
+        setBranches(response.data.data);
       } else {
         toast.error(response.data.message);
       }
@@ -174,27 +190,40 @@ const Subject = () => {
           </div>
           <div className="w-[40%] mt-4">
             <label htmlFor="branch" className="leading-7 text-sm">
-              Enter Branch
+              Select Branch
             </label>
-            <input
-              type="text"
-              id="branch"
-              value={data.branch}
+            <select
+              className="w-full bg-blue-50 rounded border focus:border-dark-green focus:bg-secondary-light focus:ring-2 focus:ring-light-green text-base outline-none py-2 px-3 leading-8 transition-colors duration-200 ease-in-out"
               onChange={(e) => setData({ ...data, branch: e.target.value })}
-              className="w-full bg-blue-50 rounded border focus:border-dark-green focus:bg-secondary-light focus:ring-2 focus:ring-light-green text-base outline-none py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-            />
+              value={data.branch}
+            >
+              <option value="">Select Branch</option>
+              {branch.map((item) => (
+                <option key={item._id} value={item._id}>
+                  {item.name}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="w-[40%] mt-4">
             <label htmlFor="semester" className="leading-7 text-sm">
               Enter Semester
             </label>
-            <input
-              type="number"
-              id="semester"
-              value={data.semester}
+            <select
+              className="w-full bg-blue-50 rounded border focus:border-dark-green focus:bg-secondary-light focus:ring-2 focus:ring-light-green text-base outline-none py-2 px-3 leading-8 transition-colors duration-200 ease-in-out"
               onChange={(e) => setData({ ...data, semester: e.target.value })}
-              className="w-full bg-blue-50 rounded border focus:border-dark-green focus:bg-secondary-light focus:ring-2 focus:ring-light-green text-base outline-none py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-            />
+              value={data.semester}
+            >
+              <option value="">Select Semester</option>
+              <option value="1">1st Semester</option>
+              <option value="2">2nd Semester</option>
+              <option value="3">3rd Semester</option>
+              <option value="4">4th Semester</option>
+              <option value="5">5th Semester</option>
+              <option value="6">6th Semester</option>
+              <option value="7">7th Semester</option>
+              <option value="8">8th Semester</option>
+            </select>
           </div>
           <div className="w-[40%] mt-4">
             <label htmlFor="credits" className="leading-7 text-sm">

@@ -22,25 +22,64 @@ const studentDetailsSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    phoneNumber: {
-      type: Number,
+    phone: {
+      type: String,
       required: true,
     },
     semester: {
       type: Number,
       required: true,
     },
-    branch: {
-      type: String,
+    branchId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Branch",
       required: true,
     },
     gender: {
       type: String,
       required: true,
+      enum: ["male", "female", "other"],
+    },
+    dob: {
+      type: Date,
+      required: true,
+    },
+    address: {
+      type: String,
+      required: true,
+    },
+    city: {
+      type: String,
+      required: true,
+    },
+    state: {
+      type: String,
+      required: true,
+    },
+    pincode: {
+      type: String,
+      required: true,
+    },
+    country: {
+      type: String,
+      required: true,
     },
     profile: {
       type: String,
-      required: true,
+    },
+    status: {
+      type: String,
+      enum: ["active", "inactive"],
+      default: "active",
+    },
+    bloodGroup: {
+      type: String,
+      enum: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
+    },
+    emergencyContact: {
+      name: String,
+      relationship: String,
+      phone: String,
     },
     password: {
       type: String,

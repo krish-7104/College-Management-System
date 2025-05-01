@@ -1,22 +1,26 @@
 const express = require("express");
 const router = express.Router();
 const {
-  getDetails,
-  addDetails,
-  updateDetails,
-  deleteDetails,
-  getCount,
-} = require("../../controllers/Student/details.controller");
+  loginStudentController,
+  getAllDetailsController,
+  registerStudentController,
+  updateDetailsController,
+  deleteDetailsController,
+  getMyDetailsController,
+  sendForgetPasswordEmail,
+  updatePasswordHandler,
+} = require("../../controllers/details/student-details.controller");
 const upload = require("../../middlewares/multer.middleware");
+const auth = require("../../middlewares/auth.middleware");
 
-router.post("/getDetails", getDetails);
+router.post("/register", upload.single("file"), registerStudentController);
+router.post("/login", loginStudentController);
+router.get("/my-details", auth, getMyDetailsController);
 
-router.post("/addDetails", upload.single("profile"), addDetails);
-
-router.put("/updateDetails/:id", upload.single("profile"), updateDetails);
-
-router.delete("/deleteDetails/:id", deleteDetails);
-
-router.get("/count", getCount);
+router.get("/", auth, getAllDetailsController);
+router.patch("/:id", auth, upload.single("file"), updateDetailsController);
+router.delete("/:id", auth, deleteDetailsController);
+router.post("/forget-password", sendForgetPasswordEmail);
+router.post("/update-password/:resetId", updatePasswordHandler);
 
 module.exports = router;

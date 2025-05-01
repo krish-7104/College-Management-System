@@ -5,8 +5,6 @@ import { IoMdAdd, IoMdClose } from "react-icons/io";
 import axiosWrapper from "../../utils/AxiosWrapper";
 import Heading from "../../components/Heading";
 import DeleteConfirm from "../../components/DeleteConfirm";
-import axios from "axios";
-import { baseApiURL } from "../../baseUrl";
 
 const Admin = () => {
   const [data, setData] = useState({
