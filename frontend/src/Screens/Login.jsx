@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
 import { FiLogIn } from "react-icons/fi";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
@@ -7,10 +6,21 @@ import toast, { Toaster } from "react-hot-toast";
 import { baseApiURL } from "../baseUrl";
 import { setUserToken } from "../redux/actions";
 import { useDispatch } from "react-redux";
+
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const params = new URLSearchParams(window.location.search);
+  const type = params.get("type");
+
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
   const userToken = localStorage.getItem("userToken");
+
   useEffect(() => {
     if (userToken) {
       navigate(`/${localStorage.getItem("userType")}`);
@@ -18,30 +28,37 @@ const Login = () => {
   }, [userToken]);
 
   const [selected, setSelected] = useState("Student");
-  const { register, handleSubmit } = useForm();
-  const onSubmit = (data) => {
-    if (data.email !== "" && data.password !== "") {
+
+  useEffect(() => {
+    if (type) {
+      setSelected(type.charAt(0).toUpperCase() + type.slice(1));
+    }
+  }, [type]);
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    if (formData.email !== "" && formData.password !== "") {
       const headers = {
         "Content-Type": "application/json",
       };
       axios
-        .post(`${baseApiURL()}/${selected.toLowerCase()}/login`, data, {
+        .post(`${baseApiURL()}/${selected}/login`, formData, {
           headers: headers,
         })
         .then((response) => {
           localStorage.setItem("userToken", response.data.data.token);
-          localStorage.setItem("userType", selected.toLowerCase());
+          localStorage.setItem("userType", selected);
           dispatch(setUserToken(response.data.data.token));
-          navigate(`/${selected.toLowerCase()}`);
+          navigate(`/${selected}`);
         })
         .catch((error) => {
           toast.dismiss();
           console.error(error);
           toast.error(error.response.data.message);
         });
-    } else {
     }
   };
+
   return (
     <div className="bg-white h-[100vh] w-full flex justify-between items-center">
       <img
@@ -51,11 +68,12 @@ const Login = () => {
       />
       <div className="w-[40%] flex justify-center items-start flex-col pl-8">
         <p className="text-3xl font-semibold pb-2 border-b-2 border-green-500">
-          {selected && selected} Login
+          {selected && selected.charAt(0).toUpperCase() + selected.slice(1)}{" "}
+          Login
         </p>
         <form
           className="flex justify-center items-start flex-col w-full mt-10"
-          onSubmit={handleSubmit(onSubmit)}
+          onSubmit={onSubmit}
         >
           <div className="flex flex-col w-[70%]">
             <label className="mb-1" htmlFor="email">
@@ -66,7 +84,10 @@ const Login = () => {
               id="email"
               required
               className="bg-white outline-none border-2 border-gray-400 py-2 px-4 rounded-md w-full focus:border-blue-500"
-              {...register("email")}
+              value={formData.email}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
             />
           </div>
           <div className="flex flex-col w-[70%] mt-3">
@@ -78,7 +99,10 @@ const Login = () => {
               id="password"
               required
               className="bg-white outline-none border-2 border-gray-400 py-2 px-4 rounded-md w-full focus:border-blue-500"
-              {...register("password")}
+              value={formData.password}
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
             />
           </div>
           <Link className="text-right mt-3 w-[70%]" to={"/forget-password"}>
@@ -95,25 +119,37 @@ const Login = () => {
       <div className="absolute top-4 right-4">
         <button
           className={`text-blue-500 mr-6 text-base font-semibold hover:text-blue-700 ease-linear duration-300 hover:ease-linear hover:duration-300 hover:transition-all transition-all ${
-            selected === "Student" && "border-b-2 border-green-500"
+            selected === "student" && "border-b-2 border-green-500"
           }`}
-          onClick={() => setSelected("Student")}
+          onClick={() => {
+            setSelected("Student");
+            params.set("type", "student");
+            navigate(`?type=student`);
+          }}
         >
           Student
         </button>
         <button
           className={`text-blue-500 mr-6 text-base font-semibold hover:text-blue-700 ease-linear duration-300 hover:ease-linear hover:duration-300 hover:transition-all transition-all ${
-            selected === "Faculty" && "border-b-2 border-green-500"
+            selected === "faculty" && "border-b-2 border-green-500"
           }`}
-          onClick={() => setSelected("Faculty")}
+          onClick={() => {
+            setSelected("Faculty");
+            params.set("type", "faculty");
+            navigate(`?type=faculty`);
+          }}
         >
           Faculty
         </button>
         <button
           className={`text-blue-500 mr-6 text-base font-semibold hover:text-blue-700 ease-linear duration-300 hover:ease-linear hover:duration-300 hover:transition-all transition-all ${
-            selected === "Admin" && "border-b-2 border-green-500"
+            selected === "admin" && "border-b-2 border-green-500"
           }`}
-          onClick={() => setSelected("Admin")}
+          onClick={() => {
+            setSelected("Admin");
+            params.set("type", "admin");
+            navigate(`?type=admin`);
+          }}
         >
           Admin
         </button>

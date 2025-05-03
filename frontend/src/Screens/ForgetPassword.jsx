@@ -1,21 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
-import axios from "axios";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { baseApiURL } from "../baseUrl";
-import { setUserToken } from "../redux/actions";
-import { useDispatch } from "react-redux";
 import axiosWrapper from "../utils/AxiosWrapper";
 const ForgetPassword = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const userToken = localStorage.getItem("userToken");
   useEffect(() => {
     if (userToken) {
       navigate(`/${localStorage.getItem("userType")}`);
     }
-  }, [userToken]);
+  }, [userToken, navigate]);
 
   const [selected, setSelected] = useState("Student");
 

@@ -5,6 +5,7 @@ import Heading from "../../components/Heading";
 import { AiOutlineClose } from "react-icons/ai";
 import toast from "react-hot-toast";
 import { baseApiURL } from "../../baseUrl";
+
 const Timetable = () => {
   const [addselected, setAddSelected] = useState({
     branch: "",

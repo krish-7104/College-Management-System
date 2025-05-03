@@ -34,7 +34,10 @@ const loginStudentController = async (req, res) => {
 
 const getAllDetailsController = async (req, res) => {
   try {
-    const users = await studentDetails.find().select("-__v -password");
+    const users = await studentDetails
+      .find()
+      .select("-__v -password")
+      .populate("branchId");
 
     if (!users || users.length === 0) {
       return ApiResponse.notFound("No Student Found").send(res);
@@ -49,31 +52,17 @@ const getAllDetailsController = async (req, res) => {
 
 const registerStudentController = async (req, res) => {
   try {
-    const { email, phone, enrollmentNo } = req.body;
-
     const profile = req.file.filename;
 
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return ApiResponse.badRequest("Invalid email format").send(res);
-    }
-
-    if (!/^\d{10}$/.test(phone)) {
-      return ApiResponse.badRequest("Phone number must be 10 digits").send(res);
-    }
-
-    const existingStudent = await studentDetails.findOne({
-      $or: [{ phone }, { email }, { enrollmentNo }],
-    });
-
-    if (existingStudent) {
-      return ApiResponse.conflict(
-        "Student with these details already exists"
-      ).send(res);
-    }
+    const enrollmentNo = Math.floor(100000 + Math.random() * 900000);
+    const email = `${enrollmentNo}@gmail.com`;
 
     const user = await studentDetails.create({
       ...req.body,
       profile,
+      password: "student123",
+      email,
+      enrollmentNo,
     });
 
     const sanitizedUser = await studentDetails
