@@ -7,14 +7,12 @@ import { useDispatch } from "react-redux";
 import { setUserData } from "../../redux/actions";
 import axiosWrapper from "../../utils/AxiosWrapper";
 import Timetable from "./Timetable";
-import Marks from "./Marks";
 import Material from "./Material";
 import StudentFinder from "./StudentFinder";
 
 const MENU_ITEMS = [
   { id: "home", label: "Home", component: ProfileCard },
   { id: "timetable", label: "Timetable", component: Timetable },
-  { id: "marks", label: "Upload Marks", component: Marks },
   { id: "material", label: "Material", component: Material },
   { id: "notice", label: "Notice", component: Notice },
   { id: "studentfinder", label: "Student Info", component: StudentFinder },

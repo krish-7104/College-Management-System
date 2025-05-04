@@ -32,7 +32,7 @@ const CustomButton = ({
         transition-all duration-300 ease-in-out
         shadow-md hover:shadow-lg
         transform hover:-translate-y-0.5
-        disabled:opacity-50 disabled:cursor-not-allowed
+        disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center
         ${getVariantClasses()}
         ${className}
       `}

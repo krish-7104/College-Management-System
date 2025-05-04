@@ -7,13 +7,11 @@ import { useDispatch } from "react-redux";
 import { setUserData } from "../../redux/actions";
 import axiosWrapper from "../../utils/AxiosWrapper";
 import Timetable from "./Timetable";
-import Marks from "./Marks";
 import Material from "../Faculty/Material";
 
 const MENU_ITEMS = [
   { id: "home", label: "Home", component: null },
   { id: "timetable", label: "Timetable", component: Timetable },
-  { id: "marks", label: "Marks", component: Marks },
   { id: "material", label: "Material", component: Material },
   { id: "notice", label: "Notice", component: Notice },
 ];
