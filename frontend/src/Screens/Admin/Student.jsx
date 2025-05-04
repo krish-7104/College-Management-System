@@ -50,7 +50,11 @@ const Student = () => {
 
   const getBranchHandler = async () => {
     try {
-      const response = await axiosWrapper.get(`/branch`);
+      const response = await axiosWrapper.get(`/branch`, {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      });
       if (response.data.success) {
         setBranches(response.data.data);
       } else {

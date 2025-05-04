@@ -149,29 +149,31 @@ const Subject = () => {
 
   return (
     <div className="w-full mx-auto mt-10 flex justify-center items-start flex-col mb-10 relative">
-      <Heading title="Subject Details" />
-      <CustomButton
-        onClick={() => {
-          setShowAddForm(!showAddForm);
-          if (!showAddForm) {
-            setData({
-              name: "",
-              code: "",
-              branch: "",
-              semester: "",
-              credits: "",
-            });
-            setIsEditing(false);
-            setSelectedSubjectId(null);
-          }
-        }}
-      >
-        {showAddForm ? (
-          <IoMdClose className="text-3xl" />
-        ) : (
-          <IoMdAdd className="text-3xl" />
-        )}
-      </CustomButton>
+      <div className="flex justify-between items-center w-full">
+        <Heading title="Subject Details" />
+        <CustomButton
+          onClick={() => {
+            setShowAddForm(!showAddForm);
+            if (!showAddForm) {
+              setData({
+                name: "",
+                code: "",
+                branch: "",
+                semester: "",
+                credits: "",
+              });
+              setIsEditing(false);
+              setSelectedSubjectId(null);
+            }
+          }}
+        >
+          {showAddForm ? (
+            <IoMdClose className="text-3xl" />
+          ) : (
+            <IoMdAdd className="text-3xl" />
+          )}
+        </CustomButton>
+      </div>
 
       {showAddForm && (
         <div className="flex flex-col justify-center items-center w-full mt-8">
