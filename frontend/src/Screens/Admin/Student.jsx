@@ -140,7 +140,13 @@ const Student = () => {
 
       toast.dismiss();
       if (response.data.success) {
-        toast.success(response.data.message);
+        if (!isEditing) {
+          toast.success(
+            `Student created successfully! Default password: student123`
+          );
+        } else {
+          toast.success(response.data.message);
+        }
         resetForm();
         getStudentHandler();
       } else {
@@ -393,6 +399,10 @@ const Student = () => {
                 />
               </div>
             ))}
+          </div>
+          <div className="text-sm text-gray-600 mt-3 mb-4">
+            Note: New students will be created with default password:{" "}
+            <span className="font-semibold">student123</span>
           </div>
           <CustomButton className="mt-6" onClick={addStudentHandler}>
             {isEditing ? "Update Student" : "Add Student"}

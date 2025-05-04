@@ -105,7 +105,13 @@ const Admin = () => {
 
       toast.dismiss();
       if (response.data.success) {
-        toast.success(response.data.message);
+        if (!isEditing) {
+          toast.success(
+            `Admin created successfully! Default password: admin123`
+          );
+        } else {
+          toast.success(response.data.message);
+        }
         resetForm();
         getAdminsHandler();
       } else {
@@ -301,6 +307,10 @@ const Admin = () => {
                 />
               </div>
             ))}
+          </div>
+          <div className="text-sm text-gray-600 mt-3 mb-4">
+            Note: New admin will be created with default password:{" "}
+            <span className="font-semibold">admin123</span>
           </div>
           <CustomButton
             variant="primary"

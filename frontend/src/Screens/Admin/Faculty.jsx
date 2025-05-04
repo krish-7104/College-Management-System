@@ -142,7 +142,13 @@ const Faculty = () => {
 
       toast.dismiss();
       if (response.data.success) {
-        toast.success(response.data.message);
+        if (!isEditing) {
+          toast.success(
+            `Faculty created successfully! Default password: faculty123`
+          );
+        } else {
+          toast.success(response.data.message);
+        }
         resetForm();
         getFacultyHandler();
       } else {
@@ -363,6 +369,10 @@ const Faculty = () => {
                 />
               </div>
             ))}
+          </div>
+          <div className="text-sm text-gray-600 mt-3 mb-4">
+            Note: New faculty will be created with default password:{" "}
+            <span className="font-semibold">faculty123</span>
           </div>
           <CustomButton className="mt-6" onClick={addFacultyHandler}>
             {isEditing ? "Update Faculty" : "Add Faculty"}
