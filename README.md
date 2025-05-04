@@ -1,42 +1,43 @@
 # College Management System
 
-A comprehensive MERN stack-based College Management System that helps manage academic activities, student information, faculty details, and administrative tasks.
+[![MERN Stack](https://img.shields.io/badge/Stack-MERN-blue)](https://www.mongodb.com/mern-stack)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Node.js](https://img.shields.io/badge/Node.js-v14+-green)](https://nodejs.org)
+[![React](https://img.shields.io/badge/React-v17+-blue)](https://reactjs.org)
+
+A comprehensive MERN stack-based College Management System that helps manage academic activities, student information, faculty details, and administrative tasks. This system streamlines the management of educational institutions by providing a centralized platform for administrators, faculty, and students.
 
 ## Features
 
 ### Admin Features
 
-- Complete system administration
-- Manage faculty accounts and permissions
-- Manage student accounts and enrollment
-- View and manage academic departments
-- Handle course assignments
-- Generate and manage notices
-- View and manage timetables
-- Access comprehensive analytics and reports
-- Manage system settings and configurations
+- Manage faculty accounts with detailed profiles and emergency contacts
+- Manage student accounts with enrollment numbers and academic details
+- Manage academic branches
+- Handle subject/course management by semester and branch
+- Generate and manage notices for students and faculty
+- Upload and manage timetables by branch and semester
+- Profile management and password updates
 
 ### Faculty Features
 
-- View and manage assigned courses
-- Upload and manage study materials
-- Create and manage assignments
-- Track student attendance
-- Grade submissions
-- View and manage class timetables
-- Communicate with students
+- View and manage personal profile with emergency contacts
+- Upload and manage study materials (notes, assignments, syllabus)
+- Filter and organize materials by subject, semester, and type
+- Upload and manage timetables for their branches
+- Search and view student information by enrollment, name, or semester
+- View and respond to notices
 - Update profile and credentials
+- Password management and reset functionality
 
 ### Student Features
 
-- View enrolled courses
-- Access study materials
-- Submit assignments
-- View grades and attendance
-- Check timetable
-- Download course materials
+- View personal profile and academic details
+- Access study materials filtered by subject and type
+- View class timetables with download option
+- Access notices and announcements
 - Update profile information
-- View notices and announcements
+- Password management and reset functionality
 
 ## Tech Stack
 
@@ -44,13 +45,12 @@ A comprehensive MERN stack-based College Management System that helps manage aca
 - Backend: Node.js, Express.js
 - Database: MongoDB
 - Authentication: JWT
-- File Storage: Local Storage
 
 ## Prerequisites
 
-- Node.js (v14 or higher)
+- Node.js
 - MongoDB
-- npm or yarn
+- npm
 
 ## Setup Instructions
 
@@ -148,3 +148,11 @@ college-management-system/
 - [My Website](http://krishjotaniya.netlify.app/)
 - [Linkedin](https://www.linkedin.com/in/krishjotaniya/)
 - [krishjotaniya71@gmail.com](mailto:krishjotaniya71@gmail.com)
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
