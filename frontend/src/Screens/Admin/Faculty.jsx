@@ -5,6 +5,7 @@ import { IoMdAdd, IoMdClose } from "react-icons/io";
 import axiosWrapper from "../../utils/AxiosWrapper";
 import Heading from "../../components/Heading";
 import DeleteConfirm from "../../components/DeleteConfirm";
+import CustomButton from "../../components/CustomButton";
 
 const Faculty = () => {
   const [data, setData] = useState({
@@ -242,7 +243,7 @@ const Faculty = () => {
   return (
     <div className="w-full mx-auto mt-10 flex justify-center items-start flex-col mb-10 relative">
       <Heading title="Faculty Details" />
-      <button
+      <CustomButton
         onClick={() => {
           if (showAddForm) {
             resetForm();
@@ -250,14 +251,14 @@ const Faculty = () => {
             setShowAddForm(true);
           }
         }}
-        className="fixed bottom-8 right-8 bg-blue-500 text-white rounded-full p-4 shadow-lg hover:bg-blue-600 transition-all duration-300"
+        className="fixed bottom-8 right-8 !rounded-full !p-4"
       >
         {showAddForm ? (
           <IoMdClose className="text-3xl" />
         ) : (
           <IoMdAdd className="text-3xl" />
         )}
-      </button>
+      </CustomButton>
 
       {showAddForm && (
         <div className="flex flex-col justify-center items-center w-full mt-8">
@@ -298,9 +299,11 @@ const Faculty = () => {
                 Select Branch
               </label>
               <select
-                className="w-full bg-blue-50 rounded border focus:border-dark-green focus:bg-secondary-light focus:ring-2 focus:ring-light-green text-base outline-none py-2 px-3 leading-8 transition-colors duration-200 ease-in-out"
-                onChange={(e) => handleInputChange("branchId", e.target.value)}
+                name="branchId"
                 value={data.branchId}
+                onChange={(e) => handleInputChange("branchId", e.target.value)}
+                className="w-full bg-blue-50 rounded border focus:border-dark-green focus:bg-secondary-light focus:ring-2 focus:ring-light-green text-base outline-none py-2 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                required
               >
                 <option value="">Select Branch</option>
                 {branch.map((item) => (
@@ -313,9 +316,11 @@ const Faculty = () => {
             <div>
               <label className="leading-7 text-sm">Gender</label>
               <select
+                name="gender"
                 value={data.gender}
                 onChange={(e) => handleInputChange("gender", e.target.value)}
                 className="w-full bg-blue-50 rounded border focus:border-dark-green focus:bg-secondary-light focus:ring-2 focus:ring-light-green text-base outline-none py-2 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                required
               >
                 <option value="">Select Gender</option>
                 <option value="male">Male</option>
@@ -340,12 +345,9 @@ const Faculty = () => {
               </div>
             ))}
           </div>
-          <button
-            className="mt-6 bg-blue-500 px-6 py-3 text-white rounded-md hover:bg-blue-600"
-            onClick={addFacultyHandler}
-          >
+          <CustomButton className="mt-6" onClick={addFacultyHandler}>
             {isEditing ? "Update Faculty" : "Add Faculty"}
-          </button>
+          </CustomButton>
         </div>
       )}
 
@@ -375,18 +377,20 @@ const Faculty = () => {
                   <td className="py-4 px-6">{item.employeeId}</td>
                   <td className="py-4 px-6">{item.designation}</td>
                   <td className="py-4 px-6 text-center flex justify-center gap-4">
-                    <button
-                      className="text-xl hover:text-blue-500"
+                    <CustomButton
+                      variant="secondary"
+                      className="!p-2"
                       onClick={() => editFacultyHandler(item)}
                     >
                       <MdEdit />
-                    </button>
-                    <button
-                      className="text-xl hover:text-red-500"
+                    </CustomButton>
+                    <CustomButton
+                      variant="danger"
+                      className="!p-2"
                       onClick={() => deleteFacultyHandler(item._id)}
                     >
                       <MdOutlineDelete />
-                    </button>
+                    </CustomButton>
                   </td>
                 </tr>
               ))}

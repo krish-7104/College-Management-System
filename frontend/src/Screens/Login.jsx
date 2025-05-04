@@ -6,6 +6,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { baseApiURL } from "../baseUrl";
 import { setUserToken } from "../redux/actions";
 import { useDispatch } from "react-redux";
+import CustomButton from "../components/CustomButton";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -108,51 +109,48 @@ const Login = () => {
           <Link className="text-right mt-3 w-[70%]" to={"/forget-password"}>
             Forget Password?
           </Link>
-          <button className="bg-blue-500 mt-3 text-white px-6 py-2 text-xl rounded-md hover:bg-blue-700 ease-linear duration-300 hover:ease-linear hover:duration-300 hover:transition-all transition-all flex justify-center items-center">
+          <CustomButton type="submit" className="mt-3 text-xl">
             Login
             <span className="ml-2">
               <FiLogIn />
             </span>
-          </button>
+          </CustomButton>
         </form>
       </div>
       <div className="absolute top-4 right-4">
-        <button
-          className={`text-blue-500 mr-6 text-base font-semibold hover:text-blue-700 ease-linear duration-300 hover:ease-linear hover:duration-300 hover:transition-all transition-all ${
-            selected === "student" && "border-b-2 border-green-500"
-          }`}
+        <CustomButton
           onClick={() => {
             setSelected("Student");
             params.set("type", "student");
             navigate(`?type=student`);
           }}
+          variant={selected === "student" ? "primary" : "secondary"}
+          className="!bg-transparent !text-blue-500 hover:!text-blue-700 !shadow-none hover:!shadow-none !transform-none hover:!transform-none"
         >
           Student
-        </button>
-        <button
-          className={`text-blue-500 mr-6 text-base font-semibold hover:text-blue-700 ease-linear duration-300 hover:ease-linear hover:duration-300 hover:transition-all transition-all ${
-            selected === "faculty" && "border-b-2 border-green-500"
-          }`}
+        </CustomButton>
+        <CustomButton
           onClick={() => {
             setSelected("Faculty");
             params.set("type", "faculty");
             navigate(`?type=faculty`);
           }}
+          variant={selected === "faculty" ? "primary" : "secondary"}
+          className="!bg-transparent !text-blue-500 hover:!text-blue-700 !shadow-none hover:!shadow-none !transform-none hover:!transform-none"
         >
           Faculty
-        </button>
-        <button
-          className={`text-blue-500 mr-6 text-base font-semibold hover:text-blue-700 ease-linear duration-300 hover:ease-linear hover:duration-300 hover:transition-all transition-all ${
-            selected === "admin" && "border-b-2 border-green-500"
-          }`}
+        </CustomButton>
+        <CustomButton
           onClick={() => {
             setSelected("Admin");
             params.set("type", "admin");
             navigate(`?type=admin`);
           }}
+          variant={selected === "admin" ? "primary" : "secondary"}
+          className="!bg-transparent !text-blue-500 hover:!text-blue-700 !shadow-none hover:!shadow-none !transform-none hover:!transform-none"
         >
           Admin
-        </button>
+        </CustomButton>
       </div>
       <Toaster position="bottom-center" />
     </div>

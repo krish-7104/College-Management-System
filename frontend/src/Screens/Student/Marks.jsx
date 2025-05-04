@@ -1,85 +1,157 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
-import { useSelector } from "react-redux";
+import axiosWrapper from "../../utils/AxiosWrapper";
 import Heading from "../../components/Heading";
-import { baseApiURL } from "../../baseUrl";
+import CustomButton from "../../components/CustomButton";
 
 const Marks = () => {
-  const userData = useSelector((state) => state.userData);
-  const [internal, setInternal] = useState();
-  const [external, setExternal] = useState();
+  const [marks, setMarks] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [selectedSemester, setSelectedSemester] = useState("");
+  const [studentDetails, setStudentDetails] = useState(null);
 
   useEffect(() => {
-    const headers = {
-      "Content-Type": "application/json",
-    };
-    axios
-      .post(
-        `${baseApiURL()}/marks/getMarks`,
-        { enrollmentNo: userData.enrollmentNo },
-        {
-          headers: headers,
-        }
-      )
-      .then((response) => {
-        if (response.data.length !== 0) {
-          setInternal(response.data.Mark[0].internal);
-          setExternal(response.data.Mark[0].external);
-        }
-      })
-      .catch((error) => {
-        toast.dismiss();
-        console.log(error);
+    fetchStudentDetails();
+  }, []);
+
+  useEffect(() => {
+    if (studentDetails) {
+      setSelectedSemester(studentDetails.semester);
+      fetchMarks(studentDetails.semester);
+    }
+  }, [studentDetails]);
+
+  const fetchStudentDetails = async () => {
+    try {
+      const response = await axiosWrapper.get("/student/details");
+      if (response.data.success) {
+        setStudentDetails(response.data.user);
+      }
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Error fetching student details"
+      );
+    }
+  };
+
+  const fetchMarks = async (semester) => {
+    if (!studentDetails) return;
+
+    setLoading(true);
+    try {
+      const response = await axiosWrapper.post("/marks/student", {
+        studentId: studentDetails._id,
+        semester: semester,
       });
-  }, [userData.enrollmentNo]);
+
+      if (response.data.success) {
+        setMarks(response.data.data);
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Error fetching marks");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSemesterChange = (e) => {
+    const semester = e.target.value;
+    setSelectedSemester(semester);
+    fetchMarks(semester);
+  };
+
+  const calculateTotalMarks = (subjectMarks) => {
+    const internal = subjectMarks.internal || 0;
+    const external = subjectMarks.external || 0;
+    return internal + external;
+  };
+
+  const calculateGrade = (totalMarks) => {
+    if (totalMarks >= 90) return "O";
+    if (totalMarks >= 80) return "A+";
+    if (totalMarks >= 70) return "A";
+    if (totalMarks >= 60) return "B+";
+    if (totalMarks >= 50) return "B";
+    if (totalMarks >= 40) return "C";
+    return "F";
+  };
 
   return (
     <div className="w-full mx-auto mt-10 flex justify-center items-start flex-col mb-10">
-      <Heading title={`Marks of Semester ${userData.semester}`} />
-      <div className="mt-14 w-full flex gap-20">
-        {internal && (
-          <div className="w-1/2 shadow-md p-4">
-            <p className="border-b-2 border-red-500 text-2xl font-semibold pb-2">
-              Internal Marks (Out of 40)
-            </p>
-            <div className="mt-5">
-              {Object.keys(internal).map((item, index) => {
-                return (
-                  <div
-                    key={index}
-                    className="flex justify-between items-center w-full text-lg mt-2"
-                  >
-                    <p className="w-full">{item}</p>
-                    <span>{internal[item]}</span>
-                  </div>
-                );
-              })}
-            </div>
+      <Heading title="Marks" />
+
+      <div className="mt-8 w-full">
+        <div className="flex justify-between items-center mb-6">
+          <div className="w-64">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Select Semester
+            </label>
+            <select
+              value={selectedSemester}
+              onChange={handleSemesterChange}
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              {[1, 2, 3, 4, 5, 6, 7, 8].map((sem) => (
+                <option key={sem} value={sem}>
+                  Semester {sem}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        {loading ? (
+          <div className="text-center py-8">Loading...</div>
+        ) : marks.length > 0 ? (
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Subject
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Internal
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    External
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Total
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Grade
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {marks.map((mark, index) => (
+                  <tr key={index}>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {mark.subject.name}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {mark.marks[0].internal || 0}/40
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {mark.marks[0].external || 0}/60
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {calculateTotalMarks(mark.marks[0])}/100
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {calculateGrade(calculateTotalMarks(mark.marks[0]))}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div className="text-center py-8 text-gray-500">
+            No marks available for this semester
           </div>
         )}
-        {external && (
-          <div className="w-1/2 shadow-md p-4">
-            <p className="border-b-2 border-red-500 text-2xl font-semibold pb-2">
-              External Marks (Out of 60)
-            </p>
-            <div className="mt-5">
-              {Object.keys(external).map((item, index) => {
-                console.log(external);
-                return (
-                  <div
-                    key={index}
-                    className="flex justify-between items-center w-full text-lg mt-2"
-                  >
-                    <p className="w-full">{item}</p>
-                    <span>{external[item]}</span>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-        {!internal && !external && <p>No Marks Available At The Moment!</p>}
       </div>
     </div>
   );

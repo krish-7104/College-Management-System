@@ -1,13 +1,14 @@
 const express = require("express");
 const {
-  getMarks,
-  addMarks,
-  deleteMarks,
-} = require("../controllers/Other/marks.controller");
+  getMarksController,
+  addMarksController,
+  deleteMarksController,
+} = require("../controllers/marks.controller");
 const router = express.Router();
+const auth = require("../middlewares/auth.middleware");
 
-router.post("/getMarks", getMarks);
-router.post("/addMarks", addMarks);
-router.delete("/deleteMarks/:id", deleteMarks);
+router.post("/student", auth, getMarksController);
+router.post("/upload", auth, addMarksController);
+router.delete("/:id", auth, deleteMarksController);
 
 module.exports = router;

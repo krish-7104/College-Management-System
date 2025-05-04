@@ -5,7 +5,7 @@ import { IoMdAdd, IoMdClose } from "react-icons/io";
 import Heading from "../../components/Heading";
 import DeleteConfirm from "../../components/DeleteConfirm";
 import axiosWrapper from "../../utils/AxiosWrapper";
-
+import CustomButton from "../../components/CustomButton";
 const Subject = () => {
   const [data, setData] = useState({
     name: "",
@@ -28,7 +28,12 @@ const Subject = () => {
 
   const getSubjectHandler = async () => {
     try {
-      const response = await axiosWrapper.get(`/subject`);
+      const response = await axiosWrapper.get(`/subject`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+        },
+      });
       if (response.data.success) {
         setSubject(response.data.data);
       } else {
@@ -42,7 +47,12 @@ const Subject = () => {
 
   const getBranchHandler = async () => {
     try {
-      const response = await axiosWrapper.get(`/branch`);
+      const response = await axiosWrapper.get(`/branch`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+        },
+      });
       if (response.data.success) {
         setBranches(response.data.data);
       } else {
@@ -59,6 +69,7 @@ const Subject = () => {
       toast.loading(isEditing ? "Updating Subject" : "Adding Subject");
       const headers = {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("userToken")}`,
       };
       let response;
       if (isEditing) {
@@ -114,6 +125,7 @@ const Subject = () => {
       toast.loading("Deleting Subject");
       const headers = {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("userToken")}`,
       };
       const response = await axiosWrapper.delete(
         `/subject/${selectedSubjectId}`,
@@ -138,7 +150,7 @@ const Subject = () => {
   return (
     <div className="w-full mx-auto mt-10 flex justify-center items-start flex-col mb-10 relative">
       <Heading title="Subject Details" />
-      <button
+      <CustomButton
         onClick={() => {
           setShowAddForm(!showAddForm);
           if (!showAddForm) {
@@ -153,14 +165,13 @@ const Subject = () => {
             setSelectedSubjectId(null);
           }
         }}
-        className="fixed bottom-8 right-8 bg-blue-500 text-white rounded-full p-4 shadow-lg hover:bg-blue-600 transition-all duration-300"
       >
         {showAddForm ? (
           <IoMdClose className="text-3xl" />
         ) : (
           <IoMdAdd className="text-3xl" />
         )}
-      </button>
+      </CustomButton>
 
       {showAddForm && (
         <div className="flex flex-col justify-center items-center w-full mt-8">
@@ -193,9 +204,11 @@ const Subject = () => {
               Select Branch
             </label>
             <select
-              className="w-full bg-blue-50 rounded border focus:border-dark-green focus:bg-secondary-light focus:ring-2 focus:ring-light-green text-base outline-none py-2 px-3 leading-8 transition-colors duration-200 ease-in-out"
-              onChange={(e) => setData({ ...data, branch: e.target.value })}
+              name="branch"
               value={data.branch}
+              onChange={(e) => setData({ ...data, branch: e.target.value })}
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
             >
               <option value="">Select Branch</option>
               {branch.map((item) => (
@@ -210,9 +223,11 @@ const Subject = () => {
               Enter Semester
             </label>
             <select
-              className="w-full bg-blue-50 rounded border focus:border-dark-green focus:bg-secondary-light focus:ring-2 focus:ring-light-green text-base outline-none py-2 px-3 leading-8 transition-colors duration-200 ease-in-out"
-              onChange={(e) => setData({ ...data, semester: e.target.value })}
+              name="semester"
               value={data.semester}
+              onChange={(e) => setData({ ...data, semester: e.target.value })}
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
             >
               <option value="">Select Semester</option>
               <option value="1">1st Semester</option>
@@ -237,12 +252,13 @@ const Subject = () => {
               className="w-full bg-blue-50 rounded border focus:border-dark-green focus:bg-secondary-light focus:ring-2 focus:ring-light-green text-base outline-none py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
             />
           </div>
-          <button
-            className="mt-6 bg-blue-500 px-6 py-3 text-white rounded-md hover:bg-blue-600"
+          <CustomButton
+            variant="primary"
+            className="mt-6"
             onClick={addSubjectHandler}
           >
             {isEditing ? "Edit Subject" : "Add Subject"}
-          </button>
+          </CustomButton>
         </div>
       )}
 
@@ -270,18 +286,18 @@ const Subject = () => {
                     <td className="py-4 px-6">{item.semester}</td>
                     <td className="py-4 px-6">{item.credits}</td>
                     <td className="py-4 px-6 text-center flex justify-center gap-4">
-                      <button
-                        className="text-xl hover:text-blue-500"
+                      <CustomButton
+                        variant="secondary"
                         onClick={() => editSubjectHandler(item)}
                       >
                         <MdEdit />
-                      </button>
-                      <button
-                        className="text-xl hover:text-red-500"
+                      </CustomButton>
+                      <CustomButton
+                        variant="danger"
                         onClick={() => deleteSubjectHandler(item._id)}
                       >
                         <MdOutlineDelete />
-                      </button>
+                      </CustomButton>
                     </td>
                   </tr>
                 ))}

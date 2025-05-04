@@ -1,279 +1,299 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
-import Heading from "../../components/Heading";
-import toast from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import { BiArrowBack } from "react-icons/bi";
-import { baseApiURL } from "../../baseUrl";
+import axiosWrapper from "../../utils/AxiosWrapper";
+import Heading from "../../components/Heading";
+import CustomButton from "../../components/CustomButton";
 
 const Marks = () => {
-  const [subject, setSubject] = useState();
-  const [branch, setBranch] = useState();
-  const [studentData, setStudentData] = useState();
+  const [subject, setSubject] = useState([]);
+  const [branch, setBranch] = useState([]);
+  const [studentData, setStudentData] = useState([]);
   const [selected, setSelected] = useState({
     branch: "",
     semester: "",
     subject: "",
-    examType: "",
+    examType: "internal",
   });
-  const loadStudentDetails = () => {
-    const headers = {
-      "Content-Type": "application/json",
-    };
-    axios
-      .post(
-        `${baseApiURL()}/student/details/getDetails`,
-        { branch: selected.branch, semester: selected.semester },
-        { headers }
-      )
-      .then((response) => {
-        if (response.data.success) {
-          setStudentData(response.data.user);
-        } else {
-          toast.error(response.data.message);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-        toast.error(error.message);
+  const [marks, setMarks] = useState({});
+  const [loading, setLoading] = useState(false);
+  const userToken = localStorage.getItem("userToken");
+
+  useEffect(() => {
+    fetchBranches();
+    fetchSubjects();
+  }, []);
+
+  const fetchBranches = async () => {
+    try {
+      const response = await axiosWrapper.get("/branch", {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
       });
+      if (response.data.success) {
+        setBranch(response.data.data);
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Error fetching branches");
+    }
   };
 
-  const submitMarksHandler = () => {
-    let container = document.getElementById("markContainer");
-    container.childNodes.forEach((enroll) => {
-      setStudentMarksHandler(
-        enroll.id,
-        document.getElementById(enroll.id + "marks").value
+  const fetchSubjects = async () => {
+    try {
+      const response = await axiosWrapper.get("/subject", {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      });
+      if (response.data.success) {
+        setSubject(response.data.data);
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Error fetching subjects");
+    }
+  };
+
+  const loadStudentDetails = async () => {
+    if (
+      !selected.branch ||
+      !selected.semester ||
+      !selected.subject ||
+      !selected.examType
+    ) {
+      toast.error("Please select all fields");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await axiosWrapper.post(
+        "/student/search",
+        {
+          branch: selected.branch,
+          semester: selected.semester,
+        },
+        {
+          headers: { Authorization: `Bearer ${userToken}` },
+        }
       );
+
+      if (response.data.success) {
+        setStudentData(response.data.data);
+        // Initialize marks object for each student
+        const initialMarks = {};
+        response.data.data.forEach((student) => {
+          initialMarks[student.enrollmentNo] = {
+            internal: 0,
+            external: 0,
+          };
+        });
+        setMarks(initialMarks);
+      }
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Error loading student details"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleMarksChange = (enrollmentNo, value) => {
+    setMarks((prev) => ({
+      ...prev,
+      [enrollmentNo]: {
+        ...prev[enrollmentNo],
+        [selected.examType]: value,
+      },
+    }));
+  };
+
+  const submitMarksHandler = async () => {
+    setLoading(true);
+    try {
+      const marksData = studentData.map((student) => ({
+        studentId: student._id,
+        semester: selected.semester,
+        branch: selected.branch,
+        marks: [
+          {
+            subject: selected.subject,
+            [selected.examType]: marks[student.enrollmentNo][selected.examType],
+          },
+        ],
+      }));
+
+      const response = await axiosWrapper.post("/marks/upload", marksData);
+
+      if (response.data.success) {
+        toast.success("Marks uploaded successfully");
+        resetForm();
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Error uploading marks");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const resetForm = () => {
+    setStudentData([]);
+    setMarks({});
+    setSelected({
+      branch: "",
+      semester: "",
+      subject: "",
+      examType: "internal",
     });
   };
 
-  const setStudentMarksHandler = (enrollment, value) => {
-    const headers = {
-      "Content-Type": "application/json",
-    };
-    axios
-      .post(
-        `${baseApiURL()}/marks/addMarks`,
-        {
-          enrollmentNo: enrollment,
-          [selected.examType]: {
-            [selected.subject]: value,
-          },
-        },
-        { headers }
-      )
-      .then((response) => {
-        if (response.data.success) {
-          toast.dismiss();
-          toast.success(response.data.message);
-        } else {
-          toast.dismiss();
-          toast.error(response.data.message);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-        toast.error(error.message);
-      });
-  };
-
-  const getBranchData = () => {
-    const headers = {
-      "Content-Type": "application/json",
-    };
-    axios
-      .get(`${baseApiURL()}/branch/getBranch`, { headers })
-      .then((response) => {
-        if (response.data.success) {
-          setBranch(response.data.branches);
-        } else {
-          toast.error(response.data.message);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-        toast.error(error.message);
-      });
-  };
-
-  const getSubjectData = () => {
-    toast.loading("Loading Subjects");
-    axios
-      .get(`${baseApiURL()}/subject/getSubject`)
-      .then((response) => {
-        toast.dismiss();
-        if (response.data.success) {
-          setSubject(response.data.subject);
-        } else {
-          toast.error(response.data.message);
-        }
-      })
-      .catch((error) => {
-        toast.dismiss();
-        toast.error(error.message);
-      });
-  };
-
-  useEffect(() => {
-    getBranchData();
-    getSubjectData();
-  }, []);
-
-  const resetValueHandler = () => {
-    setStudentData();
-  };
-
   return (
-    <div className="w-full mx-auto flex justify-center items-start flex-col my-10">
+    <div className="w-full mx-auto mt-10 flex justify-center items-start flex-col mb-10">
       <div className="relative flex justify-between items-center w-full">
-        <Heading title={`Upload Marks`} />
-        {studentData && (
-          <button
-            className="absolute right-2 flex justify-center items-center border-2 border-red-500 px-3 py-2 rounded text-red-500"
-            onClick={resetValueHandler}
-          >
+        <Heading title="Upload Marks" />
+        {studentData.length > 0 && (
+          <CustomButton variant="danger" onClick={resetForm}>
             <span className="mr-2">
-              <BiArrowBack className="text-red-500" />
+              <BiArrowBack />
             </span>
             Close
-          </button>
+          </CustomButton>
         )}
       </div>
-      {!studentData && (
-        <>
-          <div className="mt-10 w-full flex justify-evenly items-center gap-x-6">
-            <div className="w-full">
-              <label htmlFor="branch" className="leading-7 text-base ">
-                Select Branch
-              </label>
-              <select
-                id="branch"
-                className="px-2 bg-blue-50 py-3 rounded-sm text-base w-full accent-blue-700 mt-1"
-                value={selected.branch}
-                onChange={(e) =>
-                  setSelected({ ...selected, branch: e.target.value })
-                }
-              >
-                <option defaultValue>-- Select --</option>
-                {branch &&
-                  branch.map((branch) => {
-                    return (
-                      <option value={branch.name} key={branch.name}>
-                        {branch.name}
-                      </option>
-                    );
-                  })}
-              </select>
-            </div>
-            <div className="w-full">
-              <label htmlFor="semester" className="leading-7 text-base ">
-                Select Semester
-              </label>
-              <select
-                id="semester"
-                className="px-2 bg-blue-50 py-3 rounded-sm text-base w-full accent-blue-700 mt-1"
-                value={selected.semester}
-                onChange={(e) =>
-                  setSelected({ ...selected, semester: e.target.value })
-                }
-              >
-                <option defaultValue>-- Select --</option>
-                <option value="1">1st Semester</option>
-                <option value="2">2nd Semester</option>
-                <option value="3">3rd Semester</option>
-                <option value="4">4th Semester</option>
-                <option value="5">5th Semester</option>
-                <option value="6">6th Semester</option>
-                <option value="7">7th Semester</option>
-                <option value="8">8th Semester</option>
-              </select>
-            </div>
-            <div className="w-full">
-              <label htmlFor="subject" className="leading-7 text-base ">
-                Select Subject
-              </label>
-              <select
-                id="subject"
-                className="px-2 bg-blue-50 py-3 rounded-sm text-base w-full accent-blue-700 mt-1"
-                value={selected.subject}
-                onChange={(e) =>
-                  setSelected({ ...selected, subject: e.target.value })
-                }
-              >
-                <option defaultValue>-- Select --</option>
-                {subject &&
-                  subject.map((subject) => {
-                    return (
-                      <option value={subject.name} key={subject.name}>
-                        {subject.name}
-                      </option>
-                    );
-                  })}
-              </select>
-            </div>
-            <div className="w-full">
-              <label htmlFor="examType" className="leading-7 text-base ">
-                Select Exam Type
-              </label>
-              <select
-                id="examType"
-                className="px-2 bg-blue-50 py-3 rounded-sm text-base w-full accent-blue-700 mt-1"
-                value={selected.examType}
-                onChange={(e) =>
-                  setSelected({ ...selected, examType: e.target.value })
-                }
-              >
-                <option defaultValue>-- Select --</option>
-                <option value="internal">Internal</option>
-                <option value="external">External</option>
-              </select>
-            </div>
-          </div>
-          <button
-            className="bg-blue-50 px-4 py-2 mt-8 mx-auto rounded border-2 border-blue-500 text-black"
-            onClick={loadStudentDetails}
+
+      <div className="mt-10 w-full grid grid-cols-5 gap-6">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Select Branch
+          </label>
+          <select
+            value={selected.branch}
+            onChange={(e) =>
+              setSelected((prev) => ({ ...prev, branch: e.target.value }))
+            }
+            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            Load Student Data
-          </button>
-        </>
-      )}
-      {studentData && studentData.length !== 0 && (
-        <>
-          <p className="mt-4 text-lg">
-            Upload {selected.examType} Marks Of {selected.branch} Semester{" "}
-            {selected.semester} of {selected.subject}
-          </p>
-          <div
-            className="w-full flex flex-wrap justify-center items-center mt-8 gap-4"
-            id="markContainer"
+            <option value="">Select Branch</option>
+            {branch.map((b) => (
+              <option key={b._id} value={b._id}>
+                {b.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Select Semester
+          </label>
+          <select
+            value={selected.semester}
+            onChange={(e) =>
+              setSelected((prev) => ({ ...prev, semester: e.target.value }))
+            }
+            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            {studentData.map((student) => {
-              return (
+            <option value="">Select Semester</option>
+            {[1, 2, 3, 4, 5, 6, 7, 8].map((sem) => (
+              <option key={sem} value={sem}>
+                Semester {sem}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Select Subject
+          </label>
+          <select
+            value={selected.subject}
+            onChange={(e) =>
+              setSelected((prev) => ({ ...prev, subject: e.target.value }))
+            }
+            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="">Select Subject</option>
+            {subject.map((sub) => (
+              <option key={sub._id} value={sub._id}>
+                {sub.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Select Exam Type
+          </label>
+          <select
+            value={selected.examType}
+            onChange={(e) =>
+              setSelected((prev) => ({ ...prev, examType: e.target.value }))
+            }
+            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="internal">Internal</option>
+            <option value="external">External</option>
+          </select>
+        </div>
+        <CustomButton
+          className="!py-2 !px-2 flex items-center justify-center"
+          onClick={loadStudentDetails}
+          disabled={loading}
+        >
+          {loading ? "Loading..." : "Load Student Data"}
+        </CustomButton>
+      </div>
+
+      {studentData.length > 0 && (
+        <>
+          <div className="mt-8 w-full">
+            <div className="grid grid-cols-1 gap-4">
+              {studentData.map((student) => (
                 <div
                   key={student.enrollmentNo}
-                  className="w-[30%] flex justify-between items-center border-2 border-blue-500 rounded"
-                  id={student.enrollmentNo}
+                  className="flex items-center justify-between p-4 border rounded-lg"
                 >
-                  <p className="text-lg px-4 w-1/2 bg-blue-50">
-                    {student.enrollmentNo}
-                  </p>
-                  <input
-                    type="number"
-                    className="px-6 py-2 focus:ring-0 outline-none w-1/2"
-                    placeholder="Enter Marks"
-                    id={`${student.enrollmentNo}marks`}
-                  />
+                  <div>
+                    <p className="font-medium">
+                      {student.firstName} {student.lastName}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      {student.enrollmentNo}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <input
+                      type="number"
+                      min="0"
+                      max={selected.examType === "internal" ? 40 : 60}
+                      value={
+                        marks[student.enrollmentNo]?.[selected.examType] || 0
+                      }
+                      onChange={(e) =>
+                        handleMarksChange(student.enrollmentNo, e.target.value)
+                      }
+                      className="w-24 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder={`Enter ${selected.examType} marks`}
+                    />
+                    <span className="text-sm text-gray-500">
+                      /{selected.examType === "internal" ? 40 : 60}
+                    </span>
+                  </div>
                 </div>
-              );
-            })}
+              ))}
+            </div>
           </div>
-          <button
-            className="bg-blue-500 px-6 py-3 mt-8 mx-auto rounded text-white"
+
+          <CustomButton
+            className="mt-8 mx-auto"
             onClick={submitMarksHandler}
+            disabled={loading}
           >
-            Upload Student Marks
-          </button>
+            {loading ? "Uploading..." : "Upload Marks"}
+          </CustomButton>
         </>
       )}
     </div>

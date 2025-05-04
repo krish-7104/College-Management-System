@@ -1,70 +1,138 @@
-const Timetable = require("../../models/timetable.model");
+const Timetable = require("../models/timetable.model");
+const ApiResponse = require("../utils/ApiResponse");
 
-const getTimetable = async (req, res) => {
+const getTimetableController = async (req, res) => {
   try {
-    let timetable = await Timetable.find(req.body);
-    if (timetable) {
-      res.json(timetable);
-    } else {
-      res.status(404).json({ success: false, message: "Timetable Not Found" });
+    const { semester, branch } = req.query;
+    let query = {};
+
+    if (semester) query.semester = semester;
+    if (branch) query.branch = branch;
+
+    const timetables = await Timetable.find(query)
+      .populate("branch")
+      .sort({ createdAt: -1 });
+
+    if (!timetables || timetables.length === 0) {
+      return ApiResponse.notFound("No timetables found").send(res);
     }
+
+    return ApiResponse.success(
+      timetables,
+      "Timetables retrieved successfully"
+    ).send(res);
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ success: false, message: "Internal Server Error" });
+    console.error("Get Timetable Error: ", error);
+    return ApiResponse.internalServerError().send(res);
   }
 };
 
-const addTimetable = async (req, res) => {
-  let { semester, branch } = req.body;
+const addTimetableController = async (req, res) => {
   try {
+    const { semester, branch } = req.body;
+
+    if (!semester || !branch) {
+      return ApiResponse.badRequest("Semester and branch are required").send(
+        res
+      );
+    }
+
+    if (!req.file) {
+      return ApiResponse.badRequest("Timetable file is required").send(res);
+    }
+
     let timetable = await Timetable.findOne({ semester, branch });
+
     if (timetable) {
-      await Timetable.findByIdAndUpdate(timetable._id, {
-        semester,
-        branch,
-        link: req.file.filename,
-      });
-      const data = {
-        success: true,
-        message: "Timetable Updated!",
-      };
-      res.json(data);
-    } else {
-      await Timetable.create({
-        semester,
-        branch,
-        link: req.file.filename,
-      });
-      const data = {
-        success: true,
-        message: "Timetable Added!",
-      };
-      res.json(data);
+      timetable = await Timetable.findByIdAndUpdate(
+        timetable._id,
+        {
+          semester,
+          branch,
+          link: req.file.filename,
+        },
+        { new: true }
+      );
+      return ApiResponse.success(
+        timetable,
+        "Timetable updated successfully"
+      ).send(res);
     }
+
+    timetable = await Timetable.create({
+      semester,
+      branch,
+      link: req.file.filename,
+    });
+
+    return ApiResponse.created(timetable, "Timetable added successfully").send(
+      res
+    );
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ success: false, message: "Internal Server Error" });
+    console.error("Add Timetable Error: ", error);
+    return ApiResponse.internalServerError().send(res);
   }
 };
 
-const deleteTimetable = async (req, res) => {
+const updateTimetableController = async (req, res) => {
   try {
-    let timetable = await Timetable.findByIdAndDelete(req.params.id);
-    if (!timetable) {
-      return res
-        .status(400)
-        .json({ success: false, message: "No Timetable Exists!" });
+    const { id } = req.params;
+    const { semester, branch } = req.body;
+
+    if (!id) {
+      return ApiResponse.badRequest("Timetable ID is required").send(res);
     }
-    const data = {
-      success: true,
-      message: "Timetable Deleted!",
-    };
-    res.json(data);
+
+    const timetable = await Timetable.findByIdAndUpdate(
+      id,
+      {
+        semester,
+        branch,
+        link: req.file ? req.file.filename : undefined,
+      },
+      { new: true }
+    );
+
+    if (!timetable) {
+      return ApiResponse.notFound("Timetable not found").send(res);
+    }
+
+    return ApiResponse.success(
+      timetable,
+      "Timetable updated successfully"
+    ).send(res);
   } catch (error) {
-    console.error(error.message);
-    console.log(error);
-    res.status(500).json({ success: false, message: "Internal Server Error" });
+    console.error("Update Timetable Error: ", error);
+    return ApiResponse.internalServerError().send(res);
   }
 };
 
-module.exports = { getTimetable, addTimetable, deleteTimetable };
+const deleteTimetableController = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      return ApiResponse.badRequest("Timetable ID is required").send(res);
+    }
+
+    const timetable = await Timetable.findByIdAndDelete(id);
+
+    if (!timetable) {
+      return ApiResponse.notFound("Timetable not found").send(res);
+    }
+
+    return ApiResponse.success(null, "Timetable deleted successfully").send(
+      res
+    );
+  } catch (error) {
+    console.error("Delete Timetable Error: ", error);
+    return ApiResponse.internalServerError().send(res);
+  }
+};
+
+module.exports = {
+  getTimetableController,
+  addTimetableController,
+  updateTimetableController,
+  deleteTimetableController,
+};

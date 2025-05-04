@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import axiosWrapper from "../utils/AxiosWrapper";
 import { baseApiURL } from "../baseUrl";
-
+import CustomButton from "../components/CustomButton";
 const UpdatePassword = () => {
   const navigate = useNavigate();
   const { resetId, type } = useParams();
@@ -95,12 +95,13 @@ const UpdatePassword = () => {
             />
           </div>
 
-          <button
-            className="bg-blue-500 mt-5 text-white px-6 py-2 text-xl rounded-md hover:bg-blue-700 ease-linear duration-300 hover:ease-linear hover:duration-300 hover:transition-all transition-all flex justify-center items-center"
+          <CustomButton
+            variant="primary"
             disabled={isLoading}
+            onClick={onSubmit}
           >
             {isLoading ? "Resetting..." : "Reset Password"}
-          </button>
+          </CustomButton>
         </form>
       </div>
       <Toaster position="bottom-center" />

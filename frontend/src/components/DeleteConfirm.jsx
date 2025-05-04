@@ -1,4 +1,5 @@
 import React from "react";
+import CustomButton from "./CustomButton";
 
 const DeleteConfirm = ({ isOpen, onClose, onConfirm, message }) => {
   if (!isOpen) return null;
@@ -20,18 +21,12 @@ const DeleteConfirm = ({ isOpen, onClose, onConfirm, message }) => {
         </p>
 
         <div className="flex justify-end gap-4">
-          <button
-            onClick={onClose}
-            className="text-center px-6 py-3 cursor-pointer font-medium text-sm rounded-md transition-all duration-300 ease-in-out bg-red-50 text-red-700 hover:bg-red-100"
-          >
+          <CustomButton onClick={onClose} variant="secondary">
             Cancel
-          </button>
-          <button
-            onClick={onConfirm}
-            className="text-center px-6 py-3 cursor-pointer font-medium text-sm rounded-md transition-all duration-300 ease-in-out bg-gradient-to-r from-red-400 to-red-600 text-white shadow-lg transform -translate-y-1"
-          >
+          </CustomButton>
+          <CustomButton onClick={onConfirm} variant="danger">
             Delete
-          </button>
+          </CustomButton>
         </div>
       </div>
     </div>

@@ -1,76 +1,121 @@
-const Marks = require("../../models/marks.model");
+const Marks = require("../models/marks.model");
+const Student = require("../models/details/student-details.model");
 
-const getMarks = async (req, res) => {
+const getMarksController = async (req, res) => {
   try {
-    let Mark = await Marks.find(req.body);
-    if (!Mark) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Marks Not Available" });
+    const { studentId, semester } = req.body;
+
+    const query = { student: studentId };
+    if (semester) {
+      query.semester = semester;
     }
-    const data = {
+
+    const marks = await Marks.find(query)
+      .populate("branch", "name")
+      .populate("marks.subject", "name")
+      .populate("student", "firstName lastName enrollmentNo");
+
+    if (!marks || marks.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "No marks found for the specified criteria",
+      });
+    }
+
+    res.json({
       success: true,
-      message: "All Marks Loaded!",
-      Mark,
-    };
-    res.json(data);
+      message: "Marks retrieved successfully",
+      data: marks,
+    });
   } catch (error) {
-    console.error(error.message);
-    console.log(error);
-    res.status(500).json({ success: false, message: "Internal Server Error" });
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
   }
 };
 
-const addMarks = async (req, res) => {
-  let { enrollmentNo, internal, external } = req.body;
+const addMarksController = async (req, res) => {
   try {
-    let existingMarks = await Marks.findOne({ enrollmentNo });
+    const { studentId, semester, branch, marks } = req.body;
+
+    // Validate input
+    if (!studentId || !semester || !branch || !marks || !Array.isArray(marks)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid input data",
+      });
+    }
+
+    // Check if student exists
+    const student = await Student.findById(studentId);
+    if (!student) {
+      return res.status(404).json({
+        success: false,
+        message: "Student not found",
+      });
+    }
+
+    // Find existing marks or create new
+    let existingMarks = await Marks.findOne({ student: studentId, semester });
+
     if (existingMarks) {
-      if (internal) {
-        existingMarks.internal = { ...existingMarks.internal, ...internal };
-      }
-      if (external) {
-        existingMarks.external = { ...existingMarks.external, ...external };
-      }
+      // Update existing marks
+      existingMarks.marks = marks;
       await existingMarks.save();
-      const data = {
-        success: true,
-        message: "Marks Added!",
-      };
-      res.json(data);
     } else {
-      await Marks.create(req.body);
-      const data = {
-        success: true,
-        message: "Marks Added!",
-      };
-      res.json(data);
+      // Create new marks entry
+      existingMarks = await Marks.create({
+        student: studentId,
+        semester,
+        branch,
+        marks,
+      });
     }
-  } catch (error) {
-    console.error(error.message);
-    console.log(error);
-    res.status(500).json({ success: false, message: "Internal Server Error" });
-  }
-};
 
-const deleteMarks = async (req, res) => {
-  try {
-    let mark = await Marks.findByIdAndDelete(req.params.id);
-    if (!mark) {
-      return res
-        .status(400)
-        .json({ success: false, message: "No Marks Data Exists!" });
-    }
-    const data = {
+    res.json({
       success: true,
-      message: "Marks Deleted!",
-    };
-    res.json(data);
+      message: "Marks updated successfully",
+      data: existingMarks,
+    });
   } catch (error) {
-    console.error(error.message);
-    console.log(error);
-    res.status(500).json({ success: false, message: "Internal Server Error" });
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
   }
 };
 
-module.exports = { getMarks, addMarks, deleteMarks };
+const deleteMarksController = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const deletedMarks = await Marks.findByIdAndDelete(id);
+
+    if (!deletedMarks) {
+      return res.status(404).json({
+        success: false,
+        message: "Marks not found",
+      });
+    }
+
+    res.json({
+      success: true,
+      message: "Marks deleted successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
+};
+
+module.exports = {
+  getMarksController,
+  addMarksController,
+  deleteMarksController,
+};

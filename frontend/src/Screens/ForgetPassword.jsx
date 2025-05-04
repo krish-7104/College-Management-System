@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { baseApiURL } from "../baseUrl";
 import axiosWrapper from "../utils/AxiosWrapper";
+import CustomButton from "../components/CustomButton";
+
 const ForgetPassword = () => {
   const navigate = useNavigate();
   const userToken = localStorage.getItem("userToken");
@@ -80,36 +82,33 @@ const ForgetPassword = () => {
             />
           </div>
 
-          <button className="bg-blue-500 mt-5 text-white px-6 py-2 text-xl rounded-md hover:bg-blue-700 ease-linear duration-300 hover:ease-linear hover:duration-300 hover:transition-all transition-all flex justify-center items-center">
+          <CustomButton type="submit" className="mt-5 text-xl">
             Forget Password
-          </button>
+          </CustomButton>
         </form>
       </div>
       <div className="absolute top-4 right-4">
-        <button
-          className={`text-blue-500 mr-6 text-base font-semibold hover:text-blue-700 ease-linear duration-300 hover:ease-linear hover:duration-300 hover:transition-all transition-all ${
-            selected === "Student" && "border-b-2 border-green-500"
-          }`}
+        <CustomButton
           onClick={() => setSelected("Student")}
+          variant={selected === "Student" ? "primary" : "secondary"}
+          className="!bg-transparent !text-blue-500 hover:!text-blue-700 !shadow-none hover:!shadow-none !transform-none hover:!transform-none"
         >
           Student
-        </button>
-        <button
-          className={`text-blue-500 mr-6 text-base font-semibold hover:text-blue-700 ease-linear duration-300 hover:ease-linear hover:duration-300 hover:transition-all transition-all ${
-            selected === "Faculty" && "border-b-2 border-green-500"
-          }`}
+        </CustomButton>
+        <CustomButton
           onClick={() => setSelected("Faculty")}
+          variant={selected === "Faculty" ? "primary" : "secondary"}
+          className="!bg-transparent !text-blue-500 hover:!text-blue-700 !shadow-none hover:!shadow-none !transform-none hover:!transform-none"
         >
           Faculty
-        </button>
-        <button
-          className={`text-blue-500 mr-6 text-base font-semibold hover:text-blue-700 ease-linear duration-300 hover:ease-linear hover:duration-300 hover:transition-all transition-all ${
-            selected === "Admin" && "border-b-2 border-green-500"
-          }`}
+        </CustomButton>
+        <CustomButton
           onClick={() => setSelected("Admin")}
+          variant={selected === "Admin" ? "primary" : "secondary"}
+          className="!bg-transparent !text-blue-500 hover:!text-blue-700 !shadow-none hover:!shadow-none !transform-none hover:!transform-none"
         >
           Admin
-        </button>
+        </CustomButton>
       </div>
       <Toaster position="bottom-center" />
     </div>

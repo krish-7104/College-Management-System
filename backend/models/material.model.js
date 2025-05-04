@@ -1,22 +1,41 @@
 const mongoose = require("mongoose");
 
-const Material = new mongoose.Schema({
-  faculty: {
-    type: String,
-    required: true,
+const Material = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+    },
+    subject: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Subject",
+      required: true,
+    },
+    faculty: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "FacultyDetail",
+      required: true,
+    },
+    file: {
+      type: String,
+      required: true,
+    },
+    semester: {
+      type: Number,
+      required: true,
+    },
+    branch: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Branch",
+      required: true,
+    },
+    type: {
+      type: String,
+      enum: ["notes", "assignment", "syllabus", "other"],
+      required: true,
+    },
   },
-  subject: {
-    type: String,
-    required: true,
-  },
-  title: {
-    type: String,
-    required: true,
-  },
-  link: {
-    type: String,
-    required: true,
-  }
-}, { timestamps: true });
+  { timestamps: true }
+);
 
 module.exports = mongoose.model("Material", Material);

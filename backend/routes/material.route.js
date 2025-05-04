@@ -1,16 +1,24 @@
 const express = require("express");
 const router = express.Router();
-const {
-  getMaterial,
-  addMaterial,
-  updateMaterial,
-  deleteMaterial,
-} = require("../controllers/Other/material.controller");
 const upload = require("../middlewares/multer.middleware");
+const auth = require("../middlewares/auth.middleware");
+const {
+  getMaterialsController,
+  addMaterialController,
+  updateMaterialController,
+  deleteMaterialController,
+} = require("../controllers/material.controller");
 
-router.post("/getMaterial", getMaterial);
-router.post("/addMaterial", upload.single("material"), addMaterial);
-router.put("/updateMaterial/:id", updateMaterial);
-router.delete("/deleteMaterial/:id", deleteMaterial);
+// Get all materials (can filter by subject, faculty, semester, branch, type)
+router.get("/", auth, getMaterialsController);
+
+// Add new material
+router.post("/", auth, upload.single("file"), addMaterialController);
+
+// Update material
+router.put("/:id", auth, upload.single("file"), updateMaterialController);
+
+// Delete material
+router.delete("/:id", auth, deleteMaterialController);
 
 module.exports = router;

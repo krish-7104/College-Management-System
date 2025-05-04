@@ -9,6 +9,7 @@ import { IoAddOutline } from "react-icons/io5";
 import { MdDeleteOutline, MdEditNote } from "react-icons/md";
 import { BiArrowBack } from "react-icons/bi";
 import toast from "react-hot-toast";
+import CustomButton from "./CustomButton";
 
 const Notice = () => {
   const router = useLocation();
@@ -159,12 +160,9 @@ const Notice = () => {
       <div className="relative flex justify-between items-center w-full">
         <Heading title="Notices" />
         {(router.pathname === "/faculty" || router.pathname === "/admin") && (
-          <button
-            onClick={openHandler}
-            className="text-center px-6 py-3 cursor-pointer font-medium text-sm transition-all duration-300 ease-in-out bg-gradient-to-r from-red-500 rounded-full to-red-600 text-white shadow-lg transform -translate-y-1"
-          >
+          <CustomButton onClick={openHandler} className="rounded-full !p-3">
             {open ? <BiArrowBack size={24} /> : <IoAddOutline size={24} />}
-          </button>
+          </CustomButton>
         )}
       </div>
       {!open && (
@@ -186,20 +184,22 @@ const Notice = () => {
                         : "Both"}
                     </span>
                   )}
-                  <button
+                  <CustomButton
                     onClick={() => deleteNoticehandler(item._id)}
-                    className="p-2 text-red-700 bg-red-50 hover:bg-red-100 rounded-full transition duration-300"
+                    variant="danger"
+                    className="!p-2 rounded-full"
                     title="Delete Notice"
                   >
                     <MdDeleteOutline size={20} />
-                  </button>
-                  <button
+                  </CustomButton>
+                  <CustomButton
                     onClick={() => setOpenEditSectionHandler(index)}
-                    className="p-2 text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-full transition duration-300"
+                    variant="secondary"
+                    className="!p-2 rounded-full"
                     title="Edit Notice"
                   >
                     <MdEditNote size={20} />
-                  </button>
+                  </CustomButton>
                 </div>
               )}
 
@@ -298,22 +298,23 @@ const Notice = () => {
             </label>
             <select
               id="type"
-              className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200"
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={data.type}
               onChange={(e) => setData({ ...data, type: e.target.value })}
             >
+              <option value="">Select Type</option>
               <option value="student">Student</option>
               <option value="faculty">Faculty</option>
               <option value="both">Both</option>
             </select>
           </div>
 
-          <button
+          <CustomButton
             onClick={edit ? updateNoticehandler : addNoticehandler}
-            className="w-full py-3 px-6 text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg shadow-md hover:from-blue-600 hover:to-blue-700 transition-all duration-300 font-medium text-sm focus:ring-4 focus:ring-blue-200"
+            className="w-full"
           >
             {edit ? "Update Notice" : "Add Notice"}
-          </button>
+          </CustomButton>
         </form>
       )}
     </div>

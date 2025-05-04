@@ -6,10 +6,10 @@ const {
   updateSubjectController,
 } = require("../controllers/subject.controller");
 const router = express.Router();
-
-router.get("/", getSubjectController);
-router.post("/", addSubjectController);
-router.delete("/:id", deleteSubjectController);
-router.put("/:id", updateSubjectController);
+const auth = require("../middlewares/auth.middleware");
+router.get("/", auth, getSubjectController);
+router.post("/", auth, addSubjectController);
+router.delete("/:id", auth, deleteSubjectController);
+router.put("/:id", auth, updateSubjectController);
 
 module.exports = router;

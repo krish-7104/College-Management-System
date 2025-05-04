@@ -7,7 +7,7 @@ const ProfileCard = ({ profile, name, details }) => {
         <div className="p-8 flex">
           <div className="flex-shrink-0">
             <img
-              src={profile}
+              src={process.env.REACT_APP_MEDIA_LINK + "/" + profile}
               alt="profile"
               className="h-48 w-48 rounded-full object-cover border-4 border-gray-200"
             />

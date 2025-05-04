@@ -5,7 +5,7 @@ import { IoMdAdd, IoMdClose } from "react-icons/io";
 import axiosWrapper from "../../utils/AxiosWrapper";
 import Heading from "../../components/Heading";
 import DeleteConfirm from "../../components/DeleteConfirm";
-
+import CustomButton from "../../components/CustomButton";
 const Admin = () => {
   const [data, setData] = useState({
     firstName: "",
@@ -222,7 +222,7 @@ const Admin = () => {
   return (
     <div className="w-full mx-auto mt-10 flex justify-center items-start flex-col mb-10 relative">
       <Heading title="Admin Details" />
-      <button
+      <CustomButton
         onClick={() => {
           if (showAddForm) {
             resetForm();
@@ -237,7 +237,7 @@ const Admin = () => {
         ) : (
           <IoMdAdd className="text-3xl" />
         )}
-      </button>
+      </CustomButton>
 
       {showAddForm && (
         <div className="flex flex-col justify-center items-center w-full mt-8">
@@ -278,7 +278,7 @@ const Admin = () => {
               <select
                 value={data.gender}
                 onChange={(e) => handleInputChange("gender", e.target.value)}
-                className="w-full bg-blue-50 rounded border focus:border-dark-green focus:bg-secondary-light focus:ring-2 focus:ring-light-green text-base outline-none py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">Select Gender</option>
                 <option value="male">Male</option>
@@ -302,12 +302,13 @@ const Admin = () => {
               </div>
             ))}
           </div>
-          <button
-            className="mt-6 bg-blue-500 px-6 py-3 text-white rounded-md hover:bg-blue-600"
+          <CustomButton
+            variant="primary"
+            className="mt-6"
             onClick={addAdminHandler}
           >
             {isEditing ? "Update Admin" : "Add Admin"}
-          </button>
+          </CustomButton>
         </div>
       )}
 
@@ -337,18 +338,18 @@ const Admin = () => {
                   <td className="py-4 px-6">{item.employeeId}</td>
                   <td className="py-4 px-6">{item.designation}</td>
                   <td className="py-4 px-6 text-center flex justify-center gap-4">
-                    <button
-                      className="text-xl hover:text-blue-500"
+                    <CustomButton
+                      variant="secondary"
                       onClick={() => editAdminHandler(item)}
                     >
                       <MdEdit />
-                    </button>
-                    <button
-                      className="text-xl hover:text-red-500"
+                    </CustomButton>
+                    <CustomButton
+                      variant="danger"
                       onClick={() => deleteAdminHandler(item._id)}
                     >
                       <MdOutlineDelete />
-                    </button>
+                    </CustomButton>
                   </td>
                 </tr>
               ))}
