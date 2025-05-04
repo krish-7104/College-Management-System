@@ -7,10 +7,12 @@ import Faculty from "./Faculty";
 import Subjects from "./Subject";
 import Admin from "./Admin";
 import Branch from "./Branch";
-import ProfileCard from "../../components/ProfileCard";
 import { useDispatch } from "react-redux";
 import { setUserData } from "../../redux/actions";
 import axiosWrapper from "../../utils/AxiosWrapper";
+import UpdatePasswordLoggedIn from "../../components/UpdatePasswordLoggedIn";
+import Profile from "./Profile";
+
 const MENU_ITEMS = [
   { id: "home", label: "Home", component: null },
   { id: "student", label: "Student", component: Student },
@@ -19,6 +21,11 @@ const MENU_ITEMS = [
   { id: "notice", label: "Notice", component: Notice },
   { id: "subjects", label: "Subjects", component: Subjects },
   { id: "admin", label: "Admin", component: Admin },
+  {
+    id: "updatepassword",
+    label: "Update Password",
+    component: UpdatePasswordLoggedIn,
+  },
 ];
 
 const Home = () => {
@@ -57,7 +64,7 @@ const Home = () => {
   }, [dispatch, userToken]);
 
   const getMenuItemClass = (menuId) => {
-    const isSelected = selectedMenu.toLowerCase() === menuId;
+    const isSelected = selectedMenu.toLowerCase() === menuId.toLowerCase();
     return `
       text-center px-6 py-3 cursor-pointer
       font-medium text-sm w-full
@@ -79,24 +86,11 @@ const Home = () => {
     }
 
     if (selectedMenu === "Home" && profileData) {
-      return (
-        <ProfileCard
-          profile={profileData.profile}
-          name={`${profileData.firstName} ${profileData.lastName}`}
-          details={{
-            email: profileData.email,
-            phone: profileData.phone,
-            branch: profileData.branch.name,
-            designation: profileData.designation,
-            employeeId: profileData.employeeId,
-            gender: profileData.gender,
-          }}
-        />
-      );
+      return <Profile profileData={profileData} />;
     }
 
     const MenuItem = MENU_ITEMS.find(
-      (item) => item.id === selectedMenu.toLowerCase()
+      (item) => item.label.toLowerCase() === selectedMenu.toLowerCase()
     )?.component;
 
     return MenuItem && <MenuItem />;

@@ -1,9 +1,7 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { MdOutlineDelete, MdEdit } from "react-icons/md";
 import { IoMdAdd, IoMdClose } from "react-icons/io";
-import { baseApiURL } from "../../baseUrl";
 import Heading from "../../components/Heading";
 import DeleteConfirm from "../../components/DeleteConfirm";
 import axiosWrapper from "../../utils/AxiosWrapper";

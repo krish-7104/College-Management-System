@@ -297,6 +297,52 @@ const updatePasswordHandler = async (req, res) => {
   }
 };
 
+const updateLoggedInPasswordController = async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+    const userId = req.userId;
+
+    if (!currentPassword || !newPassword) {
+      return ApiResponse.badRequest(
+        "Current password and new password are required"
+      ).send(res);
+    }
+
+    if (newPassword.length < 8) {
+      return ApiResponse.badRequest(
+        "New password must be at least 8 characters long"
+      ).send(res);
+    }
+
+    const user = await adminDetails.findById(userId);
+    if (!user) {
+      return ApiResponse.notFound("User not found").send(res);
+    }
+
+    const isPasswordValid = await bcrypt.compare(
+      currentPassword,
+      user.password
+    );
+    if (!isPasswordValid) {
+      return ApiResponse.unauthorized("Current password is incorrect").send(
+        res
+      );
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    await adminDetails.findByIdAndUpdate(userId, {
+      password: hashedPassword,
+    });
+
+    return ApiResponse.success(null, "Password updated successfully").send(res);
+  } catch (error) {
+    console.error("Update Password Error: ", error);
+    return ApiResponse.internalServerError().send(res);
+  }
+};
+
 module.exports = {
   loginAdminController,
   getAllDetailsController,
@@ -306,4 +352,5 @@ module.exports = {
   getMyDetailsController,
   sendForgetPasswordEmail,
   updatePasswordHandler,
+  updateLoggedInPasswordController,
 };

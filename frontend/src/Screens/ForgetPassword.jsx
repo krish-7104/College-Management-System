@@ -1,22 +1,44 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
-import { baseApiURL } from "../baseUrl";
 import axiosWrapper from "../utils/AxiosWrapper";
 import CustomButton from "../components/CustomButton";
+
+const USER_TYPES = {
+  STUDENT: "Student",
+  FACULTY: "Faculty",
+  ADMIN: "Admin",
+};
+
+const UserTypeSelector = ({ selected, onSelect }) => (
+  <div className="flex justify-center gap-4 mb-8">
+    {Object.values(USER_TYPES).map((type) => (
+      <button
+        key={type}
+        onClick={() => onSelect(type)}
+        className={`px-5 py-2 text-sm font-medium rounded-full transition duration-200 ${
+          selected === type
+            ? "bg-blue-600 text-white shadow"
+            : "bg-gray-100 text-gray-800 hover:bg-gray-200"
+        }`}
+      >
+        {type}
+      </button>
+    ))}
+  </div>
+);
 
 const ForgetPassword = () => {
   const navigate = useNavigate();
   const userToken = localStorage.getItem("userToken");
+  const [selected, setSelected] = useState(USER_TYPES.STUDENT);
+  const [email, setEmail] = useState("");
+
   useEffect(() => {
     if (userToken) {
       navigate(`/${localStorage.getItem("userType")}`);
     }
   }, [userToken, navigate]);
-
-  const [selected, setSelected] = useState("Student");
-
-  const [email, setEmail] = useState("");
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -31,7 +53,7 @@ const ForgetPassword = () => {
         "Content-Type": "application/json",
       };
       const resp = await axiosWrapper.post(
-        `${baseApiURL()}/${selected.toLowerCase()}/forget-password`,
+        `/${selected.toLowerCase()}/forget-password`,
         { email },
         {
           headers: headers,
@@ -53,24 +75,24 @@ const ForgetPassword = () => {
       setEmail("");
     }
   };
+
   return (
-    <div className="bg-white h-[100vh] w-full flex justify-between items-center">
-      <img
-        className="w-[60%] h-[100vh] object-cover"
-        src="https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        alt=""
-      />
-      <div className="w-[40%] flex justify-center items-start flex-col pl-8">
-        <p className="text-3xl font-semibold pb-2 border-b-2 border-green-500">
-          {selected && selected} Forget Password
-        </p>
+    <div className="min-h-screen bg-gradient-to-tr from-gray-100 via-white to-gray-100 flex items-center justify-center px-4">
+      <div className="w-full max-w-[40%] px-6 py-12">
+        <h1 className="text-4xl font-bold text-gray-800 text-center mb-6">
+          {selected} Forget Password
+        </h1>
+        <UserTypeSelector selected={selected} onSelect={setSelected} />
         <form
-          className="flex justify-center items-start flex-col w-full mt-10"
+          className="w-full p-8 bg-white rounded-2xl shadow-xl border border-gray-200"
           onSubmit={onSubmit}
         >
-          <div className="flex flex-col w-[70%]">
-            <label className="mb-1" htmlFor="email">
-              {selected && selected} Email
+          <div className="mb-6">
+            <label
+              className="block text-gray-800 text-sm font-medium mb-2"
+              htmlFor="email"
+            >
+              {selected} Email
             </label>
             <input
               type="email"
@@ -78,37 +100,16 @@ const ForgetPassword = () => {
               onChange={(e) => setEmail(e.target.value)}
               value={email}
               required
-              className="bg-white outline-none border-2 border-gray-400 py-2 px-4 rounded-md w-full focus:border-blue-500"
+              className="w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
-
-          <CustomButton type="submit" className="mt-5 text-xl">
-            Forget Password
+          <CustomButton
+            type="submit"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-4 rounded-lg transition duration-200"
+          >
+            Send Reset Link
           </CustomButton>
         </form>
-      </div>
-      <div className="absolute top-4 right-4">
-        <CustomButton
-          onClick={() => setSelected("Student")}
-          variant={selected === "Student" ? "primary" : "secondary"}
-          className="!bg-transparent !text-blue-500 hover:!text-blue-700 !shadow-none hover:!shadow-none !transform-none hover:!transform-none"
-        >
-          Student
-        </CustomButton>
-        <CustomButton
-          onClick={() => setSelected("Faculty")}
-          variant={selected === "Faculty" ? "primary" : "secondary"}
-          className="!bg-transparent !text-blue-500 hover:!text-blue-700 !shadow-none hover:!shadow-none !transform-none hover:!transform-none"
-        >
-          Faculty
-        </CustomButton>
-        <CustomButton
-          onClick={() => setSelected("Admin")}
-          variant={selected === "Admin" ? "primary" : "secondary"}
-          className="!bg-transparent !text-blue-500 hover:!text-blue-700 !shadow-none hover:!shadow-none !transform-none hover:!transform-none"
-        >
-          Admin
-        </CustomButton>
       </div>
       <Toaster position="bottom-center" />
     </div>

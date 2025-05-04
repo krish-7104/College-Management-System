@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import axiosWrapper from "../utils/AxiosWrapper";
-import { baseApiURL } from "../baseUrl";
 import CustomButton from "../components/CustomButton";
+
 const UpdatePassword = () => {
   const navigate = useNavigate();
   const { resetId, type } = useParams();
@@ -33,7 +33,7 @@ const UpdatePassword = () => {
 
     try {
       const response = await axiosWrapper.post(
-        `${baseApiURL()}/${type}/update-password/${resetId}`,
+        `/${type}/update-password/${resetId}`,
         { password: newPassword, resetId }
       );
 
@@ -53,22 +53,20 @@ const UpdatePassword = () => {
   };
 
   return (
-    <div className="bg-white h-[100vh] w-full flex justify-between items-center">
-      <img
-        className="w-[60%] h-[100vh] object-cover"
-        src="https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        alt=""
-      />
-      <div className="w-[40%] flex justify-center items-start flex-col pl-8">
-        <p className="text-3xl font-semibold pb-2 border-b-2 border-green-500">
+    <div className="min-h-screen bg-gradient-to-tr from-gray-100 via-white to-gray-100 flex items-center justify-center px-4">
+      <div className="w-full max-w-2xl lg:w-1/2 px-6 py-12">
+        <h1 className="text-4xl font-bold text-gray-800 text-center mb-6">
           Update Password
-        </p>
+        </h1>
         <form
-          className="flex justify-center items-start flex-col w-full mt-10"
+          className="w-full p-8 bg-white rounded-2xl shadow-xl border border-gray-200"
           onSubmit={onSubmit}
         >
-          <div className="flex flex-col w-[70%]">
-            <label className="mb-1" htmlFor="newPassword">
+          <div className="mb-6">
+            <label
+              className="block text-gray-800 text-sm font-medium mb-2"
+              htmlFor="newPassword"
+            >
               New Password
             </label>
             <input
@@ -77,12 +75,15 @@ const UpdatePassword = () => {
               onChange={(e) => setNewPassword(e.target.value)}
               value={newPassword}
               required
-              className="bg-white outline-none border-2 border-gray-400 py-2 px-4 rounded-md w-full focus:border-blue-500"
+              className="w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
-          <div className="flex flex-col w-[70%] mt-4">
-            <label className="mb-1" htmlFor="confirmPassword">
+          <div className="mb-6">
+            <label
+              className="block text-gray-800 text-sm font-medium mb-2"
+              htmlFor="confirmPassword"
+            >
               Confirm Password
             </label>
             <input
@@ -91,14 +92,14 @@ const UpdatePassword = () => {
               onChange={(e) => setConfirmPassword(e.target.value)}
               value={confirmPassword}
               required
-              className="bg-white outline-none border-2 border-gray-400 py-2 px-4 rounded-md w-full focus:border-blue-500"
+              className="w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           <CustomButton
-            variant="primary"
+            type="submit"
             disabled={isLoading}
-            onClick={onSubmit}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-4 rounded-lg transition duration-200"
           >
             {isLoading ? "Resetting..." : "Reset Password"}
           </CustomButton>

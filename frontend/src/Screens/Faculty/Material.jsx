@@ -8,7 +8,7 @@ import axiosWrapper from "../../utils/AxiosWrapper";
 import DeleteConfirm from "../../components/DeleteConfirm";
 import CustomButton from "../../components/CustomButton";
 import { MdLink } from "react-icons/md";
-
+import { IoMdAdd } from "react-icons/io";
 const Material = () => {
   const [materials, setMaterials] = useState([]);
   const [subjects, setSubjects] = useState([]);
@@ -33,14 +33,12 @@ const Material = () => {
     type: "",
   });
 
-  // Fetch initial data
   useEffect(() => {
     fetchSubjects();
     fetchBranches();
     fetchMaterials();
   }, []);
 
-  // Fetch materials when filters change
   useEffect(() => {
     fetchMaterials();
   }, [filters]);
@@ -79,7 +77,6 @@ const Material = () => {
 
   const fetchMaterials = async () => {
     try {
-      // Construct query params from filters
       const queryParams = new URLSearchParams();
       Object.entries(filters).forEach(([key, value]) => {
         if (value) queryParams.append(key, value);
@@ -208,13 +205,8 @@ const Material = () => {
     <div className="w-full mx-auto mt-10 flex justify-center items-start flex-col mb-10">
       <div className="flex justify-between items-center w-full">
         <Heading title="Material Management" />
-        <CustomButton
-          onClick={() => {
-            resetForm();
-            setShowModal(true);
-          }}
-        >
-          Add New Material
+        <CustomButton onClick={() => setShowModal(true)}>
+          <IoMdAdd className="text-2xl" />
         </CustomButton>
       </div>
 

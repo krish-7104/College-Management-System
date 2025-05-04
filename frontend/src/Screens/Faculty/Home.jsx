@@ -2,20 +2,26 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import { toast, Toaster } from "react-hot-toast";
 import Notice from "../../components/Notice";
-import ProfileCard from "../../components/ProfileCard";
 import { useDispatch } from "react-redux";
 import { setUserData } from "../../redux/actions";
 import axiosWrapper from "../../utils/AxiosWrapper";
 import Timetable from "./Timetable";
 import Material from "./Material";
 import StudentFinder from "./StudentFinder";
+import UpdatePasswordLoggedIn from "../../components/UpdatePasswordLoggedIn";
+import Profile from "./Profile";
 
 const MENU_ITEMS = [
-  { id: "home", label: "Home", component: ProfileCard },
+  { id: "home", label: "Home", component: null },
   { id: "timetable", label: "Timetable", component: Timetable },
   { id: "material", label: "Material", component: Material },
   { id: "notice", label: "Notice", component: Notice },
   { id: "studentfinder", label: "Student Info", component: StudentFinder },
+  {
+    id: "updatepassword",
+    label: "Update Password",
+    component: UpdatePasswordLoggedIn,
+  },
 ];
 
 const Home = () => {
@@ -44,7 +50,7 @@ const Home = () => {
   }, [dispatch, userToken]);
 
   const getMenuItemClass = (menuId) => {
-    const isSelected = selectedMenu.toLowerCase() === menuId;
+    const isSelected = selectedMenu.toLowerCase() === menuId.toLowerCase();
     return `text-center px-6 py-3 cursor-pointer font-medium text-sm w-full rounded-md ${
       isSelected
         ? "bg-blue-500 text-white"
@@ -52,9 +58,17 @@ const Home = () => {
     }`;
   };
 
-  const CurrentComponent = MENU_ITEMS.find(
-    (item) => item.id.toLowerCase() === selectedMenu.toLowerCase()
-  )?.component;
+  const renderContent = () => {
+    if (selectedMenu === "Home" && profileData) {
+      return <Profile profileData={profileData} />;
+    }
+
+    const MenuItem = MENU_ITEMS.find(
+      (item) => item.label.toLowerCase() === selectedMenu.toLowerCase()
+    )?.component;
+
+    return MenuItem && <MenuItem />;
+  };
 
   return (
     <>
@@ -65,32 +79,14 @@ const Home = () => {
             <li
               key={item.id}
               className={getMenuItemClass(item.id)}
-              onClick={() => setSelectedMenu(item.id)}
+              onClick={() => setSelectedMenu(item.label)}
             >
               {item.label}
             </li>
           ))}
         </ul>
 
-        {selectedMenu.toLowerCase() === "home" && profileData ? (
-          <ProfileCard
-            profile={profileData.profile}
-            name={`${profileData.firstName} ${profileData.lastName}`}
-            details={{
-              "Employee ID": profileData.employeeId,
-              Designation: profileData.designation,
-              Email: profileData.email,
-              Phone: profileData.phone,
-              "Blood Group": profileData.bloodGroup,
-              Gender: profileData.gender,
-              "Joining Date": new Date(
-                profileData.joiningDate
-              ).toLocaleDateString(),
-            }}
-          />
-        ) : (
-          CurrentComponent && <CurrentComponent />
-        )}
+        {renderContent()}
       </div>
       <Toaster position="bottom-center" />
     </>

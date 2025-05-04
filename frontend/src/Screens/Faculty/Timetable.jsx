@@ -50,7 +50,7 @@ const AddTimetableModal = ({
             onClick={onClose}
             className="text-gray-500 hover:text-gray-700"
           >
-            <IoMdClose size={24} />
+            <IoMdClose className="text-3xl" />
           </button>
         </div>
 
@@ -261,7 +261,7 @@ const Timetable = () => {
       <div className="flex justify-between items-center w-full">
         <Heading title="Timetable Management" />
         <CustomButton onClick={() => setShowAddModal(true)}>
-          <IoMdAdd className="text-3xl" />
+          <IoMdAdd className="text-2xl" />
         </CustomButton>
       </div>
 

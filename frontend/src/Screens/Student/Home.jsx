@@ -2,18 +2,24 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import { toast, Toaster } from "react-hot-toast";
 import Notice from "../../components/Notice";
-import ProfileCard from "../../components/ProfileCard";
 import { useDispatch } from "react-redux";
 import { setUserData } from "../../redux/actions";
 import axiosWrapper from "../../utils/AxiosWrapper";
 import Timetable from "./Timetable";
 import Material from "./Material";
+import UpdatePasswordLoggedIn from "../../components/UpdatePasswordLoggedIn";
+import Profile from "./Profile";
 
 const MENU_ITEMS = [
   { id: "home", label: "Home", component: null },
   { id: "timetable", label: "Timetable", component: Timetable },
   { id: "material", label: "Material", component: Material },
   { id: "notice", label: "Notice", component: Notice },
+  {
+    id: "updatepassword",
+    label: "Update Password",
+    component: UpdatePasswordLoggedIn,
+  },
 ];
 
 const Home = () => {
@@ -52,7 +58,7 @@ const Home = () => {
   }, [dispatch, userToken]);
 
   const getMenuItemClass = (menuId) => {
-    const isSelected = selectedMenu.toLowerCase() === menuId;
+    const isSelected = selectedMenu.toLowerCase() === menuId.toLowerCase();
     return `
       text-center px-6 py-3 cursor-pointer
       font-medium text-sm w-full
@@ -74,25 +80,11 @@ const Home = () => {
     }
 
     if (selectedMenu === "Home" && profileData) {
-      return (
-        <ProfileCard
-          profile={profileData.profile}
-          name={`${profileData.firstName} ${profileData.lastName}`}
-          details={{
-            enrollmentNo: profileData.enrollmentNo,
-            email: profileData.email,
-            phone: profileData.phone,
-            bloodGroup: profileData.bloodGroup,
-            gender: profileData.gender,
-            semester: profileData.semester,
-            branch: profileData.branchId.name,
-          }}
-        />
-      );
+      return <Profile profileData={profileData} />;
     }
 
     const MenuItem = MENU_ITEMS.find(
-      (item) => item.id === selectedMenu.toLowerCase()
+      (item) => item.label.toLowerCase() === selectedMenu.toLowerCase()
     )?.component;
 
     return MenuItem && <MenuItem />;
