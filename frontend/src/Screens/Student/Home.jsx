@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import { toast, Toaster } from "react-hot-toast";
-import Notice from "../../components/Notice";
+import Notice from "../Notice";
 import { useDispatch } from "react-redux";
 import { setUserData } from "../../redux/actions";
 import axiosWrapper from "../../utils/AxiosWrapper";
@@ -32,6 +32,7 @@ const Home = () => {
   const fetchUserDetails = async () => {
     setIsLoading(true);
     try {
+      toast.loading("Loading user details...");
       const response = await axiosWrapper.get(`/student/my-details`, {
         headers: {
           Authorization: `Bearer ${userToken}`,
@@ -50,6 +51,7 @@ const Home = () => {
       );
     } finally {
       setIsLoading(false);
+      toast.dismiss();
     }
   };
 

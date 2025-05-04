@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import { toast, Toaster } from "react-hot-toast";
-import Notice from "../../components/Notice";
+import Notice from "../Notice";
 import { useDispatch } from "react-redux";
 import { setUserData } from "../../redux/actions";
 import axiosWrapper from "../../utils/AxiosWrapper";
@@ -16,9 +16,9 @@ const MENU_ITEMS = [
   { id: "timetable", label: "Timetable", component: Timetable },
   { id: "material", label: "Material", component: Material },
   { id: "notice", label: "Notice", component: Notice },
-  { id: "studentfinder", label: "Student Info", component: StudentFinder },
+  { id: "student info", label: "Student Info", component: StudentFinder },
   {
-    id: "updatepassword",
+    id: "update password",
     label: "Update Password",
     component: UpdatePasswordLoggedIn,
   },
@@ -63,11 +63,16 @@ const Home = () => {
       return <Profile profileData={profileData} />;
     }
 
-    const MenuItem = MENU_ITEMS.find(
+    const menuItem = MENU_ITEMS.find(
       (item) => item.label.toLowerCase() === selectedMenu.toLowerCase()
-    )?.component;
+    );
 
-    return MenuItem && <MenuItem />;
+    if (menuItem && menuItem.component) {
+      const Component = menuItem.component;
+      return <Component />;
+    }
+
+    return null;
   };
 
   return (

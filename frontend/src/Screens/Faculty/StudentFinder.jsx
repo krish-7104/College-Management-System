@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import Heading from "../../components/Heading";
 import axiosWrapper from "../../utils/AxiosWrapper";
 import CustomButton from "../../components/CustomButton";
+
 const StudentFinder = () => {
   const [searchParams, setSearchParams] = useState({
     enrollmentNo: "",
@@ -16,26 +17,37 @@ const StudentFinder = () => {
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const userToken = localStorage.getItem("userToken");
+  const [selectedBranch, setSelectedBranch] = useState("");
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchBranches = async () => {
       try {
-        const response = await axiosWrapper.get(`/branch`, {
+        toast.loading("Loading branches...");
+        const response = await axiosWrapper.get("/branch", {
           headers: {
             Authorization: `Bearer ${userToken}`,
           },
         });
         if (response.data.success) {
           setBranches(response.data.data);
+        } else {
+          toast.error(response.data.message);
         }
       } catch (error) {
-        console.error("Error fetching branches:", error);
-        toast.error("Failed to load branches");
-        setBranches([]);
+        if (error.response?.status === 404) {
+          setBranches([]);
+        } else {
+          toast.error(
+            error.response?.data?.message || "Failed to load branches"
+          );
+        }
+      } finally {
+        toast.dismiss();
       }
     };
     fetchBranches();
-  }, []);
+  }, [userToken]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -85,6 +97,36 @@ const StudentFinder = () => {
     setShowModal(true);
   };
 
+  const fetchStudents = async () => {
+    if (!selectedBranch) return;
+    try {
+      toast.loading("Loading students...");
+      const response = await axiosWrapper.get(
+        `/student/branch/${selectedBranch}`,
+        {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        }
+      );
+      if (response.data.success) {
+        setStudents(response.data.data);
+        toast.success("Students loaded successfully");
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      if (error.response?.status === 404) {
+        setStudents([]);
+        toast.error("No students found for this branch");
+      } else {
+        toast.error(error.response?.data?.message || "Failed to load students");
+      }
+    } finally {
+      toast.dismiss();
+    }
+  };
+
   return (
     <div className="w-full mx-auto mt-10 flex justify-center items-start flex-col mb-10">
       <div className="flex justify-between items-center w-full">
@@ -93,7 +135,7 @@ const StudentFinder = () => {
 
       <div className="my-6 mx-auto w-full">
         <form onSubmit={searchStudents} className="">
-          <div className="grid grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Enrollment Number
@@ -152,12 +194,11 @@ const StudentFinder = () => {
                 className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">Select Branch</option>
-                {branches &&
-                  branches.map((branch) => (
-                    <option key={branch._id} value={branch._id}>
-                      {branch.name}
-                    </option>
-                  ))}
+                {branches?.map((branch) => (
+                  <option key={branch._id} value={branch._id}>
+                    {branch.name}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -198,6 +239,10 @@ const StudentFinder = () => {
                           src={`${process.env.REACT_APP_MEDIA_LINK}/${student.profile}`}
                           alt={`${student.firstName}'s profile`}
                           className="w-12 h-12 object-cover rounded-full"
+                          onError={(e) => {
+                            e.target.src =
+                              "https://images.unsplash.com/photo-1744315900478-fa44dc6a4e89?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+                          }}
                         />
                       </td>
                       <td className="px-6 py-4 border-b">
@@ -221,7 +266,7 @@ const StudentFinder = () => {
         )}
 
         {showModal && selectedStudent && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
             <div className="bg-white rounded-lg p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
               <div className="flex justify-between items-start mb-6">
                 <h2 className="text-2xl font-bold">Student Details</h2>
@@ -245,20 +290,24 @@ const StudentFinder = () => {
                 </CustomButton>
               </div>
 
-              <div className="flex gap-8 mb-8">
-                <div className="w-1/3">
+              <div className="flex flex-col md:flex-row gap-8 mb-8">
+                <div className="w-full md:w-1/3">
                   <img
                     src={`${process.env.REACT_APP_MEDIA_LINK}/${selectedStudent.profile}`}
                     alt={`${selectedStudent.firstName}'s profile`}
                     className="w-full h-auto object-cover rounded-lg"
+                    onError={(e) => {
+                      e.target.src =
+                        "https://images.unsplash.com/photo-1744315900478-fa44dc6a4e89?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+                    }}
                   />
                 </div>
 
-                <div className="w-2/3">
+                <div className="w-full md:w-2/3">
                   <h3 className="text-xl font-semibold mb-4">
                     Personal Information
                   </h3>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <p>
                       <span className="font-medium">Full Name:</span>{" "}
                       {selectedStudent.firstName} {selectedStudent.middleName}{" "}
@@ -280,7 +329,7 @@ const StudentFinder = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="bg-gray-50 p-6 rounded-lg">
                   <h3 className="text-lg font-semibold mb-4">
                     Academic Information

@@ -14,12 +14,14 @@ const Subject = () => {
     semester: "",
     credits: "",
   });
-  const [subject, setSubject] = useState();
+  const [subject, setSubject] = useState([]);
   const [branch, setBranches] = useState([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const [selectedSubjectId, setSelectedSubjectId] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const userToken = localStorage.getItem("userToken");
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     getSubjectHandler();
@@ -28,10 +30,10 @@ const Subject = () => {
 
   const getSubjectHandler = async () => {
     try {
+      toast.loading("Loading subjects...");
       const response = await axiosWrapper.get(`/subject`, {
         headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+          Authorization: `Bearer ${userToken}`,
         },
       });
       if (response.data.success) {
@@ -40,17 +42,22 @@ const Subject = () => {
         toast.error(response.data.message);
       }
     } catch (error) {
-      console.error(error);
-      toast.error(error.response?.data?.message || "Error fetching subjects");
+      if (error.response?.status === 404) {
+        setSubject([]);
+      } else {
+        toast.error(error.response?.data?.message || "Error fetching subjects");
+      }
+    } finally {
+      toast.dismiss();
     }
   };
 
   const getBranchHandler = async () => {
     try {
+      toast.loading("Loading branches...");
       const response = await axiosWrapper.get(`/branch`, {
         headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+          Authorization: `Bearer ${userToken}`,
         },
       });
       if (response.data.success) {
@@ -59,8 +66,13 @@ const Subject = () => {
         toast.error(response.data.message);
       }
     } catch (error) {
-      console.error(error);
-      toast.error(error.response?.data?.message || "Error fetching subjects");
+      if (error.response?.status === 404) {
+        setBranches([]);
+      } else {
+        toast.error(error.response?.data?.message || "Error fetching branches");
+      }
+    } finally {
+      toast.dismiss();
     }
   };
 
@@ -266,45 +278,55 @@ const Subject = () => {
 
       {!showAddForm && (
         <div className="mt-8 w-full">
-          <table className="text-sm min-w-full bg-white">
-            <thead>
-              <tr className="bg-blue-500 text-white">
-                <th className="py-4 px-6 text-left font-semibold">Name</th>
-                <th className="py-4 px-6 text-left font-semibold">Code</th>
-                <th className="py-4 px-6 text-left font-semibold">Branch</th>
-                <th className="py-4 px-6 text-left font-semibold">Semester</th>
-                <th className="py-4 px-6 text-left font-semibold">Credits</th>
-                <th className="py-4 px-6 text-center font-semibold">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {" "}
-              {subject &&
-                subject.map((item, index) => (
-                  <tr key={index} className="border-b hover:bg-blue-50">
-                    <td className="py-4 px-6">{item.name}</td>
-                    <td className="py-4 px-6">{item.code}</td>
-                    <td className="py-4 px-6">{item.branch?.name}</td>
-                    <td className="py-4 px-6">{item.semester}</td>
-                    <td className="py-4 px-6">{item.credits}</td>
-                    <td className="py-4 px-6 text-center flex justify-center gap-4">
-                      <CustomButton
-                        variant="secondary"
-                        onClick={() => editSubjectHandler(item)}
-                      >
-                        <MdEdit />
-                      </CustomButton>
-                      <CustomButton
-                        variant="danger"
-                        onClick={() => deleteSubjectHandler(item._id)}
-                      >
-                        <MdOutlineDelete />
-                      </CustomButton>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
+          {subject.length === 0 ? (
+            <div className="text-center py-8 text-gray-500">
+              No subjects found
+            </div>
+          ) : (
+            <table className="text-sm min-w-full bg-white">
+              <thead>
+                <tr className="bg-blue-500 text-white">
+                  <th className="py-4 px-6 text-left font-semibold">Name</th>
+                  <th className="py-4 px-6 text-left font-semibold">Code</th>
+                  <th className="py-4 px-6 text-left font-semibold">Branch</th>
+                  <th className="py-4 px-6 text-left font-semibold">
+                    Semester
+                  </th>
+                  <th className="py-4 px-6 text-left font-semibold">Credits</th>
+                  <th className="py-4 px-6 text-center font-semibold">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {" "}
+                {subject &&
+                  subject.map((item, index) => (
+                    <tr key={index} className="border-b hover:bg-blue-50">
+                      <td className="py-4 px-6">{item.name}</td>
+                      <td className="py-4 px-6">{item.code}</td>
+                      <td className="py-4 px-6">{item.branch?.name}</td>
+                      <td className="py-4 px-6">{item.semester}</td>
+                      <td className="py-4 px-6">{item.credits}</td>
+                      <td className="py-4 px-6 text-center flex justify-center gap-4">
+                        <CustomButton
+                          variant="secondary"
+                          onClick={() => editSubjectHandler(item)}
+                        >
+                          <MdEdit />
+                        </CustomButton>
+                        <CustomButton
+                          variant="danger"
+                          onClick={() => deleteSubjectHandler(item._id)}
+                        >
+                          <MdOutlineDelete />
+                        </CustomButton>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          )}
         </div>
       )}
       <DeleteConfirm

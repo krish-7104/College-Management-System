@@ -43,6 +43,7 @@ const Faculty = () => {
   const [isEditing, setIsEditing] = useState(false);
   const userToken = localStorage.getItem("userToken");
   const [file, setFile] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     getFacultyHandler();
@@ -51,6 +52,7 @@ const Faculty = () => {
 
   const getBranchHandler = async () => {
     try {
+      toast.loading("Loading branches...");
       const response = await axiosWrapper.get(`/branch`, {
         headers: {
           Authorization: `Bearer ${userToken}`,
@@ -62,13 +64,20 @@ const Faculty = () => {
         toast.error(response.data.message);
       }
     } catch (error) {
-      console.error(error);
-      toast.error(error.response?.data?.message || "Error fetching subjects");
+      if (error.response?.status === 404) {
+        setBranches([]);
+      } else {
+        console.error(error);
+        toast.error(error.response?.data?.message || "Error fetching subjects");
+      }
+    } finally {
+      toast.dismiss();
     }
   };
 
   const getFacultyHandler = async () => {
     try {
+      toast.loading("Loading faculty...");
       const response = await axiosWrapper.get(`/faculty`, {
         headers: {
           Authorization: `Bearer ${userToken}`,
@@ -80,7 +89,13 @@ const Faculty = () => {
         toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Error fetching faculty");
+      if (error.response?.status === 404) {
+        setFaculty([]);
+      } else {
+        toast.error(error.response?.data?.message || "Error fetching faculty");
+      }
+    } finally {
+      toast.dismiss();
     }
   };
 
@@ -357,49 +372,57 @@ const Faculty = () => {
 
       {!showAddForm && (
         <div className="mt-8 w-full">
-          <table className="text-sm min-w-full bg-white">
-            <thead>
-              <tr className="bg-blue-500 text-white">
-                <th className="py-4 px-6 text-left font-semibold">Name</th>
-                <th className="py-4 px-6 text-left font-semibold">Email</th>
-                <th className="py-4 px-6 text-left font-semibold">Phone</th>
-                <th className="py-4 px-6 text-left font-semibold">
-                  Employee ID
-                </th>
-                <th className="py-4 px-6 text-left font-semibold">
-                  Designation
-                </th>
-                <th className="py-4 px-6 text-center font-semibold">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {faculty.map((item, index) => (
-                <tr key={index} className="border-b hover:bg-blue-50">
-                  <td className="py-4 px-6">{`${item.firstName} ${item.lastName}`}</td>
-                  <td className="py-4 px-6">{item.email}</td>
-                  <td className="py-4 px-6">{item.phone}</td>
-                  <td className="py-4 px-6">{item.employeeId}</td>
-                  <td className="py-4 px-6">{item.designation}</td>
-                  <td className="py-4 px-6 text-center flex justify-center gap-4">
-                    <CustomButton
-                      variant="secondary"
-                      className="!p-2"
-                      onClick={() => editFacultyHandler(item)}
-                    >
-                      <MdEdit />
-                    </CustomButton>
-                    <CustomButton
-                      variant="danger"
-                      className="!p-2"
-                      onClick={() => deleteFacultyHandler(item._id)}
-                    >
-                      <MdOutlineDelete />
-                    </CustomButton>
-                  </td>
+          {faculty.length === 0 ? (
+            <div className="text-center py-8 text-gray-500">
+              No faculty found
+            </div>
+          ) : (
+            <table className="text-sm min-w-full bg-white">
+              <thead>
+                <tr className="bg-blue-500 text-white">
+                  <th className="py-4 px-6 text-left font-semibold">Name</th>
+                  <th className="py-4 px-6 text-left font-semibold">Email</th>
+                  <th className="py-4 px-6 text-left font-semibold">Phone</th>
+                  <th className="py-4 px-6 text-left font-semibold">
+                    Employee ID
+                  </th>
+                  <th className="py-4 px-6 text-left font-semibold">
+                    Designation
+                  </th>
+                  <th className="py-4 px-6 text-center font-semibold">
+                    Actions
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {faculty.map((item, index) => (
+                  <tr key={index} className="border-b hover:bg-blue-50">
+                    <td className="py-4 px-6">{`${item.firstName} ${item.lastName}`}</td>
+                    <td className="py-4 px-6">{item.email}</td>
+                    <td className="py-4 px-6">{item.phone}</td>
+                    <td className="py-4 px-6">{item.employeeId}</td>
+                    <td className="py-4 px-6">{item.designation}</td>
+                    <td className="py-4 px-6 text-center flex justify-center gap-4">
+                      <CustomButton
+                        variant="secondary"
+                        className="!p-2"
+                        onClick={() => editFacultyHandler(item)}
+                      >
+                        <MdEdit />
+                      </CustomButton>
+                      <CustomButton
+                        variant="danger"
+                        className="!p-2"
+                        onClick={() => deleteFacultyHandler(item._id)}
+                      >
+                        <MdOutlineDelete />
+                      </CustomButton>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
       )}
       <DeleteConfirm

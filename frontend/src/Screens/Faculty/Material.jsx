@@ -32,6 +32,7 @@ const Material = () => {
     branch: "",
     type: "",
   });
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     fetchSubjects();
@@ -45,6 +46,7 @@ const Material = () => {
 
   const fetchSubjects = async () => {
     try {
+      toast.loading("Loading subjects...");
       const response = await axiosWrapper.get("/subject", {
         headers: {
           "Content-Type": "application/json",
@@ -55,12 +57,21 @@ const Material = () => {
         setSubjects(response.data.data);
       }
     } catch (error) {
-      toast.error(error?.response?.data?.message || "Failed to load subjects");
+      if (error.response?.status === 404) {
+        setSubjects([]);
+      } else {
+        toast.error(
+          error?.response?.data?.message || "Failed to load subjects"
+        );
+      }
+    } finally {
+      toast.dismiss();
     }
   };
 
   const fetchBranches = async () => {
     try {
+      toast.loading("Loading branches...");
       const response = await axiosWrapper.get("/branch", {
         headers: {
           "Content-Type": "application/json",
@@ -71,12 +82,21 @@ const Material = () => {
         setBranches(response.data.data);
       }
     } catch (error) {
-      toast.error(error?.response?.data?.message || "Failed to load branches");
+      if (error.response?.status === 404) {
+        setBranches([]);
+      } else {
+        toast.error(
+          error?.response?.data?.message || "Failed to load branches"
+        );
+      }
+    } finally {
+      toast.dismiss();
     }
   };
 
   const fetchMaterials = async () => {
     try {
+      toast.loading("Loading materials...");
       const queryParams = new URLSearchParams();
       Object.entries(filters).forEach(([key, value]) => {
         if (value) queryParams.append(key, value);
@@ -92,7 +112,15 @@ const Material = () => {
         setMaterials(response.data.data);
       }
     } catch (error) {
-      toast.error(error?.response?.data?.message || "Failed to load materials");
+      if (error.response?.status === 404) {
+        setMaterials([]);
+      } else {
+        toast.error(
+          error?.response?.data?.message || "Failed to load materials"
+        );
+      }
+    } finally {
+      toast.dismiss();
     }
   };
 
@@ -292,61 +320,67 @@ const Material = () => {
 
       {/* Materials Table */}
       <div className="w-full mt-8 overflow-x-auto">
-        <table className="text-sm min-w-full bg-white">
-          <thead>
-            <tr className="bg-blue-500 text-white">
-              <th className="py-4 px-6 text-left font-semibold">File</th>
-              <th className="py-4 px-6 text-left font-semibold">Title</th>
-              <th className="py-4 px-6 text-left font-semibold">Subject</th>
-              <th className="py-4 px-6 text-left font-semibold">Semester</th>
-              <th className="py-4 px-6 text-left font-semibold">Branch</th>
-              <th className="py-4 px-6 text-left font-semibold">Type</th>
-              <th className="py-4 px-6 text-left font-semibold">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {materials.map((material) => (
-              <tr key={material._id} className="border-b hover:bg-blue-50">
-                <td className="py-4 px-6">
-                  <CustomButton
-                    variant="primary"
-                    onClick={() => {
-                      window.open(
-                        `${process.env.REACT_APP_MEDIA_LINK}/${material.file}`
-                      );
-                    }}
-                  >
-                    <MdLink className="text-xl" />
-                  </CustomButton>
-                </td>
-                <td className="py-4 px-6">{material.title}</td>
-                <td className="py-4 px-6">{material.subject.name}</td>
-                <td className="py-4 px-6">{material.semester}</td>
-                <td className="py-4 px-6">{material.branch.name}</td>
-                <td className="py-4 px-6 capitalize">{material.type}</td>
-                <td className="py-4 px-6">
-                  <div className="flex gap-4">
+        {materials.length === 0 ? (
+          <div className="text-center py-8 text-gray-500">
+            No materials found
+          </div>
+        ) : (
+          <table className="text-sm min-w-full bg-white">
+            <thead>
+              <tr className="bg-blue-500 text-white">
+                <th className="py-4 px-6 text-left font-semibold">File</th>
+                <th className="py-4 px-6 text-left font-semibold">Title</th>
+                <th className="py-4 px-6 text-left font-semibold">Subject</th>
+                <th className="py-4 px-6 text-left font-semibold">Semester</th>
+                <th className="py-4 px-6 text-left font-semibold">Branch</th>
+                <th className="py-4 px-6 text-left font-semibold">Type</th>
+                <th className="py-4 px-6 text-left font-semibold">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {materials.map((material) => (
+                <tr key={material._id} className="border-b hover:bg-blue-50">
+                  <td className="py-4 px-6">
                     <CustomButton
-                      variant="secondary"
-                      onClick={() => handleEdit(material)}
-                    >
-                      <FiEdit2 />
-                    </CustomButton>
-                    <CustomButton
-                      variant="danger"
+                      variant="primary"
                       onClick={() => {
-                        setSelectedMaterialId(material._id);
-                        setIsDeleteConfirmOpen(true);
+                        window.open(
+                          `${process.env.REACT_APP_MEDIA_LINK}/${material.file}`
+                        );
                       }}
                     >
-                      <FiTrash2 />
+                      <MdLink className="text-xl" />
                     </CustomButton>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                  </td>
+                  <td className="py-4 px-6">{material.title}</td>
+                  <td className="py-4 px-6">{material.subject.name}</td>
+                  <td className="py-4 px-6">{material.semester}</td>
+                  <td className="py-4 px-6">{material.branch.name}</td>
+                  <td className="py-4 px-6 capitalize">{material.type}</td>
+                  <td className="py-4 px-6">
+                    <div className="flex gap-4">
+                      <CustomButton
+                        variant="secondary"
+                        onClick={() => handleEdit(material)}
+                      >
+                        <FiEdit2 />
+                      </CustomButton>
+                      <CustomButton
+                        variant="danger"
+                        onClick={() => {
+                          setSelectedMaterialId(material._id);
+                          setIsDeleteConfirmOpen(true);
+                        }}
+                      >
+                        <FiTrash2 />
+                      </CustomButton>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
 
       {/* Add/Edit Material Modal */}

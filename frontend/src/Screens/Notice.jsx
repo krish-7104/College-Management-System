@@ -4,10 +4,10 @@ import { HiOutlineCalendar } from "react-icons/hi";
 import { useLocation, useNavigate } from "react-router-dom";
 import { MdDeleteOutline, MdEditNote } from "react-icons/md";
 import toast from "react-hot-toast";
-import Heading from "./Heading";
+import Heading from "../components/Heading";
 import axiosWrapper from "../utils/AxiosWrapper";
-import CustomButton from "./CustomButton";
-import DeleteConfirm from "./DeleteConfirm";
+import CustomButton from "../components/CustomButton";
+import DeleteConfirm from "../components/DeleteConfirm";
 
 const AddNoticeModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
   const [formData, setFormData] = useState({
@@ -159,6 +159,7 @@ const Notice = () => {
   const [editingNotice, setEditingNotice] = useState(null);
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const [selectedNoticeId, setSelectedNoticeId] = useState(null);
+  const [error, setError] = useState(null);
 
   const token = localStorage.getItem("userToken");
 
@@ -171,17 +172,25 @@ const Notice = () => {
 
   const getNotices = async () => {
     try {
+      toast.loading("Loading notices...");
       const response = await axiosWrapper.get("/notice", {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
-
       if (response.data.success) {
         setNotices(response.data.data);
       } else {
         toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to fetch notices");
+      if (error.response?.status === 404) {
+        setNotices([]);
+      } else {
+        toast.error(error.response?.data?.message || "Failed to load notices");
+      }
+    } finally {
+      toast.dismiss();
     }
   };
 
@@ -256,73 +265,79 @@ const Notice = () => {
         )}
       </div>
 
-      <div className="mt-8 w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {notices?.map((notice) => (
-          <div
-            key={notice._id}
-            className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border border-gray-100"
-          >
-            <div className="p-6">
-              <div className="flex justify-between items-start mb-4">
-                <h3
-                  className={`text-lg font-semibold line-clamp-2 group flex items-start ${
-                    notice.link ? "cursor-pointer hover:text-blue-600" : ""
-                  }`}
-                  onClick={() => notice.link && window.open(notice.link)}
-                >
-                  {notice.title}
-                  {notice.link && (
-                    <IoMdLink className="ml-2 flex-shrink-0 text-xl opacity-70 group-hover:opacity-100 group-hover:text-blue-500" />
-                  )}
-                </h3>
-                {(router.pathname === "/faculty" ||
-                  router.pathname === "/admin") && (
-                  <div className="flex gap-2 ml-2 flex-shrink-0">
-                    <CustomButton
-                      onClick={() => {
-                        setSelectedNoticeId(notice._id);
-                        setIsDeleteConfirmOpen(true);
-                      }}
-                      variant="danger"
-                      className="!p-1.5 rounded-full"
-                      title="Delete Notice"
+      <div className="mt-8">
+        {notices.length === 0 ? (
+          <div className="text-center py-8 text-gray-500">No notices found</div>
+        ) : (
+          <div className="mt-8 w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {notices?.map((notice) => (
+              <div
+                key={notice._id}
+                className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border border-gray-100 w-[350px]"
+              >
+                <div className="p-6">
+                  <div className="flex justify-between items-start mb-4">
+                    <h3
+                      className={`text-lg font-semibold line-clamp-2 group flex items-start ${
+                        notice.link ? "cursor-pointer hover:text-blue-600" : ""
+                      }`}
+                      onClick={() => notice.link && window.open(notice.link)}
                     >
-                      <MdDeleteOutline size={18} />
-                    </CustomButton>
-                    <CustomButton
-                      onClick={() => handleEdit(notice)}
-                      variant="secondary"
-                      className="!p-1.5 rounded-full"
-                      title="Edit Notice"
-                    >
-                      <MdEditNote size={18} />
-                    </CustomButton>
+                      {notice.title}
+                      {notice.link && (
+                        <IoMdLink className="ml-2 flex-shrink-0 text-xl opacity-70 group-hover:opacity-100 group-hover:text-blue-500" />
+                      )}
+                    </h3>
+                    {(router.pathname === "/faculty" ||
+                      router.pathname === "/admin") && (
+                      <div className="flex gap-2 ml-2 flex-shrink-0">
+                        <CustomButton
+                          onClick={() => {
+                            setSelectedNoticeId(notice._id);
+                            setIsDeleteConfirmOpen(true);
+                          }}
+                          variant="danger"
+                          className="!p-1.5 rounded-full"
+                          title="Delete Notice"
+                        >
+                          <MdDeleteOutline size={18} />
+                        </CustomButton>
+                        <CustomButton
+                          onClick={() => handleEdit(notice)}
+                          variant="secondary"
+                          className="!p-1.5 rounded-full"
+                          title="Edit Notice"
+                        >
+                          <MdEditNote size={18} />
+                        </CustomButton>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
 
-              <p className="text-gray-600 text-sm line-clamp-3 mb-4">
-                {notice.description}
-              </p>
+                  <p className="text-gray-600 text-sm line-clamp-3 mb-4">
+                    {notice.description}
+                  </p>
 
-              <div className="flex items-center justify-between text-xs text-gray-500">
-                <div className="flex items-center">
-                  <HiOutlineCalendar className="mr-1" />
-                  {new Date(notice.createdAt).toLocaleString("en-GB", {
-                    day: "2-digit",
-                    month: "2-digit",
-                    year: "numeric",
-                  })}
+                  <div className="flex items-center justify-between text-xs text-gray-500">
+                    <div className="flex items-center">
+                      <HiOutlineCalendar className="mr-1" />
+                      {new Date(notice.createdAt).toLocaleString("en-GB", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric",
+                      })}
+                    </div>
+                    {notice.type !== "both" && (
+                      <span className="bg-blue-50 text-blue-600 px-3 py-1 rounded-full font-medium">
+                        {notice.type === "student" ? "Student" : "Faculty"}
+                      </span>
+                    )}
+                  </div>
                 </div>
-                {notice.type !== "both" && (
-                  <span className="bg-blue-50 text-blue-600 px-3 py-1 rounded-full font-medium">
-                    {notice.type === "student" ? "Student" : "Faculty"}
-                  </span>
-                )}
               </div>
-            </div>
+            ))}
           </div>
-        ))}
+        )}
       </div>
 
       <AddNoticeModal

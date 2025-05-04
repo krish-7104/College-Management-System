@@ -39,6 +39,7 @@ const Student = () => {
   const [selectedStudentId, setSelectedStudentId] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [file, setFile] = useState(null);
+  const [error, setError] = useState(null);
   const userToken = localStorage.getItem("userToken");
 
   useEffect(() => {
@@ -48,6 +49,7 @@ const Student = () => {
 
   const getBranchHandler = async () => {
     try {
+      toast.loading("Loading branches...");
       const response = await axiosWrapper.get(`/branch`, {
         headers: {
           Authorization: `Bearer ${userToken}`,
@@ -59,13 +61,20 @@ const Student = () => {
         toast.error(response.data.message);
       }
     } catch (error) {
-      console.error(error);
-      toast.error(error.response?.data?.message || "Error fetching branches");
+      if (error.response?.status === 404) {
+        setBranches([]);
+      } else {
+        console.error(error);
+        toast.error(error.response?.data?.message || "Error fetching branches");
+      }
+    } finally {
+      toast.dismiss();
     }
   };
 
   const getStudentHandler = async () => {
     try {
+      toast.loading("Loading students...");
       const response = await axiosWrapper.get(`/student`, {
         headers: {
           Authorization: `Bearer ${userToken}`,
@@ -77,8 +86,14 @@ const Student = () => {
         toast.error(response.data.message);
       }
     } catch (error) {
-      console.error(error);
-      toast.error(error.response?.data?.message || "Error fetching students");
+      if (error.response?.status === 404) {
+        setStudent([]);
+      } else {
+        console.error(error);
+        toast.error(error.response?.data?.message || "Error fetching students");
+      }
+    } finally {
+      toast.dismiss();
     }
   };
 
@@ -387,52 +402,62 @@ const Student = () => {
 
       {!showAddForm && (
         <div className="mt-8 w-full">
-          <table className="text-sm min-w-full bg-white">
-            <thead>
-              <tr className="bg-blue-500 text-white">
-                <th className="py-4 px-6 text-left font-semibold">Name</th>
-                <th className="py-4 px-6 text-left font-semibold">
-                  Enrollment No
-                </th>
-                <th className="py-4 px-6 text-left font-semibold">Email</th>
-                <th className="py-4 px-6 text-left font-semibold">Phone</th>
-                <th className="py-4 px-6 text-left font-semibold">Branch</th>
-                <th className="py-4 px-6 text-left font-semibold">Semester</th>
-                <th className="py-4 px-6 text-center font-semibold">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {student &&
-                student.map((item, index) => (
-                  <tr key={index} className="border-b hover:bg-blue-50">
-                    <td className="py-4 px-6">
-                      {`${item.firstName} ${item.middleName} ${item.lastName}`}
-                    </td>
-                    <td className="py-4 px-6">{item.enrollmentNo}</td>
-                    <td className="py-4 px-6">{item.email}</td>
-                    <td className="py-4 px-6">{item.phone}</td>
-                    <td className="py-4 px-6">{item.branchId?.name}</td>
-                    <td className="py-4 px-6">{item.semester}</td>
-                    <td className="py-4 px-6 text-center flex justify-center gap-4">
-                      <CustomButton
-                        variant="secondary"
-                        className="!p-2"
-                        onClick={() => editStudentHandler(item)}
-                      >
-                        <MdEdit />
-                      </CustomButton>
-                      <CustomButton
-                        variant="danger"
-                        className="!p-2"
-                        onClick={() => deleteStudentHandler(item._id)}
-                      >
-                        <MdOutlineDelete />
-                      </CustomButton>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
+          {student.length === 0 ? (
+            <div className="text-center py-8 text-gray-500">
+              No students found
+            </div>
+          ) : (
+            <table className="text-sm min-w-full bg-white">
+              <thead>
+                <tr className="bg-blue-500 text-white">
+                  <th className="py-4 px-6 text-left font-semibold">Name</th>
+                  <th className="py-4 px-6 text-left font-semibold">
+                    Enrollment No
+                  </th>
+                  <th className="py-4 px-6 text-left font-semibold">Email</th>
+                  <th className="py-4 px-6 text-left font-semibold">Phone</th>
+                  <th className="py-4 px-6 text-left font-semibold">Branch</th>
+                  <th className="py-4 px-6 text-left font-semibold">
+                    Semester
+                  </th>
+                  <th className="py-4 px-6 text-center font-semibold">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {student &&
+                  student.map((item, index) => (
+                    <tr key={index} className="border-b hover:bg-blue-50">
+                      <td className="py-4 px-6">
+                        {`${item.firstName} ${item.middleName} ${item.lastName}`}
+                      </td>
+                      <td className="py-4 px-6">{item.enrollmentNo}</td>
+                      <td className="py-4 px-6">{item.email}</td>
+                      <td className="py-4 px-6">{item.phone}</td>
+                      <td className="py-4 px-6">{item.branchId?.name}</td>
+                      <td className="py-4 px-6">{item.semester}</td>
+                      <td className="py-4 px-6 text-center flex justify-center gap-4">
+                        <CustomButton
+                          variant="secondary"
+                          className="!p-2"
+                          onClick={() => editStudentHandler(item)}
+                        >
+                          <MdEdit />
+                        </CustomButton>
+                        <CustomButton
+                          variant="danger"
+                          className="!p-2"
+                          onClick={() => deleteStudentHandler(item._id)}
+                        >
+                          <MdOutlineDelete />
+                        </CustomButton>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          )}
         </div>
       )}
       <DeleteConfirm
