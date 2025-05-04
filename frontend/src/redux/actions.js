@@ -1,11 +1,11 @@
-import { USER_DATA, USER_LOGIN_ID } from "./action";
+import { USER_DATA, USER_TOKEN } from "./action";
 
 export const setUserData = (data) => ({
   type: USER_DATA,
   payload: data,
 });
 
-export const setUserID = (data) => ({
-  type: USER_LOGIN_ID,
+export const setUserToken = (data) => ({
+  type: USER_TOKEN,
   payload: data,
 });

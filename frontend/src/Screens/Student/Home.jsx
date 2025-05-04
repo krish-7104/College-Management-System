@@ -1,91 +1,117 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
-import Profile from "./Profile";
+import { toast, Toaster } from "react-hot-toast";
+import Notice from "../Notice";
+import { useDispatch } from "react-redux";
+import { setUserData } from "../../redux/actions";
+import axiosWrapper from "../../utils/AxiosWrapper";
 import Timetable from "./Timetable";
-import Marks from "./Marks";
-import Notice from "../../components/Notice";
 import Material from "./Material";
-import { Toaster } from "react-hot-toast";
-import { useLocation, useNavigate } from "react-router-dom";
+import UpdatePasswordLoggedIn from "../../components/UpdatePasswordLoggedIn";
+import Profile from "./Profile";
+
+const MENU_ITEMS = [
+  { id: "home", label: "Home", component: null },
+  { id: "timetable", label: "Timetable", component: Timetable },
+  { id: "material", label: "Material", component: Material },
+  { id: "notice", label: "Notice", component: Notice },
+  {
+    id: "updatepassword",
+    label: "Update Password",
+    component: UpdatePasswordLoggedIn,
+  },
+];
+
 const Home = () => {
-  const [selectedMenu, setSelectedMenu] = useState("My Profile");
-  const router = useLocation();
-  const navigate = useNavigate();
-  const [load, setLoad] = useState(false);
-  useEffect(() => {
-    if (router.state === null) {
-      navigate("/");
+  const [selectedMenu, setSelectedMenu] = useState("Home");
+  const [profileData, setProfileData] = useState();
+  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
+  const userToken = localStorage.getItem("userToken");
+
+  const fetchUserDetails = async () => {
+    setIsLoading(true);
+    try {
+      toast.loading("Loading user details...");
+      const response = await axiosWrapper.get(`/student/my-details`, {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      });
+      if (response.data.success) {
+        setProfileData(response.data.data);
+        dispatch(setUserData(response.data.data));
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(
+        error.response?.data?.message || "Error fetching user details"
+      );
+    } finally {
+      setIsLoading(false);
+      toast.dismiss();
     }
-    setLoad(true);
-  }, [navigate, router.state]);
+  };
+
+  useEffect(() => {
+    fetchUserDetails();
+  }, [dispatch, userToken]);
+
+  const getMenuItemClass = (menuId) => {
+    const isSelected = selectedMenu.toLowerCase() === menuId.toLowerCase();
+    return `
+      text-center px-6 py-3 cursor-pointer
+      font-medium text-sm w-full
+      rounded-md
+      transition-all duration-300 ease-in-out
+      ${
+        isSelected
+          ? "bg-gradient-to-r from-blue-400 to-blue-600 text-white shadow-lg transform -translate-y-1"
+          : "bg-blue-50 text-blue-700 hover:bg-blue-100"
+      }
+    `;
+  };
+
+  const renderContent = () => {
+    if (isLoading) {
+      return (
+        <div className="flex justify-center items-center h-64">Loading...</div>
+      );
+    }
+
+    if (selectedMenu === "Home" && profileData) {
+      return <Profile profileData={profileData} />;
+    }
+
+    const MenuItem = MENU_ITEMS.find(
+      (item) => item.label.toLowerCase() === selectedMenu.toLowerCase()
+    )?.component;
+
+    return MenuItem && <MenuItem />;
+  };
+
   return (
-    <section>
-      {load && (
-        <>
-          <Navbar />
-          <div className="max-w-6xl mx-auto">
-            <ul className="flex justify-evenly items-center gap-10 w-full mx-auto my-8">
-              <li
-                className={`text-center rounded-sm px-4 py-2 w-1/5 cursor-pointer ease-linear duration-300 hover:ease-linear hover:duration-300 hover:transition-all transition-all ${
-                  selectedMenu === "My Profile"
-                    ? "border-b-2 pb-2 border-blue-500 bg-blue-100 rounded-sm"
-                    : "bg-blue-500 text-white hover:bg-blue-600 border-b-2 border-blue-500"
-                }`}
-                onClick={() => setSelectedMenu("My Profile")}
-              >
-                My Profile
-              </li>
-              <li
-                className={`text-center rounded-sm px-4 py-2 w-1/5 cursor-pointer ease-linear duration-300 hover:ease-linear hover:duration-300 hover:transition-all transition-all ${
-                  selectedMenu === "Timetable"
-                    ? "border-b-2 pb-2 border-blue-500 bg-blue-100 rounded-sm"
-                    : "bg-blue-500 text-white hover:bg-blue-600 border-b-2 border-blue-500"
-                }`}
-                onClick={() => setSelectedMenu("Timetable")}
-              >
-                Timetable
-              </li>
-              <li
-                className={`text-center rounded-sm px-4 py-2 w-1/5 cursor-pointer ease-linear duration-300 hover:ease-linear hover:duration-300 hover:transition-all transition-all ${
-                  selectedMenu === "Marks"
-                    ? "border-b-2 pb-2 border-blue-500 bg-blue-100 rounded-sm"
-                    : "bg-blue-500 text-white hover:bg-blue-600 border-b-2 border-blue-500"
-                }`}
-                onClick={() => setSelectedMenu("Marks")}
-              >
-                Marks
-              </li>
-              <li
-                className={`text-center rounded-sm px-4 py-2 w-1/5 cursor-pointer ease-linear duration-300 hover:ease-linear hover:duration-300 hover:transition-all transition-all ${
-                  selectedMenu === "Material"
-                    ? "border-b-2 pb-2 border-blue-500 bg-blue-100 rounded-sm"
-                    : "bg-blue-500 text-white hover:bg-blue-600 border-b-2 border-blue-500"
-                }`}
-                onClick={() => setSelectedMenu("Material")}
-              >
-                Material
-              </li>
-              <li
-                className={`text-center rounded-sm px-4 py-2 w-1/5 cursor-pointer ease-linear duration-300 hover:ease-linear hover:duration-300 hover:transition-all transition-all ${
-                  selectedMenu === "Notice"
-                    ? "border-b-2 pb-2 border-blue-500 bg-blue-100 rounded-sm"
-                    : "bg-blue-500 text-white hover:bg-blue-600 border-b-2 border-blue-500"
-                }`}
-                onClick={() => setSelectedMenu("Notice")}
-              >
-                Notice
-              </li>
-            </ul>
-            {selectedMenu === "Timetable" && <Timetable />}
-            {selectedMenu === "Marks" && <Marks />}
-            {selectedMenu === "Material" && <Material />}
-            {selectedMenu === "Notice" && <Notice />}
-            {selectedMenu === "My Profile" && <Profile />}
-          </div>
-        </>
-      )}
+    <>
+      <Navbar />
+      <div className="max-w-7xl mx-auto">
+        <ul className="flex justify-evenly items-center gap-10 w-full mx-auto my-8">
+          {MENU_ITEMS.map((item) => (
+            <li
+              key={item.id}
+              className={getMenuItemClass(item.id)}
+              onClick={() => setSelectedMenu(item.label)}
+            >
+              {item.label}
+            </li>
+          ))}
+        </ul>
+
+        {renderContent()}
+      </div>
       <Toaster position="bottom-center" />
-    </section>
+    </>
   );
 };
 

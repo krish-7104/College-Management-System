@@ -1,87 +1,147 @@
-
 # College Management System
 
-The College Management System is a MERN Stack-based system with three different login portals for students, faculty, and admin.
+A comprehensive MERN stack-based College Management System that helps manage academic activities, student information, faculty details, and administrative tasks.
+
+## Features
+
+### Admin Features
+
+- Complete system administration
+- Manage faculty accounts and permissions
+- Manage student accounts and enrollment
+- View and manage academic departments
+- Handle course assignments
+- Generate and manage notices
+- View and manage timetables
+- Access comprehensive analytics and reports
+- Manage system settings and configurations
+
+### Faculty Features
+
+- View and manage assigned courses
+- Upload and manage study materials
+- Create and manage assignments
+- Track student attendance
+- Grade submissions
+- View and manage class timetables
+- Communicate with students
+- Update profile and credentials
+
+### Student Features
+
+- View enrolled courses
+- Access study materials
+- Submit assignments
+- View grades and attendance
+- Check timetable
+- Download course materials
+- Update profile information
+- View notices and announcements
 
 ## Tech Stack
 
-**Client:** React, Redux, TailwindCSS
+- Frontend: React.js
+- Backend: Node.js, Express.js
+- Database: MongoDB
+- Authentication: JWT
+- File Storage: Local Storage
 
-**Server:** Node, Express
+## Prerequisites
 
-**Database:** MongoDB
-
-## Student Features
-
-- Internal Marks: Access to view internal marks for courses
-- External Marks: Access to view external marks for courses
-- Course Materials: Ability to download course materials
-- Notices: Access to view notices
-- Timetables: Access to view their own timetables
-- Password Update: Ability for students to update their passwords
-
-## Faculty Features
-
-- Student Details: Ability for faculty to view student details
-- Password Update: Ability for faculty to update their own passwords
-- Notices: Ability for faculty to add notices
-- Materials Upload: Ability for faculty to upload course materials
-- Timetable Management: Ability for faculty to manage timetables
-- Exam Mark Recording: Ability for faculty to record internal and external exam marks
-
-## Admin Features
-
-- Account Creation: Ability for admins to add new students, faculty, and admin accounts
-- Account Details Modification: Ability for admins to modify the details of each account
-- Subject Management: Ability for admins to add/edit subjects
-- Notices Management: Ability for admins to add/edit notices
+- Node.js (v14 or higher)
+- MongoDB
+- npm or yarn
 
 ## Setup Instructions
 
-1. **Clone the repository:**
+Sample .env file is added in both backend and frontend, copy that variables and create `.env` in both the folders and then follow below given instructions
 
-   ```bash
-   git clone https://github.com/krish-7104/College-Management-System
-   ```
+1. Clone the repository:
 
-2. **Install dependencies:**
+```bash
+git clone <repository-url>
+cd College-Management-System
+```
 
-   ```bash
-   cd backend
-   npm install
-   cd ../frontend
-   npm install
-   ```
+2. Install dependencies:
 
-3. **Setup environment variables:**
+```bash
+# Install backend dependencies
+cd backend
+npm install
 
-  - I have provided .env.sample in both frontend and backend using that create .env file
+# Install frontend dependencies
+cd ../frontend
+npm install
+```
 
-4. **Run the admin seeder:**
+3. Create a `.env` file in the backend directory with the following variables:
 
-   ```bash
-   cd backend
-   npm run seed
-   ```
+```
+MONGODB_URI =mongodb://127.0.0.1:27017/College-Management-System
+PORT = 4000
+FRONTEND_API_LINK = http://localhost:3000
+JWT_SECRET = THISISSECRET
 
-   - **Login ID:** `123456`
-   - **Password:** `admin123`
-  
-   - Using this login to the admin account and from admin you can add new faculty, student and admins!
+NODEMAILER_EMAIL =
+NODEMAILER_PASS =
+```
 
-5. **Run the backend server:**
+4. Create a `.env` file in the frontend directory:
 
-   ```bash
-   cd backend
-   npm start
-   ```
+```env
+REACT_APP_APILINK = http://localhost:4000/api
 
-6. **Run the frontend server:**
+REACT_APP_MEDIA_LINK = http://localhost:4000/media
 
-   ```bash
-   cd ../frontend
-   npm start
-   ```
+```
+
+5. Start the development servers:
+
+```bash
+# Start backend server (from backend directory)
+npm run dev
+
+# Start frontend server (from frontend directory)
+npm start
+```
+
+## Initial Setup
+
+1. Create an admin account using the seeder:
+
+```bash
+cd backend
+npm run seed
+```
+
+This will create a default admin account with the following credentials:
+
+- Employee ID: 123456
+- Password: admin123
+- Email: admin@gmail.com
+
+## Project Structure
+
+```
+college-management-system/
+├── backend/
+│   ├── controllers/
+│   │   ├── models/
+│   │   ├── routes/
+│   │   ├── middlewares/
+│   │   ├── utils/
+│   │   └── media/
+│   └── README.md
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── context/
+│   │   └── utils/
+│   └── public/
+└── README.md
+```
 
 ## For Any Doubt Feel Free To Contact Me 🚀
 

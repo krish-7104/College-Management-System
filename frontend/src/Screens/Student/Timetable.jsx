@@ -3,37 +3,37 @@ import React, { useEffect, useState } from "react";
 import { FiDownload } from "react-icons/fi";
 import Heading from "../../components/Heading";
 import { useSelector } from "react-redux";
+import axiosWrapper from "../../utils/AxiosWrapper";
 import { toast } from "react-hot-toast";
-import { baseApiURL } from "../../baseUrl";
 const Timetable = () => {
   const [timetable, setTimetable] = useState("");
   const userData = useSelector((state) => state.userData);
 
   useEffect(() => {
-    const getTimetable = () => {
-      const headers = {
-        "Content-Type": "application/json",
-      };
-      axios
-        .get(
-          `${baseApiURL()}/timetable/getTimetable`,
-          { semester: userData.semester, branch: userData.branch },
+    const getTimetable = async () => {
+      try {
+        const response = await axiosWrapper.get(
+          `/timetable?semester=${userData.semester}&branch=${userData.branchId?._id}`,
           {
-            headers: headers,
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+            },
           }
-        )
-        .then((response) => {
-          if (response.data.length !== 0) {
-            setTimetable(response.data[0].link);
-          }
-        })
-        .catch((error) => {
-          toast.dismiss();
-          console.log(error);
-        });
+        );
+        if (response.data.success && response.data.data.length > 0) {
+          setTimetable(response.data.data[0].link);
+        } else {
+          setTimetable("");
+        }
+      } catch (error) {
+        toast.error(
+          error.response?.data?.message || "Error fetching timetable"
+        );
+        console.error(error);
+      }
     };
     userData && getTimetable();
-  }, [userData, userData.branch, userData.semester]);
+  }, [userData, userData.branchId, userData.semester]);
 
   return (
     <div className="w-full mx-auto mt-10 flex justify-center items-start flex-col mb-10">

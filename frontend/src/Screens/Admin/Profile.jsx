@@ -1,170 +1,171 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { useLocation } from "react-router-dom";
-import { setUserData } from "../../redux/actions";
-import { baseApiURL } from "../../baseUrl";
-import toast from "react-hot-toast";
-const Profile = () => {
-  const [showPass, setShowPass] = useState(false);
-  const router = useLocation();
-  const [data, setData] = useState();
-  const dispatch = useDispatch();
-  const [password, setPassword] = useState({
-    new: "",
-    current: "",
-  });
-  useEffect(() => {
-    const headers = {
-      "Content-Type": "application/json",
-    };
-    axios
-      .post(
-        `${baseApiURL()}/${router.state.type}/details/getDetails`,
-        { employeeId: router.state.loginid },
-        {
-          headers: headers,
-        }
-      )
-      .then((response) => {
-        if (response.data.success) {
-          setData(response.data.user[0]);
-          dispatch(
-            setUserData({
-              fullname: `${response.data.user[0].firstName} ${response.data.user[0].middleName} ${response.data.user[0].lastName}`,
-              semester: response.data.user[0].semester,
-              enrollmentNo: response.data.user[0].enrollmentNo,
-              branch: response.data.user[0].branch,
-            })
-          );
-        } else {
-          toast.error(response.data.message);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, [dispatch, router.state.loginid, router.state.type]);
+import React from "react";
 
-  const checkPasswordHandler = (e) => {
-    e.preventDefault();
-    const headers = {
-      "Content-Type": "application/json",
-    };
-    axios
-      .post(
-        `${baseApiURL()}/admin/auth/login`,
-        { loginid: router.state.loginid, password: password.current },
-        {
-          headers: headers,
-        }
-      )
-      .then((response) => {
-        if (response.data.success) {
-          changePasswordHandler(response.data.id);
-        } else {
-          toast.error(response.data.message);
-        }
-      })
-      .catch((error) => {
-        toast.error(error.response.data.message);
-        console.error(error);
-      });
-  };
+const Profile = ({ profileData }) => {
+  if (!profileData) return null;
 
-  const changePasswordHandler = (id) => {
-    const headers = {
-      "Content-Type": "application/json",
-    };
-    axios
-      .put(
-        `${baseApiURL()}/admin/auth/update/${id}`,
-        { loginid: router.state.loginid, password: password.new },
-        {
-          headers: headers,
-        }
-      )
-      .then((response) => {
-        if (response.data.success) {
-          toast.success(response.data.message);
-          setPassword({ new: "", current: "" });
-        } else {
-          toast.error(response.data.message);
-        }
-      })
-      .catch((error) => {
-        toast.error(error.response.data.message);
-        console.error(error);
-      });
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
   };
 
   return (
-    <div className="w-full mx-auto my-8 flex justify-between items-start">
-      {data && (
-        <>
-          <div>
-            <p className="text-2xl font-semibold">
-              Hello {data.firstName} {data.middleName} {data.lastName}👋
-            </p>
-            <div className="mt-3">
-              <p className="text-lg font-normal mb-2">
-                Employee Id: {data.employeeId}
-              </p>
-              <p className="text-lg font-normal mb-2">
-                Phone Number: +91 {data.phoneNumber}
-              </p>
-              <p className="text-lg font-normal mb-2">
-                Email Address: {data.email}
+    <div className="max-w-6xl mx-auto p-8">
+      {/* Header Section */}
+      <div className="flex items-center gap-8 mb-12 border-b pb-8">
+        <img
+          src={profileData.profile}
+          alt="Profile"
+          className="w-40 h-40 rounded-full object-cover ring-4 ring-blue-500 ring-offset-4"
+          onError={(e) => {
+            e.target.src =
+              "https://images.unsplash.com/photo-1744315900478-fa44dc6a4e89?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+          }}
+        />
+        <div>
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">
+            {`${profileData.firstName} ${profileData.lastName}`}
+          </h1>
+          <p className="text-lg text-gray-600 mb-1">
+            Employee ID: {profileData.employeeId}
+          </p>
+          <p className="text-lg text-blue-600 font-medium">
+            {profileData.designation}
+            {profileData.isSuperAdmin && " (Super Admin)"}
+          </p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 gap-12">
+        {/* Personal Information */}
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">
+            Personal Information
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div>
+              <label className="text-sm font-medium text-gray-500">Email</label>
+              <p className="text-gray-900">{profileData.email}</p>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-500">Phone</label>
+              <p className="text-gray-900">{profileData.phone}</p>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-500">
+                Gender
+              </label>
+              <p className="text-gray-900 capitalize">{profileData.gender}</p>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-500">
+                Blood Group
+              </label>
+              <p className="text-gray-900">{profileData.bloodGroup}</p>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-500">
+                Date of Birth
+              </label>
+              <p className="text-gray-900">{formatDate(profileData.dob)}</p>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-500">
+                Joining Date
+              </label>
+              <p className="text-gray-900">
+                {formatDate(profileData.joiningDate)}
               </p>
             </div>
-            <button
-              className={`${
-                showPass ? "bg-red-100 text-red-600" : "bg-blue-600 text-white"
-              }  px-3 py-1 rounded mt-4`}
-              onClick={() => setShowPass(!showPass)}
-            >
-              {!showPass ? "Change Password" : "Close Change Password"}
-            </button>
-            {showPass && (
-              <form
-                className="mt-4 border-t-2 border-blue-500 flex flex-col justify-center items-start"
-                onSubmit={checkPasswordHandler}
-              >
-                <input
-                  type="password"
-                  value={password.current}
-                  onChange={(e) =>
-                    setPassword({ ...password, current: e.target.value })
-                  }
-                  placeholder="Current Password"
-                  className="px-3 py-1 border-2 border-blue-500 outline-none rounded mt-4"
-                />
-                <input
-                  type="password"
-                  value={password.new}
-                  onChange={(e) =>
-                    setPassword({ ...password, new: e.target.value })
-                  }
-                  placeholder="New Password"
-                  className="px-3 py-1 border-2 border-blue-500 outline-none rounded mt-4"
-                />
-                <button
-                  className="mt-4 hover:border-b-2 hover:border-blue-500"
-                  onClick={checkPasswordHandler}
-                  type="submit"
-                >
-                  Change Password
-                </button>
-              </form>
-            )}
+            <div>
+              <label className="text-sm font-medium text-gray-500">
+                Salary
+              </label>
+              <p className="text-gray-900">
+                ₹{profileData.salary.toLocaleString()}
+              </p>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-500">
+                Status
+              </label>
+              <p className="text-gray-900 capitalize">{profileData.status}</p>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-500">Role</label>
+              <p className="text-gray-900 capitalize">
+                {profileData.isSuperAdmin ? "Super Admin" : "Admin"}
+              </p>
+            </div>
           </div>
-          <img
-            src={process.env.REACT_APP_MEDIA_LINK + "/" + data.profile}
-            alt="student profile"
-            className="h-[200px] w-[200px] object-cover rounded-lg shadow-md"
-          />
-        </>
-      )}
+        </div>
+
+        {/* Address Information */}
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">
+            Address Information
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div>
+              <label className="text-sm font-medium text-gray-500">
+                Address
+              </label>
+              <p className="text-gray-900">{profileData.address}</p>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-500">City</label>
+              <p className="text-gray-900">{profileData.city}</p>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-500">State</label>
+              <p className="text-gray-900">{profileData.state}</p>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-500">
+                Pincode
+              </label>
+              <p className="text-gray-900">{profileData.pincode}</p>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-500">
+                Country
+              </label>
+              <p className="text-gray-900">{profileData.country}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Emergency Contact */}
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">
+            Emergency Contact
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div>
+              <label className="text-sm font-medium text-gray-500">Name</label>
+              <p className="text-gray-900">
+                {profileData.emergencyContact.name}
+              </p>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-500">
+                Relationship
+              </label>
+              <p className="text-gray-900">
+                {profileData.emergencyContact.relationship}
+              </p>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-500">Phone</label>
+              <p className="text-gray-900">
+                {profileData.emergencyContact.phone}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

@@ -1,138 +1,155 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { MdLink } from "react-icons/md";
 import Heading from "../../components/Heading";
-import { IoMdLink } from "react-icons/io";
-import { HiOutlineCalendar, HiOutlineSearch } from "react-icons/hi";
+import { useSelector } from "react-redux";
+import axiosWrapper from "../../utils/AxiosWrapper";
 import toast from "react-hot-toast";
-import { baseApiURL } from "../../baseUrl";
+import CustomButton from "../../components/CustomButton";
+
 const Material = () => {
-  const [subject, setSubject] = useState();
-  const [selected, setSelected] = useState();
-  const [material, setMaterial] = useState([]);
+  const [materials, setMaterials] = useState([]);
+  const [subjects, setSubjects] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const userData = useSelector((state) => state.userData);
+  const [filters, setFilters] = useState({
+    subject: "",
+    type: "",
+  });
+
   useEffect(() => {
-    toast.loading("Loading Subjects");
-    axios
-      .get(`${baseApiURL()}/subject/getSubject`)
-      .then((response) => {
-        toast.dismiss();
-        if (response.data.success) {
-          setSubject(response.data.subject);
-        } else {
-          toast.error(response.data.message);
-        }
-      })
-      .catch((error) => {
-        toast.dismiss();
-        toast.error(error.message);
-      });
+    fetchSubjects();
   }, []);
 
-  const getSubjectMaterial = () => {
-    const headers = {
-      "Content-Type": "application/json",
-    };
-    axios
-      .post(
-        `${baseApiURL()}/material/getMaterial`,
-        { subject: selected },
-        { headers }
-      )
-      .then((response) => {
-        if (response.data.success) {
-          setMaterial(response.data.material);
-        } else {
-          // Error
+  useEffect(() => {
+    fetchMaterials();
+  }, [filters]);
+
+  const fetchSubjects = async () => {
+    try {
+      const response = await axiosWrapper.get(
+        `/subject?semester=${userData.semester}&branch=${userData.branchId._id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+          },
         }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+      );
+      if (response.data.success) {
+        setSubjects(response.data.data);
+      }
+    } catch (error) {}
   };
 
-  const onSelectChangeHandler = (e) => {
-    setMaterial();
-    setSelected(e.target.value);
+  const fetchMaterials = async () => {
+    try {
+      const queryParams = new URLSearchParams({
+        semester: userData.semester,
+        branch: userData.branchId._id,
+      });
+
+      if (filters.subject) queryParams.append("subject", filters.subject);
+      if (filters.type) queryParams.append("type", filters.type);
+
+      const response = await axiosWrapper.get(`/material?${queryParams}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+        },
+      });
+      if (response.data.success) {
+        setMaterials(response.data.data);
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Failed to load materials");
+    }
+  };
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   return (
     <div className="w-full mx-auto mt-10 flex justify-center items-start flex-col mb-10">
-      <Heading title="Material" />
-      <div className="mt-8 w-full flex justify-center items-center flex-col">
-        <div className="flex justify-center items-center w-[40%]">
-          <select
-            value={selected}
-            name="subject"
-            id="subject"
-            onChange={onSelectChangeHandler}
-            className="px-2 bg-blue-50 py-3 rounded-sm text-base accent-blue-700"
-          >
-            <option defaultValue value="select">
-              -- Select Subject --
-            </option>
-            {subject &&
-              subject.map((item) => {
-                return (
-                  <option value={item.name} key={item.name}>
-                    {item.name}
-                  </option>
-                );
-              })}
-          </select>
-          <button
-            onClick={getSubjectMaterial}
-            className="bg-blue-500 text-white py-3 px-4 text-2xl rounded-sm"
-          >
-            <HiOutlineSearch />
-          </button>
+      <Heading title="Study Materials" />
+
+      <div className="w-full mt-4">
+        <div className="grid grid-cols-4 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Filter by Subject
+            </label>
+            <select
+              name="subject"
+              value={filters.subject}
+              onChange={handleFilterChange}
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">All Subjects</option>
+              {subjects.map((subject) => (
+                <option key={subject._id} value={subject._id}>
+                  {subject.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Filter by Type
+            </label>
+            <select
+              name="type"
+              value={filters.type}
+              onChange={handleFilterChange}
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">All Types</option>
+              <option value="notes">Notes</option>
+              <option value="assignment">Assignment</option>
+              <option value="syllabus">Syllabus</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
         </div>
-        <div className="mt-8 w-full">
-          {material &&
-            material.reverse().map((item, index) => {
-              return (
-                <div
-                  key={index}
-                  className="border-blue-500 border-2 w-full rounded-md shadow-sm py-4 px-6 relative mb-4"
-                >
-                  <p
-                    className={`text-xl font-medium flex justify-start items-center ${
-                      item.link && "cursor-pointer"
-                    } group`}
-                    onClick={() =>
-                      item.link &&
+      </div>
+
+      <div className="w-full mt-8 overflow-x-auto">
+        <table className="text-sm min-w-full bg-white">
+          <thead>
+            <tr className="bg-blue-500 text-white">
+              <th className="py-4 px-6 text-left font-semibold">File</th>
+              <th className="py-4 px-6 text-left font-semibold">Title</th>
+              <th className="py-4 px-6 text-left font-semibold">Subject</th>
+              <th className="py-4 px-6 text-left font-semibold">Type</th>
+            </tr>
+          </thead>
+          <tbody>
+            {materials.map((material) => (
+              <tr key={material._id} className="border-b hover:bg-blue-50">
+                <td className="py-4 px-6">
+                  <CustomButton
+                    variant="primary"
+                    onClick={() => {
                       window.open(
-                        process.env.REACT_APP_MEDIA_LINK + "/" + item.link
-                      )
-                    }
+                        `${process.env.REACT_APP_MEDIA_LINK}/${material.file}`
+                      );
+                    }}
                   >
-                    {item.title}{" "}
-                    {item.link && (
-                      <span className="text-2xl group-hover:text-blue-500 ml-1">
-                        <IoMdLink />
-                      </span>
-                    )}
-                  </p>
-                  <p className="text-base font-normal mt-1">
-                    {item.subject} - {item.faculty}
-                  </p>
-                  <p className="text-sm absolute top-4 right-4 flex justify-center items-center">
-                    <span className="text-base mr-1">
-                      <HiOutlineCalendar />
-                    </span>{" "}
-                    {item.createdAt.split("T")[0].split("-")[2] +
-                      "/" +
-                      item.createdAt.split("T")[0].split("-")[1] +
-                      "/" +
-                      item.createdAt.split("T")[0].split("-")[0] +
-                      " " +
-                      item.createdAt.split("T")[1].split(".")[0]}
-                  </p>
-                </div>
-              );
-            })}
-          {material && material.length === 0 && selected && (
-            <p className="text-center">No Material For {selected}!</p>
-          )}
-        </div>
+                    <MdLink className="text-xl" />
+                  </CustomButton>
+                </td>
+                <td className="py-4 px-6">{material.title}</td>
+                <td className="py-4 px-6">{material.subject.name}</td>
+                <td className="py-4 px-6 capitalize">{material.type}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
