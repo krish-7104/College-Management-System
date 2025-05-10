@@ -1,14 +1,31 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { MdOutlineDelete, MdEdit } from "react-icons/md";
-import { IoMdAdd, IoMdClose } from "react-icons/io";
+import { IoMdAdd } from "react-icons/io";
 import Heading from "../../components/Heading";
 import DeleteConfirm from "../../components/DeleteConfirm";
 import axiosWrapper from "../../utils/AxiosWrapper";
 import CustomButton from "../../components/CustomButton";
-
+import NoData from "../../components/NoData";
 const Student = () => {
-  const [data, setData] = useState({
+  const [searchParams, setSearchParams] = useState({
+    enrollmentNo: "",
+    name: "",
+    semester: "",
+    branch: "",
+  });
+  const [students, setStudents] = useState([]);
+  const [branches, setBranches] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const [selectedStudentId, setSelectedStudentId] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [file, setFile] = useState(null);
+  const [hasSearched, setHasSearched] = useState(false);
+  const userToken = localStorage.getItem("userToken");
+
+  const [formData, setFormData] = useState({
     firstName: "",
     middleName: "",
     lastName: "",
@@ -32,18 +49,7 @@ const Student = () => {
     },
   });
 
-  const [student, setStudent] = useState([]);
-  const [branch, setBranches] = useState([]);
-  const [showAddForm, setShowAddForm] = useState(false);
-  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
-  const [selectedStudentId, setSelectedStudentId] = useState(null);
-  const [isEditing, setIsEditing] = useState(false);
-  const [file, setFile] = useState(null);
-  const [error, setError] = useState(null);
-  const userToken = localStorage.getItem("userToken");
-
   useEffect(() => {
-    getStudentHandler();
     getBranchHandler();
   }, []);
 
@@ -72,29 +78,75 @@ const Student = () => {
     }
   };
 
-  const getStudentHandler = async () => {
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setSearchParams((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const searchStudents = async (e) => {
+    e.preventDefault();
+
+    // Check if any filter is selected
+    if (
+      !searchParams.enrollmentNo &&
+      !searchParams.name &&
+      !searchParams.semester &&
+      !searchParams.branch
+    ) {
+      toast.error("Please select at least one filter");
+      return;
+    }
+
+    setLoading(true);
+    setHasSearched(true);
+    toast.loading("Searching students...");
     try {
-      toast.loading("Loading students...");
-      const response = await axiosWrapper.get(`/student`, {
-        headers: {
-          Authorization: `Bearer ${userToken}`,
-        },
-      });
+      const response = await axiosWrapper.post(
+        `/student/search`,
+        searchParams,
+        {
+          headers: { Authorization: `Bearer ${userToken}` },
+        }
+      );
+
+      toast.dismiss();
       if (response.data.success) {
-        setStudent(response.data.data);
+        if (response.data.data.length === 0) {
+          setStudents([]);
+        } else {
+          toast.success("Students found!");
+          setStudents(response.data.data);
+        }
       } else {
         toast.error(response.data.message);
       }
     } catch (error) {
-      if (error.response?.status === 404) {
-        setStudent([]);
-      } else {
-        console.error(error);
-        toast.error(error.response?.data?.message || "Error fetching students");
-      }
-    } finally {
       toast.dismiss();
+      setStudents([]);
+      toast.error(error.response?.data?.message || "Error searching students");
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const handleFormInputChange = (field, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const handleEmergencyContactChange = (field, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      emergencyContact: {
+        ...prev.emergencyContact,
+        [field]: value,
+      },
+    }));
   };
 
   const addStudentHandler = async () => {
@@ -105,37 +157,41 @@ const Student = () => {
         Authorization: `Bearer ${userToken}`,
       };
 
-      const formData = new FormData();
-      for (const key in data) {
+      const formDataToSend = new FormData();
+      for (const key in formData) {
         if (key === "emergencyContact") {
-          for (const subKey in data.emergencyContact) {
-            formData.append(
+          for (const subKey in formData.emergencyContact) {
+            formDataToSend.append(
               `emergencyContact[${subKey}]`,
-              data.emergencyContact[subKey]
+              formData.emergencyContact[subKey]
             );
           }
         } else {
-          formData.append(key, data[key]);
+          formDataToSend.append(key, formData[key]);
         }
       }
 
       if (file) {
-        formData.append("file", file);
+        formDataToSend.append("file", file);
       }
 
       let response;
       if (isEditing) {
         response = await axiosWrapper.patch(
           `/student/${selectedStudentId}`,
-          formData,
+          formDataToSend,
           {
             headers,
           }
         );
       } else {
-        response = await axiosWrapper.post(`/student/register`, formData, {
-          headers,
-        });
+        response = await axiosWrapper.post(
+          `/student/register`,
+          formDataToSend,
+          {
+            headers,
+          }
+        );
       }
 
       toast.dismiss();
@@ -148,7 +204,7 @@ const Student = () => {
           toast.success(response.data.message);
         }
         resetForm();
-        getStudentHandler();
+        searchStudents({ preventDefault: () => {} });
       } else {
         toast.error(response.data.message);
       }
@@ -164,7 +220,7 @@ const Student = () => {
   };
 
   const editStudentHandler = (student) => {
-    setData({
+    setFormData({
       firstName: student.firstName || "",
       middleName: student.middleName || "",
       lastName: student.lastName || "",
@@ -209,7 +265,7 @@ const Student = () => {
       if (response.data.success) {
         toast.success("Student has been deleted successfully");
         setIsDeleteConfirmOpen(false);
-        getStudentHandler();
+        searchStudents({ preventDefault: () => {} });
       } else {
         toast.error(response.data.message);
       }
@@ -220,11 +276,10 @@ const Student = () => {
   };
 
   const resetForm = () => {
-    setData({
+    setFormData({
       firstName: "",
       middleName: "",
       lastName: "",
-      email: "",
       phone: "",
       semester: "",
       branchId: "",
@@ -247,229 +302,501 @@ const Student = () => {
     setShowAddForm(false);
     setIsEditing(false);
     setSelectedStudentId(null);
-  };
-
-  const handleInputChange = (field, value) => {
-    setData({ ...data, [field]: value });
-  };
-
-  const handleEmergencyContactChange = (field, value) => {
-    setData({
-      ...data,
-      emergencyContact: { ...data.emergencyContact, [field]: value },
-    });
+    setFile(null);
   };
 
   return (
-    <div className="w-full mx-auto mt-10 flex justify-center items-start flex-col mb-10 relative">
-      <Heading title="Student Details" />
-      <CustomButton
-        onClick={() => {
-          if (showAddForm) {
-            resetForm();
-          } else {
-            setShowAddForm(true);
-          }
-        }}
-        className="fixed bottom-8 right-8 !rounded-full !p-4"
-      >
-        {showAddForm ? (
-          <IoMdClose className="text-3xl" />
-        ) : (
-          <IoMdAdd className="text-3xl" />
-        )}
-      </CustomButton>
+    <div className="w-full mx-auto mt-10 flex justify-center items-start flex-col mb-10">
+      <div className="flex justify-between items-center w-full">
+        <Heading title="Student Management" />
+        <CustomButton onClick={() => setShowAddForm(true)}>
+          <IoMdAdd className="text-2xl" />
+        </CustomButton>
+      </div>
 
-      {showAddForm && (
-        <div className="flex flex-col justify-center items-center w-full mt-8">
-          <div className="grid grid-cols-2 gap-4 w-[60%]">
+      <div className="my-6 mx-auto w-full">
+        <form onSubmit={searchStudents} className="flex items-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-[90%] mx-auto">
             <div>
-              <label className="leading-7 text-sm">Upload Profile Photo</label>
-              <input type="file" onChange={(e) => setFile(e.target.files[0])} />
-            </div>
-            {[
-              { label: "First Name", field: "firstName" },
-              { label: "Middle Name", field: "middleName" },
-              { label: "Last Name", field: "lastName" },
-              { label: "Phone", field: "phone" },
-              { label: "Address", field: "address" },
-              { label: "City", field: "city" },
-              { label: "State", field: "state" },
-              { label: "Pincode", field: "pincode" },
-              { label: "Country", field: "country" },
-              { label: "DOB", field: "dob", type: "date" },
-            ].map(({ label, field, type = "text" }) => (
-              <div key={field}>
-                <label className="leading-7 text-sm">{label}</label>
-                <input
-                  type={type}
-                  value={data[field]}
-                  onChange={(e) => handleInputChange(field, e.target.value)}
-                  className="w-full bg-blue-50 rounded border focus:border-dark-green focus:bg-secondary-light focus:ring-2 focus:ring-light-green text-base outline-none py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-                />
-              </div>
-            ))}
-
-            <div>
-              <label className="leading-7 text-sm">Select Branch</label>
-              <select
-                name="branchId"
-                value={data.branchId}
-                onChange={(e) => handleInputChange("branchId", e.target.value)}
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Enrollment Number
+              </label>
+              <input
+                type="text"
+                name="enrollmentNo"
+                value={searchParams.enrollmentNo}
+                onChange={handleInputChange}
                 className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              >
-                <option value="">Select Branch</option>
-                {branch.map((item) => (
-                  <option key={item._id} value={item._id}>
-                    {item.name}
-                  </option>
-                ))}
-              </select>
+                placeholder="Enter enrollment number"
+              />
             </div>
 
             <div>
-              <label className="leading-7 text-sm">Semester</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Name
+              </label>
+              <input
+                type="text"
+                name="name"
+                value={searchParams.name}
+                onChange={handleInputChange}
+                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter student name"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Semester
+              </label>
               <select
                 name="semester"
-                value={data.semester}
-                onChange={(e) => handleInputChange("semester", e.target.value)}
+                value={searchParams.semester}
+                onChange={handleInputChange}
                 className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
               >
                 <option value="">Select Semester</option>
                 {[1, 2, 3, 4, 5, 6, 7, 8].map((sem) => (
                   <option key={sem} value={sem}>
-                    {sem} Semester
+                    Semester {sem}
                   </option>
                 ))}
               </select>
             </div>
 
             <div>
-              <label className="leading-7 text-sm">Gender</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Branch
+              </label>
               <select
-                name="gender"
-                value={data.gender}
-                onChange={(e) => handleInputChange("gender", e.target.value)}
+                name="branch"
+                value={searchParams.branch}
+                onChange={handleInputChange}
                 className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
               >
-                <option value="">Select Gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
+                <option value="">Select Branch</option>
+                {branches?.map((branch) => (
+                  <option key={branch._id} value={branch._id}>
+                    {branch.name}
+                  </option>
+                ))}
               </select>
             </div>
-
-            <div>
-              <label className="leading-7 text-sm">Blood Group</label>
-              <select
-                name="bloodGroup"
-                value={data.bloodGroup}
-                onChange={(e) =>
-                  handleInputChange("bloodGroup", e.target.value)
-                }
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              >
-                <option value="">Select Blood Group</option>
-                {["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"].map(
-                  (group) => (
-                    <option key={group} value={group}>
-                      {group}
-                    </option>
-                  )
-                )}
-              </select>
-            </div>
-
-            {["name", "relationship", "phone"].map((field) => (
-              <div key={field}>
-                <label className="leading-7 text-sm">
-                  Emergency {field.charAt(0).toUpperCase() + field.slice(1)}
-                </label>
-                <input
-                  type="text"
-                  value={data.emergencyContact[field]}
-                  onChange={(e) =>
-                    handleEmergencyContactChange(field, e.target.value)
-                  }
-                  className="w-full bg-blue-50 rounded border focus:border-dark-green focus:bg-secondary-light focus:ring-2 focus:ring-light-green text-base outline-none py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-                />
-              </div>
-            ))}
           </div>
-          <div className="text-sm text-gray-600 mt-3 mb-4">
-            Note: New students will be created with default password:{" "}
-            <span className="font-semibold">student123</span>
-          </div>
-          <CustomButton className="mt-6" onClick={addStudentHandler}>
-            {isEditing ? "Update Student" : "Add Student"}
-          </CustomButton>
-        </div>
-      )}
 
-      {!showAddForm && (
-        <div className="mt-8 w-full">
-          {student.length === 0 ? (
-            <div className="text-center py-8 text-gray-500">
-              No students found
-            </div>
-          ) : (
-            <table className="text-sm min-w-full bg-white">
-              <thead>
-                <tr className="bg-blue-500 text-white">
-                  <th className="py-4 px-6 text-left font-semibold">Name</th>
-                  <th className="py-4 px-6 text-left font-semibold">
-                    Enrollment No
-                  </th>
-                  <th className="py-4 px-6 text-left font-semibold">Email</th>
-                  <th className="py-4 px-6 text-left font-semibold">Phone</th>
-                  <th className="py-4 px-6 text-left font-semibold">Branch</th>
-                  <th className="py-4 px-6 text-left font-semibold">
-                    Semester
-                  </th>
-                  <th className="py-4 px-6 text-center font-semibold">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {student &&
-                  student.map((item, index) => (
-                    <tr key={index} className="border-b hover:bg-blue-50">
-                      <td className="py-4 px-6">
-                        {`${item.firstName} ${item.middleName} ${item.lastName}`}
+          <div className="mt-6 flex justify-center w-[10%] mx-auto">
+            <CustomButton type="submit" disabled={loading} variant="primary">
+              {loading ? "Searching..." : "Search"}
+            </CustomButton>
+          </div>
+        </form>
+
+        {!hasSearched && (
+          <div className="text-center mt-8 text-gray-600 flex flex-col items-center justify-center my-10 bg-white p-10 rounded-lg mx-auto w-[40%]">
+            <img
+              src="/assets/filter.svg"
+              alt="Select filters"
+              className="w-64 h-64 mb-4"
+            />
+            Please select at least one filter to search students
+          </div>
+        )}
+
+        {hasSearched && students.length === 0 && (
+          <NoData title="No students found" />
+        )}
+
+        {students && students.length > 0 && (
+          <div className="mt-8">
+            <h2 className="text-xl font-semibold mb-4">Search Results</h2>
+            <div className="overflow-x-auto">
+              <table className="min-w-full bg-white border border-gray-300">
+                <thead>
+                  <tr className="bg-gray-100">
+                    <th className="px-6 py-3 border-b text-left">Profile</th>
+                    <th className="px-6 py-3 border-b text-left">Name</th>
+                    <th className="px-6 py-3 border-b text-left">E. No</th>
+                    <th className="px-6 py-3 border-b text-left">Semester</th>
+                    <th className="px-6 py-3 border-b text-left">Branch</th>
+                    <th className="px-6 py-3 border-b text-left">Email</th>
+                    <th className="px-6 py-3 border-b text-center">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {students.map((student) => (
+                    <tr key={student._id} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 border-b">
+                        <img
+                          src={`${process.env.REACT_APP_MEDIA_LINK}/${student.profile}`}
+                          alt={`${student.firstName}'s profile`}
+                          className="w-12 h-12 object-cover rounded-full"
+                          onError={(e) => {
+                            e.target.src =
+                              "https://images.unsplash.com/photo-1744315900478-fa44dc6a4e89?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+                          }}
+                        />
                       </td>
-                      <td className="py-4 px-6">{item.enrollmentNo}</td>
-                      <td className="py-4 px-6">{item.email}</td>
-                      <td className="py-4 px-6">{item.phone}</td>
-                      <td className="py-4 px-6">{item.branchId?.name}</td>
-                      <td className="py-4 px-6">{item.semester}</td>
-                      <td className="py-4 px-6 text-center flex justify-center gap-4">
-                        <CustomButton
-                          variant="secondary"
-                          className="!p-2"
-                          onClick={() => editStudentHandler(item)}
-                        >
-                          <MdEdit />
-                        </CustomButton>
-                        <CustomButton
-                          variant="danger"
-                          className="!p-2"
-                          onClick={() => deleteStudentHandler(item._id)}
-                        >
-                          <MdOutlineDelete />
-                        </CustomButton>
+                      <td className="px-6 py-4 border-b">
+                        {student.firstName} {student.middleName}{" "}
+                        {student.lastName}
+                      </td>
+                      <td className="px-6 py-4 border-b">
+                        {student.enrollmentNo}
+                      </td>
+                      <td className="px-6 py-4 border-b">{student.semester}</td>
+                      <td className="px-6 py-4 border-b">
+                        {student.branchId?.name}
+                      </td>
+                      <td className="px-6 py-4 border-b">{student.email}</td>
+                      <td className="px-6 py-4 border-b text-center">
+                        <div className="flex justify-center gap-2">
+                          <CustomButton
+                            variant="secondary"
+                            className="!p-2"
+                            onClick={() => editStudentHandler(student)}
+                          >
+                            <MdEdit />
+                          </CustomButton>
+                          <CustomButton
+                            variant="danger"
+                            className="!p-2"
+                            onClick={() => deleteStudentHandler(student._id)}
+                          >
+                            <MdOutlineDelete />
+                          </CustomButton>
+                        </div>
                       </td>
                     </tr>
                   ))}
-              </tbody>
-            </table>
-          )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {showAddForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-8 w-[90%] max-w-4xl max-h-[90vh] overflow-y-auto">
+            <h2 className="text-2xl font-semibold mb-6">
+              {isEditing ? "Edit Student" : "Add New Student"}
+            </h2>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                addStudentHandler();
+              }}
+            >
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    First Name
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.firstName}
+                    onChange={(e) =>
+                      handleFormInputChange("firstName", e.target.value)
+                    }
+                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Middle Name
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.middleName}
+                    onChange={(e) =>
+                      handleFormInputChange("middleName", e.target.value)
+                    }
+                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Last Name
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.lastName}
+                    onChange={(e) =>
+                      handleFormInputChange("lastName", e.target.value)
+                    }
+                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Phone
+                  </label>
+                  <input
+                    type="tel"
+                    value={formData.phone}
+                    onChange={(e) =>
+                      handleFormInputChange("phone", e.target.value)
+                    }
+                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Semester
+                  </label>
+                  <select
+                    value={formData.semester}
+                    onChange={(e) =>
+                      handleFormInputChange("semester", e.target.value)
+                    }
+                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  >
+                    <option value="">Select Semester</option>
+                    {[1, 2, 3, 4, 5, 6, 7, 8].map((sem) => (
+                      <option key={sem} value={sem}>
+                        Semester {sem}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Branch
+                  </label>
+                  <select
+                    value={formData.branchId}
+                    onChange={(e) =>
+                      handleFormInputChange("branchId", e.target.value)
+                    }
+                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  >
+                    <option value="">Select Branch</option>
+                    {branches?.map((branch) => (
+                      <option key={branch._id} value={branch._id}>
+                        {branch.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Gender
+                  </label>
+                  <select
+                    value={formData.gender}
+                    onChange={(e) =>
+                      handleFormInputChange("gender", e.target.value)
+                    }
+                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  >
+                    <option value="">Select Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Date of Birth
+                  </label>
+                  <input
+                    type="date"
+                    value={formData.dob}
+                    onChange={(e) =>
+                      handleFormInputChange("dob", e.target.value)
+                    }
+                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Blood Group
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.bloodGroup}
+                    onChange={(e) =>
+                      handleFormInputChange("bloodGroup", e.target.value)
+                    }
+                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Profile Photo
+                  </label>
+                  <input
+                    type="file"
+                    onChange={(e) => setFile(e.target.files[0])}
+                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    accept="image/*"
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Address
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.address}
+                    onChange={(e) =>
+                      handleFormInputChange("address", e.target.value)
+                    }
+                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    City
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.city}
+                    onChange={(e) =>
+                      handleFormInputChange("city", e.target.value)
+                    }
+                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    State
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.state}
+                    onChange={(e) =>
+                      handleFormInputChange("state", e.target.value)
+                    }
+                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Pincode
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.pincode}
+                    onChange={(e) =>
+                      handleFormInputChange("pincode", e.target.value)
+                    }
+                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Country
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.country}
+                    onChange={(e) =>
+                      handleFormInputChange("country", e.target.value)
+                    }
+                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <h3 className="text-lg font-semibold mb-4">
+                    Emergency Contact
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Name
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.emergencyContact.name}
+                        onChange={(e) =>
+                          handleEmergencyContactChange("name", e.target.value)
+                        }
+                        className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Relationship
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.emergencyContact.relationship}
+                        onChange={(e) =>
+                          handleEmergencyContactChange(
+                            "relationship",
+                            e.target.value
+                          )
+                        }
+                        className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Phone
+                      </label>
+                      <input
+                        type="tel"
+                        value={formData.emergencyContact.phone}
+                        onChange={(e) =>
+                          handleEmergencyContactChange("phone", e.target.value)
+                        }
+                        className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-8 flex justify-end gap-4">
+                <CustomButton
+                  type="button"
+                  variant="secondary"
+                  onClick={resetForm}
+                >
+                  Cancel
+                </CustomButton>
+                <CustomButton type="submit" variant="primary">
+                  {isEditing ? "Update Student" : "Add Student"}
+                </CustomButton>
+              </div>
+            </form>
+          </div>
         </div>
       )}
+
       <DeleteConfirm
         isOpen={isDeleteConfirmOpen}
         onClose={() => setIsDeleteConfirmOpen(false)}

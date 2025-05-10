@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import Heading from "../../components/Heading";
 import axiosWrapper from "../../utils/AxiosWrapper";
 import CustomButton from "../../components/CustomButton";
+import NoData from "../../components/NoData";
 
 const StudentFinder = () => {
   const [searchParams, setSearchParams] = useState({
@@ -17,8 +18,7 @@ const StudentFinder = () => {
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const userToken = localStorage.getItem("userToken");
-  const [selectedBranch, setSelectedBranch] = useState("");
-  const [error, setError] = useState(null);
+  const [hasSearched, setHasSearched] = useState(false);
 
   useEffect(() => {
     const fetchBranches = async () => {
@@ -60,6 +60,7 @@ const StudentFinder = () => {
   const searchStudents = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setHasSearched(true);
     toast.loading("Searching students...");
     setStudents([]);
     try {
@@ -97,36 +98,6 @@ const StudentFinder = () => {
     setShowModal(true);
   };
 
-  const fetchStudents = async () => {
-    if (!selectedBranch) return;
-    try {
-      toast.loading("Loading students...");
-      const response = await axiosWrapper.get(
-        `/student/branch/${selectedBranch}`,
-        {
-          headers: {
-            Authorization: `Bearer ${userToken}`,
-          },
-        }
-      );
-      if (response.data.success) {
-        setStudents(response.data.data);
-        toast.success("Students loaded successfully");
-      } else {
-        toast.error(response.data.message);
-      }
-    } catch (error) {
-      if (error.response?.status === 404) {
-        setStudents([]);
-        toast.error("No students found for this branch");
-      } else {
-        toast.error(error.response?.data?.message || "Failed to load students");
-      }
-    } finally {
-      toast.dismiss();
-    }
-  };
-
   return (
     <div className="w-full mx-auto mt-10 flex justify-center items-start flex-col mb-10">
       <div className="flex justify-between items-center w-full">
@@ -134,8 +105,8 @@ const StudentFinder = () => {
       </div>
 
       <div className="my-6 mx-auto w-full">
-        <form onSubmit={searchStudents} className="">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <form onSubmit={searchStudents} className="flex items-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-[90%] mx-auto">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Enrollment Number
@@ -203,12 +174,27 @@ const StudentFinder = () => {
             </div>
           </div>
 
-          <div className="mt-6 flex justify-center">
+          <div className="mt-6 flex justify-center w-[10%] mx-auto">
             <CustomButton type="submit" disabled={loading} variant="primary">
-              {loading ? "Searching..." : "Search Students"}
+              {loading ? "Searching..." : "Search"}
             </CustomButton>
           </div>
         </form>
+
+        {!hasSearched && (
+          <div className="text-center mt-8 text-gray-600 flex flex-col items-center justify-center my-10 bg-white p-10 rounded-lg mx-auto w-[40%]">
+            <img
+              src="/assets/filter.svg"
+              alt="Select filters"
+              className="w-64 h-64 mb-4"
+            />
+            Please select at least one filter to search students
+          </div>
+        )}
+
+        {hasSearched && students.length === 0 && (
+          <NoData title="No students found" />
+        )}
 
         {students.length > 0 && (
           <div className="mt-8">
