@@ -9,12 +9,14 @@ import Timetable from "./Timetable";
 import Material from "./Material";
 import UpdatePasswordLoggedIn from "../../components/UpdatePasswordLoggedIn";
 import Profile from "./Profile";
+import Exam from "../Exam";
 
 const MENU_ITEMS = [
   { id: "home", label: "Home", component: null },
   { id: "timetable", label: "Timetable", component: Timetable },
   { id: "material", label: "Material", component: Material },
   { id: "notice", label: "Notice", component: Notice },
+  { id: "exam", label: "Exam", component: Exam },
   {
     id: "updatepassword",
     label: "Update Password",

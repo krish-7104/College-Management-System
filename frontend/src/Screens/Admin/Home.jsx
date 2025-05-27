@@ -10,8 +10,8 @@ import Branch from "./Branch";
 import { useDispatch } from "react-redux";
 import { setUserData } from "../../redux/actions";
 import axiosWrapper from "../../utils/AxiosWrapper";
-import UpdatePasswordLoggedIn from "../../components/UpdatePasswordLoggedIn";
 import Profile from "./Profile";
+import Exam from "../Exam";
 
 const MENU_ITEMS = [
   { id: "home", label: "Home", component: null },
@@ -19,13 +19,9 @@ const MENU_ITEMS = [
   { id: "faculty", label: "Faculty", component: Faculty },
   { id: "branch", label: "Branch", component: Branch },
   { id: "notice", label: "Notice", component: Notice },
+  { id: "exam", label: "Exam", component: Exam },
   { id: "subjects", label: "Subjects", component: Subjects },
   { id: "admin", label: "Admin", component: Admin },
-  {
-    id: "updatepassword",
-    label: "Update Password",
-    component: UpdatePasswordLoggedIn,
-  },
 ];
 
 const Home = () => {
