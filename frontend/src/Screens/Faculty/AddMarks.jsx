@@ -20,6 +20,8 @@ const AddMarks = () => {
   const [consent, setConsent] = useState(false);
   const [showSearch, setShowSearch] = useState(true);
 
+  console.log(selectedExam);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     if (name === "branch") {
@@ -397,36 +399,66 @@ const AddMarks = () => {
       {/* Marks Entry Section */}
       {!showSearch && masterMarksData && masterMarksData.length > 0 && (
         <div className="w-full bg-white rounded-lg p-6">
-          <div className="grid grid-cols-5 gap-6 w-full mb-10 text-gray-500">
-            <div className="bg-white rounded-lg shadow-md p-4 border border-gray-200">
-              <span className="block mb-2 text-sm">Exam Name</span>
-              <p className="text-gray-800 font-semibold">
-                {selectedExam?.name || "Not Selected"}
-              </p>
-            </div>
-            <div className="bg-white rounded-lg shadow-md p-4 border border-gray-200">
-              <span className="block mb-2 text-sm">Subject Name</span>
-              <p className="text-gray-800 font-semibold ">
-                {selectedSubject?.name || "Not Selected"}
-              </p>
-            </div>
-            <div className="bg-white rounded-lg shadow-md p-4 border border-gray-200">
-              <span className="block mb-2 text-sm">Branch</span>
-              <p className="text-gray-800 font-semibold">
-                {selectedBranch?.branchId || "Not Selected"}
-              </p>
-            </div>
-            <div className="bg-white rounded-lg shadow-md p-4 border border-gray-200">
-              <span className="block mb-2 text-sm">Semester</span>
-              <p className="text-gray-800 font-semibold">
-                {selectedSemester || "Not Selected"}
-              </p>
-            </div>
-            <div className="bg-white rounded-lg shadow-md p-4 border border-gray-200">
-              <span className="block mb-2 text-sm">Total Students</span>
-              <p className="text-gray-800 font-semibold">
-                {masterMarksData.length || "Not Selected"}
-              </p>
+          <div className="space-y-4 w-full mb-6">
+            <div className="flex flex-col gap-4 w-[90%] mx-auto">
+              <div className="grid grid-cols-4 gap-4">
+                <div className="border p-3 rounded-md shadow">
+                  <span className="text-sm text-gray-500">
+                    Branch and Semester:
+                  </span>
+                  <p className="text-gray-800">
+                    {selectedBranch?.branchId} - Semester {selectedSemester}
+                  </p>
+                </div>
+
+                <div className="border p-3 rounded-md shadow">
+                  <span className="text-sm text-gray-500">Exam:</span>
+                  <p className="text-gray-800">
+                    {selectedExam?.name || "Not Selected"}
+                  </p>
+                </div>
+                <div className="border p-3 rounded-md shadow">
+                  <span className="text-sm text-gray-500">Exam Type:</span>
+                  <p className="text-gray-800">
+                    {selectedExam?.examType === "mid" ? "Mid Term" : "End Term"}
+                  </p>
+                </div>
+                <div className="border p-3 rounded-md shadow">
+                  <span className="text-sm text-gray-500">Subject:</span>
+                  <p className="text-gray-800">
+                    {selectedSubject?.name || "Not Selected"}
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-4 gap-4">
+                <div className="border p-3 rounded-md shadow">
+                  <span className="text-sm text-gray-500">Total Marks:</span>
+                  <p className="text-gray-800">
+                    {selectedExam?.totalMarks || "Not Selected"}
+                  </p>
+                </div>
+                <div className="border p-3 rounded-md shadow">
+                  <span className="text-sm text-gray-500">Date:</span>
+                  <p className="text-gray-800">
+                    {selectedExam?.date
+                      ? new Date(selectedExam.date).toLocaleDateString()
+                      : "Not Selected"}
+                  </p>
+                </div>
+                <div className="border p-3 rounded-md shadow">
+                  <span className="text-sm text-gray-500">Time:</span>
+                  <p className="text-gray-800">
+                    {selectedExam?.time || "Not Selected"}
+                  </p>
+                </div>
+                <div className="border p-3 rounded-md shadow">
+                  <span className="text-sm text-gray-500">Students:</span>
+                  <p className="text-gray-800">
+                    {masterMarksData.length || "Not Selected"}
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -451,6 +483,8 @@ const AddMarks = () => {
                 </p>
                 <input
                   type="number"
+                  min={0}
+                  max={selectedExam?.totalMarks || 100}
                   className="px-4 py-2 border rounded-md focus:outline-none bg-gray-50 border-gray-200 focus:ring-2 focus:ring-blue-500 w-full m-2"
                   value={marksData[student._id] || ""}
                   placeholder="Enter Marks"

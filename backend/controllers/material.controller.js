@@ -88,7 +88,6 @@ const updateMaterialController = async (req, res) => {
       return ApiResponse.notFound("Material not found").send(res);
     }
 
-    // Check if the faculty is the owner of the material
     if (material.faculty.toString() !== req.userId) {
       return ApiResponse.unauthorized(
         "You are not authorized to update this material"
@@ -139,7 +138,6 @@ const deleteMaterialController = async (req, res) => {
       return ApiResponse.notFound("Material not found").send(res);
     }
 
-    // Check if the faculty is the owner of the material
     if (material.faculty.toString() !== req.userId) {
       return ApiResponse.unauthorized(
         "You are not authorized to delete this material"

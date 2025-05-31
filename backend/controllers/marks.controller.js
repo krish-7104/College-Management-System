@@ -45,7 +45,6 @@ const addMarksController = async (req, res) => {
   try {
     const { studentId, semester, branch, marks } = req.body;
 
-    // Validate input
     if (!studentId || !semester || !branch || !marks || !Array.isArray(marks)) {
       return res.status(400).json({
         success: false,
@@ -53,7 +52,6 @@ const addMarksController = async (req, res) => {
       });
     }
 
-    // Check if student exists
     const student = await Student.findById(studentId);
     if (!student) {
       return res.status(404).json({
@@ -62,15 +60,12 @@ const addMarksController = async (req, res) => {
       });
     }
 
-    // Find existing marks or create new
     let existingMarks = await Marks.findOne({ student: studentId, semester });
 
     if (existingMarks) {
-      // Update existing marks
       existingMarks.marks = marks;
       await existingMarks.save();
     } else {
-      // Create new marks entry
       existingMarks = await Marks.create({
         student: studentId,
         semester,
@@ -141,12 +136,10 @@ const addBulkMarksController = async (req, res) => {
       });
 
       if (existingMark) {
-        // Update existing mark
         existingMark.marksObtained = markData.obtainedMarks;
         await existingMark.save();
         results.push(existingMark);
       } else {
-        // Create new mark
         const newMark = await Marks.create({
           studentId: markData.studentId,
           examId,
@@ -228,10 +221,52 @@ const getStudentsWithMarksController = async (req, res) => {
   }
 };
 
+const getStudentMarksController = async (req, res) => {
+  try {
+    const { semester } = req.query;
+    const studentId = req.userId;
+
+    if (!semester) {
+      return res.status(400).json({
+        success: false,
+        message: "Semester is required",
+      });
+    }
+
+    const marks = await Marks.find({
+      studentId,
+      semester: Number(semester),
+    })
+      .populate("subjectId", "name")
+      .populate("examId", "name examType totalMarks");
+
+    if (!marks || marks.length === 0) {
+      return res.status(200).json({
+        success: true,
+        data: [],
+        message: "No marks found for this semester",
+      });
+    }
+
+    res.json({
+      success: true,
+      message: "Marks retrieved successfully",
+      data: marks,
+    });
+  } catch (error) {
+    console.error("Error in getStudentMarksController:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message || "Error retrieving marks",
+    });
+  }
+};
+
 module.exports = {
   getMarksController,
   addMarksController,
   deleteMarksController,
   addBulkMarksController,
   getStudentsWithMarksController,
+  getStudentMarksController,
 };

@@ -7,9 +7,9 @@ import { setUserData } from "../../redux/actions";
 import axiosWrapper from "../../utils/AxiosWrapper";
 import Timetable from "./Timetable";
 import Material from "./Material";
-import UpdatePasswordLoggedIn from "../../components/UpdatePasswordLoggedIn";
 import Profile from "./Profile";
 import Exam from "../Exam";
+import ViewMarks from "./ViewMarks";
 
 const MENU_ITEMS = [
   { id: "home", label: "Home", component: null },
@@ -17,11 +17,7 @@ const MENU_ITEMS = [
   { id: "material", label: "Material", component: Material },
   { id: "notice", label: "Notice", component: Notice },
   { id: "exam", label: "Exam", component: Exam },
-  {
-    id: "updatepassword",
-    label: "Update Password",
-    component: UpdatePasswordLoggedIn,
-  },
+  { id: "marks", label: "Marks", component: ViewMarks },
 ];
 
 const Home = () => {

@@ -166,7 +166,6 @@ const updateDetailsController = async (req, res, next) => {
       updateData.profile = req.file.filename;
     }
 
-    // Convert date strings to Date objects if present
     if (updateData.dob) {
       updateData.dob = new Date(updateData.dob);
     }

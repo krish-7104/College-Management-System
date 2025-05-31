@@ -89,7 +89,6 @@ const Student = () => {
   const searchStudents = async (e) => {
     e.preventDefault();
 
-    // Check if any filter is selected
     if (
       !searchParams.enrollmentNo &&
       !searchParams.name &&
