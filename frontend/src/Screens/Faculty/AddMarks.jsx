@@ -499,7 +499,7 @@ const AddMarks = () => {
             ))}
           </div>
 
-          <div className="mt-6 flex flex-col items-center gap-4 fixed bottom-0 left-0 right-0 bg-white p-4 border-t">
+          <div className="flex flex-col items-center gap-4 bottom-0 left-0 right-0 bg-white p-4 border-t mt-10">
             <div className="flex items-center gap-2">
               <input
                 type="checkbox"
