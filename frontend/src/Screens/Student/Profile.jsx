@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
+import CustomButton from "../../components/CustomButton";
+import UpdatePasswordLoggedIn from "../../components/UpdatePasswordLoggedIn";
 
 const Profile = ({ profileData }) => {
+  const [showPasswordUpdate, setShowPasswordUpdate] = useState(false);
   if (!profileData) return null;
 
   const formatDate = (dateString) => {
@@ -14,27 +17,42 @@ const Profile = ({ profileData }) => {
   return (
     <div className="max-w-6xl mx-auto p-8">
       {/* Header Section */}
-      <div className="flex items-center gap-8 mb-12 border-b pb-8">
-        <img
-          src={`${process.env.REACT_APP_API_URL}/uploads/${profileData.profile}`}
-          alt="Profile"
-          className="w-40 h-40 rounded-full object-cover ring-4 ring-blue-500 ring-offset-4"
-          onError={(e) => {
-            e.target.src =
-              "https://images.unsplash.com/photo-1744315900478-fa44dc6a4e89?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
-          }}
-        />
-        <div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
-            {`${profileData.firstName} ${profileData.middleName} ${profileData.lastName}`}
-          </h1>
-          <p className="text-lg text-gray-600 mb-1">
-            {profileData.enrollmentNo}
-          </p>
-          <p className="text-lg text-blue-600 font-medium">
-            {profileData.branchId.name}
-          </p>
+      <div className="flex items-center gap-8 mb-12 border-b pb-8 justify-between">
+        <div className="flex items-center gap-8">
+          <img
+            src={`${process.env.REACT_APP_API_URL}/uploads/${profileData.profile}`}
+            alt="Profile"
+            className="w-40 h-40 rounded-full object-cover ring-4 ring-blue-500 ring-offset-4"
+            onError={(e) => {
+              e.target.src =
+                "https://images.unsplash.com/photo-1744315900478-fa44dc6a4e89?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+            }}
+          />
+          <div>
+            <h1 className="text-4xl font-bold text-gray-900 mb-2">
+              {`${profileData.firstName} ${profileData.middleName} ${profileData.lastName}`}
+            </h1>
+            <p className="text-lg text-gray-600 mb-1">
+              {profileData.enrollmentNo}
+            </p>
+            <p className="text-lg text-blue-600 font-medium">
+              {profileData.branchId.name}
+            </p>
+          </div>
         </div>
+        <div className="flex items-center gap-8 justify-end">
+          <CustomButton
+            onClick={() => setShowPasswordUpdate(!showPasswordUpdate)}
+            variant="primary"
+          >
+            {showPasswordUpdate ? "Hide" : "Update Password"}
+          </CustomButton>
+        </div>
+        {showPasswordUpdate && (
+          <UpdatePasswordLoggedIn
+            onClose={() => setShowPasswordUpdate(false)}
+          />
+        )}
       </div>
 
       <div className="grid grid-cols-1 gap-12">

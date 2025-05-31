@@ -294,13 +294,7 @@ const updatePasswordHandler = async (req, res) => {
 
 const searchStudentsController = async (req, res) => {
   try {
-    const {
-      enrollmentNo,
-      name,
-      semester,
-      branch,
-      showMarks = false,
-    } = req.body;
+    const { enrollmentNo, name, semester, branch } = req.body;
     let query = {};
 
     if (!enrollmentNo && !name && !semester && !branch) {

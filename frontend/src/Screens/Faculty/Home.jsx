@@ -10,6 +10,7 @@ import Material from "./Material";
 import StudentFinder from "./StudentFinder";
 import UpdatePasswordLoggedIn from "../../components/UpdatePasswordLoggedIn";
 import Profile from "./Profile";
+import Marks from "./AddMarks";
 
 const MENU_ITEMS = [
   { id: "home", label: "Home", component: null },
@@ -17,11 +18,7 @@ const MENU_ITEMS = [
   { id: "material", label: "Material", component: Material },
   { id: "notice", label: "Notice", component: Notice },
   { id: "student info", label: "Student Info", component: StudentFinder },
-  {
-    id: "update password",
-    label: "Update Password",
-    component: UpdatePasswordLoggedIn,
-  },
+  { id: "marks", label: "Marks", component: Marks },
 ];
 
 const Home = () => {

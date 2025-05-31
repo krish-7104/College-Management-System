@@ -9,7 +9,6 @@ const examSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
-
   semester: {
     type: Number,
     required: true,
