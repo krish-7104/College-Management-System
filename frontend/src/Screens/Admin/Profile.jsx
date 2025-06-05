@@ -23,10 +23,6 @@ const Profile = ({ profileData }) => {
             src={profileData.profile}
             alt="Profile"
             className="w-40 h-40 rounded-full object-cover ring-4 ring-blue-500 ring-offset-4"
-            onError={(e) => {
-              e.target.src =
-                "https://images.unsplash.com/photo-1744315900478-fa44dc6a4e89?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
-            }}
           />
           <div>
             <h1 className="text-4xl font-bold text-gray-900 mb-2">
