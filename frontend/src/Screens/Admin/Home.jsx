@@ -12,7 +12,7 @@ import { setUserData } from "../../redux/actions";
 import axiosWrapper from "../../utils/AxiosWrapper";
 import Profile from "./Profile";
 import Exam from "../Exam";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const MENU_ITEMS = [
   { id: "home", label: "Home", component: Profile },
@@ -27,7 +27,6 @@ const MENU_ITEMS = [
 
 const Home = () => {
   const navigate = useNavigate();
-  const { menuId } = useParams();
   const location = useLocation();
   const [selectedMenu, setSelectedMenu] = useState("home");
   const [profileData, setProfileData] = useState();

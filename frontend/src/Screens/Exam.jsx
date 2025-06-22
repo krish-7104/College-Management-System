@@ -214,7 +214,7 @@ const Exam = () => {
               </tr>
             </thead>
             <tbody>
-              {exams &&
+              {exams && exams.length > 0 ? (
                 exams.map((item, index) => (
                   <tr key={index} className="border-b hover:bg-blue-50">
                     <td className="py-4 px-6">{item.name}</td>
@@ -245,7 +245,14 @@ const Exam = () => {
                       </td>
                     )}
                   </tr>
-                ))}
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="5x" className="text-center text-base pt-10">
+                    No Exams found.
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

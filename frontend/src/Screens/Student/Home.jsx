@@ -10,6 +10,7 @@ import Material from "./Material";
 import Profile from "./Profile";
 import Exam from "../Exam";
 import ViewMarks from "./ViewMarks";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const MENU_ITEMS = [
   { id: "home", label: "Home", component: null },
@@ -21,11 +22,13 @@ const MENU_ITEMS = [
 ];
 
 const Home = () => {
-  const [selectedMenu, setSelectedMenu] = useState("Home");
+  const [selectedMenu, setSelectedMenu] = useState("home");
   const [profileData, setProfileData] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const userToken = localStorage.getItem("userToken");
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const fetchUserDetails = async () => {
     setIsLoading(true);
@@ -79,7 +82,7 @@ const Home = () => {
       );
     }
 
-    if (selectedMenu === "Home" && profileData) {
+    if (selectedMenu === "home" && profileData) {
       return <Profile profileData={profileData} />;
     }
 
@@ -88,6 +91,18 @@ const Home = () => {
     )?.component;
 
     return MenuItem && <MenuItem />;
+  };
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const pathMenuId = urlParams.get("page") || "home";
+    const validMenu = MENU_ITEMS.find((item) => item.id === pathMenuId);
+    setSelectedMenu(validMenu ? validMenu.id : "home");
+  }, [location.pathname]);
+
+  const handleMenuClick = (menuId) => {
+    setSelectedMenu(menuId);
+    navigate(`/student?page=${menuId}`);
   };
 
   return (
@@ -99,7 +114,7 @@ const Home = () => {
             <li
               key={item.id}
               className={getMenuItemClass(item.id)}
-              onClick={() => setSelectedMenu(item.label)}
+              onClick={() => handleMenuClick(item.id)}
             >
               {item.label}
             </li>

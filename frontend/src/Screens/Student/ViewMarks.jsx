@@ -73,7 +73,7 @@ const ViewMarks = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
         <div className="bg-white rounded-lg shadow-md p-6">
           <h2 className="text-xl font-semibold mb-4">Mid Term Marks</h2>
-          {loading ? (
+          {dataLoading ? (
             <p className="text-gray-500">Loading...</p>
           ) : midTermMarks.length > 0 ? (
             <div className="space-y-4">
@@ -110,7 +110,7 @@ const ViewMarks = () => {
 
         <div className="bg-white rounded-lg shadow-md p-6">
           <h2 className="text-xl font-semibold mb-4">End Term Marks</h2>
-          {loading ? (
+          {dataLoading ? (
             <p className="text-gray-500">Loading...</p>
           ) : endTermMarks.length > 0 ? (
             <div className="space-y-4">
