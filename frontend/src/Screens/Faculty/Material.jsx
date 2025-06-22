@@ -13,7 +13,7 @@ const Material = () => {
   const [materials, setMaterials] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [branches, setBranches] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [dataLoading, setDataLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [editingMaterial, setEditingMaterial] = useState(null);
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
@@ -158,7 +158,7 @@ const Material = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    setDataLoading(true);
     toast.loading(
       editingMaterial ? "Updating material..." : "Adding material..."
     );
@@ -194,7 +194,7 @@ const Material = () => {
     } catch (error) {
       toast.error(error?.response?.data?.message || "Operation failed");
     } finally {
-      setLoading(false);
+      setDataLoading(false);
       toast.dismiss();
     }
   };

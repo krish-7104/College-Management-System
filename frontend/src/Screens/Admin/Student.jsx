@@ -7,6 +7,8 @@ import DeleteConfirm from "../../components/DeleteConfirm";
 import axiosWrapper from "../../utils/AxiosWrapper";
 import CustomButton from "../../components/CustomButton";
 import NoData from "../../components/NoData";
+import { CgDanger } from "react-icons/cg";
+
 const Student = () => {
   const [searchParams, setSearchParams] = useState({
     enrollmentNo: "",
@@ -16,7 +18,7 @@ const Student = () => {
   });
   const [students, setStudents] = useState([]);
   const [branches, setBranches] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [dataLoading, setDataLoading] = useState(false);
   const [showAddForm, setShowAddForm] = useState(false);
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const [selectedStudentId, setSelectedStudentId] = useState(null);
@@ -99,7 +101,7 @@ const Student = () => {
       return;
     }
 
-    setLoading(true);
+    setDataLoading(true);
     setHasSearched(true);
     toast.loading("Searching students...");
     try {
@@ -127,7 +129,7 @@ const Student = () => {
       setStudents([]);
       toast.error(error.response?.data?.message || "Error searching students");
     } finally {
-      setLoading(false);
+      setDataLoading(false);
     }
   };
 
@@ -308,171 +310,192 @@ const Student = () => {
     <div className="w-full mx-auto mt-10 flex justify-center items-start flex-col mb-10">
       <div className="flex justify-between items-center w-full">
         <Heading title="Student Management" />
-        <CustomButton onClick={() => setShowAddForm(true)}>
-          <IoMdAdd className="text-2xl" />
-        </CustomButton>
+        {branches.length > 0 && (
+          <CustomButton onClick={() => setShowAddForm(true)}>
+            <IoMdAdd className="text-2xl" />
+          </CustomButton>
+        )}
       </div>
 
-      <div className="my-6 mx-auto w-full">
-        <form onSubmit={searchStudents} className="flex items-center">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-[90%] mx-auto">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Enrollment Number
-              </label>
-              <input
-                type="text"
-                name="enrollmentNo"
-                value={searchParams.enrollmentNo}
-                onChange={handleInputChange}
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter enrollment number"
-              />
-            </div>
+      {branches.length > 0 && (
+        <div className="my-6 mx-auto w-full">
+          <form onSubmit={searchStudents} className="flex items-center">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-[90%] mx-auto">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Enrollment Number
+                </label>
+                <input
+                  type="text"
+                  name="enrollmentNo"
+                  value={searchParams.enrollmentNo}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Enter enrollment number"
+                />
+              </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Name
-              </label>
-              <input
-                type="text"
-                name="name"
-                value={searchParams.name}
-                onChange={handleInputChange}
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter student name"
-              />
-            </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Name
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  value={searchParams.name}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Enter student name"
+                />
+              </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Semester
-              </label>
-              <select
-                name="semester"
-                value={searchParams.semester}
-                onChange={handleInputChange}
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">Select Semester</option>
-                {[1, 2, 3, 4, 5, 6, 7, 8].map((sem) => (
-                  <option key={sem} value={sem}>
-                    Semester {sem}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Branch
-              </label>
-              <select
-                name="branch"
-                value={searchParams.branch}
-                onChange={handleInputChange}
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">Select Branch</option>
-                {branches?.map((branch) => (
-                  <option key={branch._id} value={branch._id}>
-                    {branch.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          <div className="mt-6 flex justify-center w-[10%] mx-auto">
-            <CustomButton type="submit" disabled={loading} variant="primary">
-              {loading ? "Searching..." : "Search"}
-            </CustomButton>
-          </div>
-        </form>
-
-        {!hasSearched && (
-          <div className="text-center mt-8 text-gray-600 flex flex-col items-center justify-center my-10 bg-white p-10 rounded-lg mx-auto w-[40%]">
-            <img
-              src="/assets/filter.svg"
-              alt="Select filters"
-              className="w-64 h-64 mb-4"
-            />
-            Please select at least one filter to search students
-          </div>
-        )}
-
-        {hasSearched && students.length === 0 && (
-          <NoData title="No students found" />
-        )}
-
-        {students && students.length > 0 && (
-          <div className="mt-8">
-            <h2 className="text-xl font-semibold mb-4">Search Results</h2>
-            <div className="overflow-x-auto">
-              <table className="min-w-full bg-white border border-gray-300">
-                <thead>
-                  <tr className="bg-gray-100">
-                    <th className="px-6 py-3 border-b text-left">Profile</th>
-                    <th className="px-6 py-3 border-b text-left">Name</th>
-                    <th className="px-6 py-3 border-b text-left">E. No</th>
-                    <th className="px-6 py-3 border-b text-left">Semester</th>
-                    <th className="px-6 py-3 border-b text-left">Branch</th>
-                    <th className="px-6 py-3 border-b text-left">Email</th>
-                    <th className="px-6 py-3 border-b text-center">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {students.map((student) => (
-                    <tr key={student._id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 border-b">
-                        <img
-                          src={`${process.env.REACT_APP_MEDIA_LINK}/${student.profile}`}
-                          alt={`${student.firstName}'s profile`}
-                          className="w-12 h-12 object-cover rounded-full"
-                          onError={(e) => {
-                            e.target.src =
-                              "https://images.unsplash.com/photo-1744315900478-fa44dc6a4e89?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
-                          }}
-                        />
-                      </td>
-                      <td className="px-6 py-4 border-b">
-                        {student.firstName} {student.middleName}{" "}
-                        {student.lastName}
-                      </td>
-                      <td className="px-6 py-4 border-b">
-                        {student.enrollmentNo}
-                      </td>
-                      <td className="px-6 py-4 border-b">{student.semester}</td>
-                      <td className="px-6 py-4 border-b">
-                        {student.branchId?.name}
-                      </td>
-                      <td className="px-6 py-4 border-b">{student.email}</td>
-                      <td className="px-6 py-4 border-b text-center">
-                        <div className="flex justify-center gap-2">
-                          <CustomButton
-                            variant="secondary"
-                            className="!p-2"
-                            onClick={() => editStudentHandler(student)}
-                          >
-                            <MdEdit />
-                          </CustomButton>
-                          <CustomButton
-                            variant="danger"
-                            className="!p-2"
-                            onClick={() => deleteStudentHandler(student._id)}
-                          >
-                            <MdOutlineDelete />
-                          </CustomButton>
-                        </div>
-                      </td>
-                    </tr>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Semester
+                </label>
+                <select
+                  name="semester"
+                  value={searchParams.semester}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">Select Semester</option>
+                  {[1, 2, 3, 4, 5, 6, 7, 8].map((sem) => (
+                    <option key={sem} value={sem}>
+                      Semester {sem}
+                    </option>
                   ))}
-                </tbody>
-              </table>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Branch
+                </label>
+                <select
+                  name="branch"
+                  value={searchParams.branch}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">Select Branch</option>
+                  {branches?.map((branch) => (
+                    <option key={branch._id} value={branch._id}>
+                      {branch.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
-          </div>
-        )}
-      </div>
+
+            <div className="mt-6 flex justify-center w-[10%] mx-auto">
+              <CustomButton
+                type="submit"
+                disabled={dataLoading}
+                variant="primary"
+              >
+                {dataLoading ? "Searching..." : "Search"}
+              </CustomButton>
+            </div>
+          </form>
+
+          {!hasSearched && (
+            <div className="text-center mt-8 text-gray-600 flex flex-col items-center justify-center my-10 bg-white p-10 rounded-lg mx-auto w-[40%]">
+              <img
+                src="/assets/filter.svg"
+                alt="Select filters"
+                className="w-64 h-64 mb-4"
+              />
+              Please select at least one filter to search students
+            </div>
+          )}
+
+          {hasSearched && students.length === 0 && (
+            <NoData title="No students found" />
+          )}
+
+          {students && students.length > 0 && (
+            <div className="mt-8">
+              <h2 className="text-xl font-semibold mb-4">Search Results</h2>
+              <div className="overflow-x-auto">
+                <table className="min-w-full bg-white border border-gray-300">
+                  <thead>
+                    <tr className="bg-gray-100">
+                      <th className="px-6 py-3 border-b text-left">Profile</th>
+                      <th className="px-6 py-3 border-b text-left">Name</th>
+                      <th className="px-6 py-3 border-b text-left">E. No</th>
+                      <th className="px-6 py-3 border-b text-left">Semester</th>
+                      <th className="px-6 py-3 border-b text-left">Branch</th>
+                      <th className="px-6 py-3 border-b text-left">Email</th>
+                      <th className="px-6 py-3 border-b text-center">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {students.map((student) => (
+                      <tr key={student._id} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 border-b">
+                          <img
+                            src={`${process.env.REACT_APP_MEDIA_LINK}/${student.profile}`}
+                            alt={`${student.firstName}'s profile`}
+                            className="w-12 h-12 object-cover rounded-full"
+                            onError={(e) => {
+                              e.target.src =
+                                "https://images.unsplash.com/photo-1744315900478-fa44dc6a4e89?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+                            }}
+                          />
+                        </td>
+                        <td className="px-6 py-4 border-b">
+                          {student.firstName} {student.middleName}{" "}
+                          {student.lastName}
+                        </td>
+                        <td className="px-6 py-4 border-b">
+                          {student.enrollmentNo}
+                        </td>
+                        <td className="px-6 py-4 border-b">
+                          {student.semester}
+                        </td>
+                        <td className="px-6 py-4 border-b">
+                          {student.branchId?.name}
+                        </td>
+                        <td className="px-6 py-4 border-b">{student.email}</td>
+                        <td className="px-6 py-4 border-b text-center">
+                          <div className="flex justify-center gap-2">
+                            <CustomButton
+                              variant="secondary"
+                              className="!p-2"
+                              onClick={() => editStudentHandler(student)}
+                            >
+                              <MdEdit />
+                            </CustomButton>
+                            <CustomButton
+                              variant="danger"
+                              className="!p-2"
+                              onClick={() => deleteStudentHandler(student._id)}
+                            >
+                              <MdOutlineDelete />
+                            </CustomButton>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {branches.length == 0 && (
+        <div className="flex justify-center items-center flex-col w-full mt-24">
+          <CgDanger className="w-16 h-16 text-yellow-500 mb-4" />
+          <p className="text-center text-lg">
+            Please add branches before adding a student.
+          </p>
+        </div>
+      )}
 
       {showAddForm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

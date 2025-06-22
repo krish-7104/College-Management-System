@@ -6,7 +6,7 @@ const noticeSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  content: {
+  description: {
     type: String,
     required: true,
   },
@@ -14,6 +14,10 @@ const noticeSchema = new mongoose.Schema({
     type: String,
     required: true,
     enum: ["student", "faculty", "both"],
+  },
+  link: {
+    type: String,
+    required: false,
   },
   createdAt: {
     type: Date,

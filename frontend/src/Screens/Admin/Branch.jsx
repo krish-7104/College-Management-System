@@ -6,6 +6,7 @@ import axiosWrapper from "../../utils/AxiosWrapper";
 import Heading from "../../components/Heading";
 import DeleteConfirm from "../../components/DeleteConfirm";
 import CustomButton from "../../components/CustomButton";
+import Loading from "../../components/Loading";
 
 const Branch = () => {
   const [data, setData] = useState({
@@ -17,12 +18,15 @@ const Branch = () => {
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const [selectedBranchId, setSelectedBranchId] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [dataLoading, setDataLoading] = useState(false);
+  const [processLoading, setProcessLoading] = useState(false);
 
   useEffect(() => {
     getBranchHandler();
   }, []);
 
   const getBranchHandler = async () => {
+    setDataLoading(true);
     try {
       const response = await axiosWrapper.get(`/branch`, {
         headers: {
@@ -36,12 +40,23 @@ const Branch = () => {
         toast.error(response.data.message);
       }
     } catch (error) {
+      if (error.response && error.response.status === 404) {
+        setBranch([]);
+        return;
+      }
       console.error(error);
       toast.error(error.response?.data?.message || "Error fetching branches");
+    } finally {
+      setDataLoading(false);
     }
   };
 
   const addBranchHandler = async () => {
+    if (!data.name || !data.branchId) {
+      toast.dismiss();
+      toast.error("Please fill all the fields");
+      return;
+    }
     try {
       toast.loading(isEditing ? "Updating Branch" : "Adding Branch");
       const headers = {
@@ -142,39 +157,75 @@ const Branch = () => {
         )}
       </CustomButton>
 
+      {dataLoading && <Loading />}
+
       {showAddForm && (
-        <div className="flex flex-col justify-center items-center w-full mt-8">
-          <div className="w-[40%]">
-            <label htmlFor="name" className="leading-7 text-sm">
-              Enter Branch Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              value={data.name}
-              onChange={(e) => setData({ ...data, name: e.target.value })}
-              className="w-full bg-blue-50 rounded border focus:border-dark-green focus:bg-secondary-light focus:ring-2 focus:ring-light-green text-base outline-none py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-            />
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white rounded-lg w-[500px] max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center p-6 border-b">
+              <h2 className="text-xl font-semibold">
+                {isEditing ? "Edit Branch" : "Add New Branch"}
+              </h2>
+              <button
+                onClick={() => setShowAddForm(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <IoMdClose className="text-3xl" />
+              </button>
+            </div>
+
+            <form onSubmit={addBranchHandler} className="p-6 space-y-4">
+              <div>
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Branch Name
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  value={data.name}
+                  onChange={(e) => setData({ ...data, name: e.target.value })}
+                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="branchId"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Branch ID
+                </label>
+                <input
+                  type="text"
+                  id="branchId"
+                  value={data.branchId}
+                  onChange={(e) =>
+                    setData({ ...data, branchId: e.target.value })
+                  }
+                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              <div className="flex justify-end gap-4 pt-4 border-t">
+                <CustomButton
+                  variant="secondary"
+                  onClick={() => setShowAddForm(false)}
+                >
+                  Cancel
+                </CustomButton>
+                <CustomButton variant="primary" onClick={addBranchHandler}>
+                  {isEditing ? "Update" : "Add"}
+                </CustomButton>
+              </div>
+            </form>
           </div>
-          <div className="w-[40%] mt-4">
-            <label htmlFor="branchId" className="leading-7 text-sm">
-              Enter Branch ID
-            </label>
-            <input
-              type="text"
-              id="branchId"
-              value={data.branchId}
-              onChange={(e) => setData({ ...data, branchId: e.target.value })}
-              className="w-full bg-blue-50 rounded border focus:border-dark-green focus:bg-secondary-light focus:ring-2 focus:ring-light-green text-base outline-none py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-            />
-          </div>
-          <CustomButton className="mt-6" onClick={addBranchHandler}>
-            {isEditing ? "Update Branch" : "Add Branch"}
-          </CustomButton>
         </div>
       )}
 
-      {!showAddForm && (
+      {!dataLoading && (
         <div className="mt-8 w-full">
           <table className="text-sm min-w-full bg-white">
             <thead>
@@ -190,8 +241,7 @@ const Branch = () => {
               </tr>
             </thead>
             <tbody>
-              {" "}
-              {branch &&
+              {branch && branch.length > 0 ? (
                 branch.map((item, index) => (
                   <tr key={index} className="border-b hover:bg-blue-50">
                     <td className="py-4 px-6">{item.name}</td>
@@ -216,7 +266,14 @@ const Branch = () => {
                       </CustomButton>
                     </td>
                   </tr>
-                ))}
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="4" className="text-center text-base pt-10">
+                    No branches found.
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

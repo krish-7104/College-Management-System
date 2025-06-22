@@ -14,17 +14,18 @@ const getNoticeController = async (req, res) => {
 };
 
 const addNoticeController = async (req, res) => {
-  const { title, content, type } = req.body;
+  const { title, description, type, link } = req.body;
 
-  if (!title || !content || !type) {
+  if (!title || !description || !type) {
     return ApiResponse.error("All fields are required", 400).send(res);
   }
 
   try {
     const notice = await Notice.create({
       title,
-      content,
       type,
+      description,
+      link,
     });
 
     return ApiResponse.created(notice, "Notice Added Successfully!").send(res);
@@ -34,12 +35,13 @@ const addNoticeController = async (req, res) => {
 };
 
 const updateNoticeController = async (req, res) => {
-  const { title, content, type } = req.body;
+  const { title, description, type, link } = req.body;
   const updateFields = {};
 
   if (title) updateFields.title = title;
-  if (content) updateFields.content = content;
+  if (description) updateFields.description = description;
   if (type) updateFields.type = type;
+  if (link) updateFields.link = link;
 
   if (Object.keys(updateFields).length === 0) {
     return ApiResponse.error("No fields provided for update", 400).send(res);

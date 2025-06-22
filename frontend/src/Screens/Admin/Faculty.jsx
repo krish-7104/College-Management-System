@@ -6,6 +6,7 @@ import axiosWrapper from "../../utils/AxiosWrapper";
 import Heading from "../../components/Heading";
 import DeleteConfirm from "../../components/DeleteConfirm";
 import CustomButton from "../../components/CustomButton";
+import Loading from "../../components/Loading";
 
 const Faculty = () => {
   const [data, setData] = useState({
@@ -43,7 +44,7 @@ const Faculty = () => {
   const [isEditing, setIsEditing] = useState(false);
   const userToken = localStorage.getItem("userToken");
   const [file, setFile] = useState(null);
-  const [error, setError] = useState(null);
+  const [dataLoading, setDataLoading] = useState(null);
 
   useEffect(() => {
     getFacultyHandler();
@@ -52,7 +53,7 @@ const Faculty = () => {
 
   const getBranchHandler = async () => {
     try {
-      toast.loading("Loading branches...");
+      setDataLoading(true);
       const response = await axiosWrapper.get(`/branch`, {
         headers: {
           Authorization: `Bearer ${userToken}`,
@@ -71,7 +72,7 @@ const Faculty = () => {
         toast.error(error.response?.data?.message || "Error fetching subjects");
       }
     } finally {
-      toast.dismiss();
+      setDataLoading(false);
     }
   };
 
@@ -268,22 +269,26 @@ const Faculty = () => {
   return (
     <div className="w-full mx-auto mt-10 flex justify-center items-start flex-col mb-10 relative">
       <Heading title="Faculty Details" />
-      <CustomButton
-        onClick={() => {
-          if (showAddForm) {
-            resetForm();
-          } else {
-            setShowAddForm(true);
-          }
-        }}
-        className="fixed bottom-8 right-8 !rounded-full !p-4"
-      >
-        {showAddForm ? (
-          <IoMdClose className="text-3xl" />
-        ) : (
-          <IoMdAdd className="text-3xl" />
-        )}
-      </CustomButton>
+      {!dataLoading && (
+        <CustomButton
+          onClick={() => {
+            if (showAddForm) {
+              resetForm();
+            } else {
+              setShowAddForm(true);
+            }
+          }}
+          className="fixed bottom-8 right-8 !rounded-full !p-4"
+        >
+          {showAddForm ? (
+            <IoMdClose className="text-3xl" />
+          ) : (
+            <IoMdAdd className="text-3xl" />
+          )}
+        </CustomButton>
+      )}
+
+      {dataLoading && <Loading />}
 
       {showAddForm && (
         <div className="flex flex-col justify-center items-center w-full mt-8">
@@ -380,32 +385,26 @@ const Faculty = () => {
         </div>
       )}
 
-      {!showAddForm && (
+      {!dataLoading && !showAddForm && (
         <div className="mt-8 w-full">
-          {faculty.length === 0 ? (
-            <div className="text-center py-8 text-gray-500">
-              No faculty found
-            </div>
-          ) : (
-            <table className="text-sm min-w-full bg-white">
-              <thead>
-                <tr className="bg-blue-500 text-white">
-                  <th className="py-4 px-6 text-left font-semibold">Name</th>
-                  <th className="py-4 px-6 text-left font-semibold">Email</th>
-                  <th className="py-4 px-6 text-left font-semibold">Phone</th>
-                  <th className="py-4 px-6 text-left font-semibold">
-                    Employee ID
-                  </th>
-                  <th className="py-4 px-6 text-left font-semibold">
-                    Designation
-                  </th>
-                  <th className="py-4 px-6 text-center font-semibold">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {faculty.map((item, index) => (
+          <table className="text-sm min-w-full bg-white">
+            <thead>
+              <tr className="bg-blue-500 text-white">
+                <th className="py-4 px-6 text-left font-semibold">Name</th>
+                <th className="py-4 px-6 text-left font-semibold">Email</th>
+                <th className="py-4 px-6 text-left font-semibold">Phone</th>
+                <th className="py-4 px-6 text-left font-semibold">
+                  Employee ID
+                </th>
+                <th className="py-4 px-6 text-left font-semibold">
+                  Designation
+                </th>
+                <th className="py-4 px-6 text-center font-semibold">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {faculty && faculty.length > 0 ? (
+                faculty.map((item, index) => (
                   <tr key={index} className="border-b hover:bg-blue-50">
                     <td className="py-4 px-6">{`${item.firstName} ${item.lastName}`}</td>
                     <td className="py-4 px-6">{item.email}</td>
@@ -429,10 +428,16 @@ const Faculty = () => {
                       </CustomButton>
                     </td>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="6" className="text-center text-base pt-10">
+                    No Faculty found.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
       )}
       <DeleteConfirm

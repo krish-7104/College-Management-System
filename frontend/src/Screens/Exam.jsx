@@ -9,6 +9,7 @@ import DeleteConfirm from "../components/DeleteConfirm";
 import CustomButton from "../components/CustomButton";
 import { FiUpload } from "react-icons/fi";
 import { useSelector } from "react-redux";
+import Loading from "../components/Loading";
 
 const Exam = () => {
   const [data, setData] = useState({
@@ -27,6 +28,8 @@ const Exam = () => {
   const [file, setFile] = useState(null);
   const userData = useSelector((state) => state.userData);
   const loginType = localStorage.getItem("userType");
+  const [processLoading, setProcessLoading] = useState(false);
+  const [dataLoading, setDataLoading] = useState(false);
 
   useEffect(() => {
     getExamsHandler();
@@ -34,6 +37,7 @@ const Exam = () => {
 
   const getExamsHandler = async () => {
     try {
+      setDataLoading(true);
       let link = "/exam";
       if (userData.semester) {
         link = `/exam?semester=${userData.semester}`;
@@ -50,8 +54,14 @@ const Exam = () => {
         toast.error(response.data.message);
       }
     } catch (error) {
+      if (error.response?.status === 404) {
+        setExams([]);
+        return;
+      }
       console.error(error);
       toast.error(error.response?.data?.message || "Error fetching exams");
+    } finally {
+      setDataLoading(false);
     }
   };
 
@@ -60,7 +70,19 @@ const Exam = () => {
   };
 
   const addExamHandler = async () => {
+    if (
+      !data.name ||
+      !data.date ||
+      !data.semester ||
+      !data.examType ||
+      !data.totalMarks
+    ) {
+      toast.dismiss();
+      toast.error("Please fill all the fields");
+      return;
+    }
     try {
+      setProcessLoading(true);
       toast.loading(isEditing ? "Updating Exam" : "Adding Exam");
       const headers = {
         "Content-Type": "multipart/form-data",
@@ -99,6 +121,8 @@ const Exam = () => {
     } catch (error) {
       toast.dismiss();
       toast.error(error.response.data.message);
+    } finally {
+      setProcessLoading(false);
     }
   };
 
@@ -163,63 +187,71 @@ const Exam = () => {
     <div className="w-full mx-auto mt-10 flex justify-center items-start flex-col mb-10">
       <div className="flex justify-between items-center w-full">
         <Heading title="Exam Details" />
-        {loginType !== "Student" && (
+        {!dataLoading && loginType !== "Student" && (
           <CustomButton onClick={() => setShowModal(true)}>
             <IoMdAdd className="text-2xl" />
           </CustomButton>
         )}
       </div>
 
-      <div className="mt-8 w-full">
-        <table className="text-sm min-w-full bg-white">
-          <thead>
-            <tr className="bg-blue-500 text-white">
-              <th className="py-4 px-6 text-left font-semibold">Exam Name</th>
-              <th className="py-4 px-6 text-left font-semibold">Date</th>
-              <th className="py-4 px-6 text-left font-semibold">Semester</th>
-              <th className="py-4 px-6 text-left font-semibold">Exam Type</th>
-              <th className="py-4 px-6 text-left font-semibold">Total Marks</th>
-              {loginType !== "Student" && (
-                <th className="py-4 px-6 text-center font-semibold">Actions</th>
-              )}
-            </tr>
-          </thead>
-          <tbody>
-            {exams &&
-              exams.map((item, index) => (
-                <tr key={index} className="border-b hover:bg-blue-50">
-                  <td className="py-4 px-6">{item.name}</td>
-                  <td className="py-4 px-6">
-                    {new Date(item.date).toLocaleDateString()}
-                  </td>
-                  <td className="py-4 px-6">{item.semester}</td>
-                  <td className="py-4 px-6">
-                    {item.examType === "mid" ? "Mid Term" : "End Term"}
-                  </td>
-                  <td className="py-4 px-6">{item.totalMarks}</td>
-                  {loginType !== "Student" && (
-                    <td className="py-4 px-6 text-center flex justify-center gap-4">
-                      <CustomButton
-                        variant="secondary"
-                        className="!p-2"
-                        onClick={() => editExamHandler(item)}
-                      >
-                        <MdEdit />
-                      </CustomButton>
-                      <CustomButton
-                        variant="danger"
-                        className="!p-2"
-                        onClick={() => deleteExamHandler(item._id)}
-                      >
-                        <MdOutlineDelete />
-                      </CustomButton>
+      {!dataLoading ? (
+        <div className="mt-8 w-full">
+          <table className="text-sm min-w-full bg-white">
+            <thead>
+              <tr className="bg-blue-500 text-white">
+                <th className="py-4 px-6 text-left font-semibold">Exam Name</th>
+                <th className="py-4 px-6 text-left font-semibold">Date</th>
+                <th className="py-4 px-6 text-left font-semibold">Semester</th>
+                <th className="py-4 px-6 text-left font-semibold">Exam Type</th>
+                <th className="py-4 px-6 text-left font-semibold">
+                  Total Marks
+                </th>
+                {loginType !== "Student" && (
+                  <th className="py-4 px-6 text-center font-semibold">
+                    Actions
+                  </th>
+                )}
+              </tr>
+            </thead>
+            <tbody>
+              {exams &&
+                exams.map((item, index) => (
+                  <tr key={index} className="border-b hover:bg-blue-50">
+                    <td className="py-4 px-6">{item.name}</td>
+                    <td className="py-4 px-6">
+                      {new Date(item.date).toLocaleDateString()}
                     </td>
-                  )}
-                </tr>
-              ))}
-          </tbody>
-        </table>
-      </div>
+                    <td className="py-4 px-6">{item.semester}</td>
+                    <td className="py-4 px-6">
+                      {item.examType === "mid" ? "Mid Term" : "End Term"}
+                    </td>
+                    <td className="py-4 px-6">{item.totalMarks}</td>
+                    {loginType !== "Student" && (
+                      <td className="py-4 px-6 text-center flex justify-center gap-4">
+                        <CustomButton
+                          variant="secondary"
+                          className="!p-2"
+                          onClick={() => editExamHandler(item)}
+                        >
+                          <MdEdit />
+                        </CustomButton>
+                        <CustomButton
+                          variant="danger"
+                          className="!p-2"
+                          onClick={() => deleteExamHandler(item._id)}
+                        >
+                          <MdOutlineDelete />
+                        </CustomButton>
+                      </td>
+                    )}
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <Loading />
+      )}
 
       {/* Add/Edit Exam Modal */}
       {showModal && (
@@ -348,7 +380,10 @@ const Exam = () => {
                 <CustomButton onClick={resetForm} variant="secondary">
                   Cancel
                 </CustomButton>
-                <CustomButton onClick={addExamHandler}>
+                <CustomButton
+                  onClick={addExamHandler}
+                  disabled={processLoading}
+                >
                   {isEditing ? "Update Exam" : "Add Exam"}
                 </CustomButton>
               </div>

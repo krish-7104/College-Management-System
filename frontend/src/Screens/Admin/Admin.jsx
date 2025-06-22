@@ -6,6 +6,7 @@ import axiosWrapper from "../../utils/AxiosWrapper";
 import Heading from "../../components/Heading";
 import DeleteConfirm from "../../components/DeleteConfirm";
 import CustomButton from "../../components/CustomButton";
+import Loading from "../../components/Loading";
 const Admin = () => {
   const [data, setData] = useState({
     firstName: "",
@@ -39,6 +40,7 @@ const Admin = () => {
   const [isEditing, setIsEditing] = useState(false);
   const userToken = localStorage.getItem("userToken");
   const [file, setFile] = useState(null);
+  const [dataLoading, setDataLoading] = useState(false);
 
   useEffect(() => {
     getAdminsHandler();
@@ -46,6 +48,7 @@ const Admin = () => {
 
   const getAdminsHandler = async () => {
     try {
+      setDataLoading(true);
       const response = await axiosWrapper.get(`/admin`, {
         headers: {
           Authorization: `Bearer ${userToken}`,
@@ -57,8 +60,14 @@ const Admin = () => {
         toast.error(response.data.message);
       }
     } catch (error) {
+      if (error.response?.status === 404) {
+        setAdmins([]);
+        return;
+      }
       console.error(error);
       toast.error(error.response?.data?.message || "Error fetching admins");
+    } finally {
+      setDataLoading(false);
     }
   };
 
@@ -228,22 +237,24 @@ const Admin = () => {
   return (
     <div className="w-full mx-auto mt-10 flex justify-center items-start flex-col mb-10 relative">
       <Heading title="Admin Details" />
-      <CustomButton
-        onClick={() => {
-          if (showAddForm) {
-            resetForm();
-          } else {
-            setShowAddForm(true);
-          }
-        }}
-        className="fixed bottom-8 right-8 bg-blue-500 text-white rounded-full p-4 shadow-lg hover:bg-blue-600 transition-all duration-300"
-      >
-        {showAddForm ? (
-          <IoMdClose className="text-3xl" />
-        ) : (
-          <IoMdAdd className="text-3xl" />
-        )}
-      </CustomButton>
+      {!dataLoading && (
+        <CustomButton
+          onClick={() => {
+            if (showAddForm) {
+              resetForm();
+            } else {
+              setShowAddForm(true);
+            }
+          }}
+          className="fixed bottom-8 right-8 bg-blue-500 text-white rounded-full p-4 shadow-lg hover:bg-blue-600 transition-all duration-300"
+        >
+          {showAddForm ? (
+            <IoMdClose className="text-3xl" />
+          ) : (
+            <IoMdAdd className="text-3xl" />
+          )}
+        </CustomButton>
+      )}
 
       {showAddForm && (
         <div className="flex flex-col justify-center items-center w-full mt-8">
@@ -322,7 +333,9 @@ const Admin = () => {
         </div>
       )}
 
-      {!showAddForm && (
+      {dataLoading && <Loading />}
+
+      {!dataLoading && !showAddForm && (
         <div className="mt-8 w-full">
           <table className="text-sm min-w-full bg-white">
             <thead>
@@ -340,29 +353,37 @@ const Admin = () => {
               </tr>
             </thead>
             <tbody>
-              {admins.map((item, index) => (
-                <tr key={index} className="border-b hover:bg-blue-50">
-                  <td className="py-4 px-6">{`${item.firstName} ${item.lastName}`}</td>
-                  <td className="py-4 px-6">{item.email}</td>
-                  <td className="py-4 px-6">{item.phone}</td>
-                  <td className="py-4 px-6">{item.employeeId}</td>
-                  <td className="py-4 px-6">{item.designation}</td>
-                  <td className="py-4 px-6 text-center flex justify-center gap-4">
-                    <CustomButton
-                      variant="secondary"
-                      onClick={() => editAdminHandler(item)}
-                    >
-                      <MdEdit />
-                    </CustomButton>
-                    <CustomButton
-                      variant="danger"
-                      onClick={() => deleteAdminHandler(item._id)}
-                    >
-                      <MdOutlineDelete />
-                    </CustomButton>
+              {admins && admins.length > 0 ? (
+                admins.map((item, index) => (
+                  <tr key={index} className="border-b hover:bg-blue-50">
+                    <td className="py-4 px-6">{`${item.firstName} ${item.lastName}`}</td>
+                    <td className="py-4 px-6">{item.email}</td>
+                    <td className="py-4 px-6">{item.phone}</td>
+                    <td className="py-4 px-6">{item.employeeId}</td>
+                    <td className="py-4 px-6">{item.designation}</td>
+                    <td className="py-4 px-6 text-center flex justify-center gap-4">
+                      <CustomButton
+                        variant="secondary"
+                        onClick={() => editAdminHandler(item)}
+                      >
+                        <MdEdit />
+                      </CustomButton>
+                      <CustomButton
+                        variant="danger"
+                        onClick={() => deleteAdminHandler(item._id)}
+                      >
+                        <MdOutlineDelete />
+                      </CustomButton>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="6" className="text-center text-base pt-10">
+                    No Admins found.
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>

@@ -6,7 +6,7 @@ import CustomButton from "../../components/CustomButton";
 
 const AddMarks = () => {
   const [branches, setBranches] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [dataLoading, setDataLoading] = useState(false);
   const userToken = localStorage.getItem("userToken");
   const [students, setStudents] = useState([]);
   const [subjects, setSubjects] = useState([]);
@@ -19,8 +19,6 @@ const AddMarks = () => {
   const [marksData, setMarksData] = useState({});
   const [consent, setConsent] = useState(false);
   const [showSearch, setShowSearch] = useState(true);
-
-  console.log(selectedExam);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -117,7 +115,7 @@ const AddMarks = () => {
   };
 
   const searchStudents = async () => {
-    setLoading(true);
+    setDataLoading(true);
     toast.loading("Searching students...");
     setStudents([]);
     try {
@@ -153,12 +151,12 @@ const AddMarks = () => {
       toast.error(error.response?.data?.message || "Error searching students");
       console.error("Search error:", error);
     } finally {
-      setLoading(false);
+      setDataLoading(false);
     }
   };
 
   const getMarks = async (e) => {
-    setLoading(true);
+    setDataLoading(true);
     toast.loading("Getting marks...");
     setMasterMarksData([]);
     try {
@@ -191,7 +189,7 @@ const AddMarks = () => {
       toast.error(error.response?.data?.message || "Error searching students");
       console.error("Search error:", error);
     } finally {
-      setLoading(false);
+      setDataLoading(false);
     }
   };
 
@@ -207,7 +205,7 @@ const AddMarks = () => {
       return;
     }
 
-    setLoading(true);
+    setDataLoading(true);
     toast.loading("Submitting marks...");
     try {
       const marksToSubmit = Object.entries(marksData).map(
@@ -242,7 +240,7 @@ const AddMarks = () => {
       toast.error(error.response?.data?.message || "Error submitting marks");
       console.error("Submit error:", error);
     } finally {
-      setLoading(false);
+      setDataLoading(false);
       toast.dismiss();
     }
   };

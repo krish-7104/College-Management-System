@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 
 const ViewMarks = () => {
   const userData = useSelector((state) => state.userData);
-  const [loading, setLoading] = useState(false);
+  const [dataLoading, setDataLoading] = useState(false);
   const [selectedSemester, setSelectedSemester] = useState(
     userData?.semester || 1
   );
@@ -14,7 +14,7 @@ const ViewMarks = () => {
   const userToken = localStorage.getItem("userToken");
 
   const fetchMarks = async (semester) => {
-    setLoading(true);
+    setDataLoading(true);
     toast.loading("Loading marks...");
     try {
       const response = await axiosWrapper.get(
@@ -32,7 +32,7 @@ const ViewMarks = () => {
     } catch (error) {
       toast.error(error.response?.data?.message || "Error fetching marks");
     } finally {
-      setLoading(false);
+      setDataLoading(false);
       toast.dismiss();
     }
   };

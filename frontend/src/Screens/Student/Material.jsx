@@ -9,7 +9,7 @@ import CustomButton from "../../components/CustomButton";
 const Material = () => {
   const [materials, setMaterials] = useState([]);
   const [subjects, setSubjects] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [dataLoading, setDataLoading] = useState(false);
   const userData = useSelector((state) => state.userData);
   const [filters, setFilters] = useState({
     subject: "",

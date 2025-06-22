@@ -12,9 +12,10 @@ import { setUserData } from "../../redux/actions";
 import axiosWrapper from "../../utils/AxiosWrapper";
 import Profile from "./Profile";
 import Exam from "../Exam";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 
 const MENU_ITEMS = [
-  { id: "home", label: "Home", component: null },
+  { id: "home", label: "Home", component: Profile },
   { id: "student", label: "Student", component: Student },
   { id: "faculty", label: "Faculty", component: Faculty },
   { id: "branch", label: "Branch", component: Branch },
@@ -25,7 +26,10 @@ const MENU_ITEMS = [
 ];
 
 const Home = () => {
-  const [selectedMenu, setSelectedMenu] = useState("Home");
+  const navigate = useNavigate();
+  const { menuId } = useParams();
+  const location = useLocation();
+  const [selectedMenu, setSelectedMenu] = useState("home");
   const [profileData, setProfileData] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
@@ -61,8 +65,15 @@ const Home = () => {
     fetchUserDetails();
   }, [dispatch, userToken]);
 
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const pathMenuId = urlParams.get("page") || "home";
+    const validMenu = MENU_ITEMS.find((item) => item.id === pathMenuId);
+    setSelectedMenu(validMenu ? validMenu.id : "home");
+  }, [location.pathname]);
+
   const getMenuItemClass = (menuId) => {
-    const isSelected = selectedMenu.toLowerCase() === menuId.toLowerCase();
+    const isSelected = selectedMenu === menuId;
     return `
       text-center px-6 py-3 cursor-pointer
       font-medium text-sm w-full
@@ -83,15 +94,20 @@ const Home = () => {
       );
     }
 
-    if (selectedMenu === "Home" && profileData) {
+    const MenuItem = MENU_ITEMS.find(
+      (item) => item.id === selectedMenu
+    )?.component;
+
+    if (selectedMenu === "home" && profileData) {
       return <Profile profileData={profileData} />;
     }
 
-    const MenuItem = MENU_ITEMS.find(
-      (item) => item.label.toLowerCase() === selectedMenu.toLowerCase()
-    )?.component;
-
     return MenuItem && <MenuItem />;
+  };
+
+  const handleMenuClick = (menuId) => {
+    setSelectedMenu(menuId);
+    navigate(`/admin?page=${menuId}`);
   };
 
   return (
@@ -103,7 +119,7 @@ const Home = () => {
             <li
               key={item.id}
               className={getMenuItemClass(item.id)}
-              onClick={() => setSelectedMenu(item.label)}
+              onClick={() => handleMenuClick(item.id)}
             >
               {item.label}
             </li>

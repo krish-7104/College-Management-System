@@ -14,7 +14,7 @@ const StudentFinder = () => {
   });
   const [students, setStudents] = useState([]);
   const [branches, setBranches] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [dataLoading, setDataLoading] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const userToken = localStorage.getItem("userToken");
@@ -59,7 +59,7 @@ const StudentFinder = () => {
 
   const searchStudents = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    setDataLoading(true);
     setHasSearched(true);
     toast.loading("Searching students...");
     setStudents([]);
@@ -89,7 +89,7 @@ const StudentFinder = () => {
       toast.error(error.response?.data?.message || "Error searching students");
       console.error("Search error:", error);
     } finally {
-      setLoading(false);
+      setDataLoading(false);
     }
   };
 
@@ -175,8 +175,12 @@ const StudentFinder = () => {
           </div>
 
           <div className="mt-6 flex justify-center w-[10%] mx-auto">
-            <CustomButton type="submit" disabled={loading} variant="primary">
-              {loading ? "Searching..." : "Search"}
+            <CustomButton
+              type="submit"
+              disabled={dataLoading}
+              variant="primary"
+            >
+              {dataLoading ? "Searching..." : "Search"}
             </CustomButton>
           </div>
         </form>
