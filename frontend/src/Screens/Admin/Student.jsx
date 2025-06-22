@@ -205,7 +205,6 @@ const Student = () => {
           toast.success(response.data.message);
         }
         resetForm();
-        searchStudents({ preventDefault: () => {} });
       } else {
         toast.error(response.data.message);
       }
@@ -649,14 +648,24 @@ const Student = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Blood Group
                   </label>
-                  <input
-                    type="text"
+                  <select
                     value={formData.bloodGroup}
                     onChange={(e) =>
                       handleFormInputChange("bloodGroup", e.target.value)
                     }
                     className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
+                    required
+                  >
+                    <option value="">Select Blood Group</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                  </select>
                 </div>
 
                 <div>
