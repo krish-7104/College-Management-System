@@ -268,8 +268,8 @@ const Faculty = () => {
 
   return (
     <div className="w-full mx-auto mt-10 flex justify-center items-start flex-col mb-10 relative">
-      <Heading title="Faculty Details" />
-      {!dataLoading && (
+      <div className="flex justify-between items-center w-full">
+        <Heading title="Faculty Management" />
         <CustomButton
           onClick={() => {
             if (showAddForm) {
@@ -278,110 +278,371 @@ const Faculty = () => {
               setShowAddForm(true);
             }
           }}
-          className="fixed bottom-8 right-8 !rounded-full !p-4"
         >
-          {showAddForm ? (
-            <IoMdClose className="text-3xl" />
-          ) : (
-            <IoMdAdd className="text-3xl" />
-          )}
+          <IoMdAdd className="text-2xl" />
         </CustomButton>
-      )}
+      </div>
 
       {dataLoading && <Loading />}
 
       {showAddForm && (
-        <div className="flex flex-col justify-center items-center w-full mt-8">
-          <div className="grid grid-cols-2 gap-4 w-[60%]">
-            <div>
-              <label className="leading-7 text-sm">Upload Profile Photo</label>
-              <input type="file" onChange={(e) => setFile(e.target.files[0])} />
-            </div>
-            {[
-              { label: "First Name", field: "firstName" },
-              { label: "Last Name", field: "lastName" },
-              { label: "Email", field: "email" },
-              { label: "Phone", field: "phone" },
-              { label: "Address", field: "address" },
-              { label: "City", field: "city" },
-              { label: "State", field: "state" },
-              { label: "Pincode", field: "pincode" },
-              { label: "Country", field: "country" },
-              { label: "DOB", field: "dob", type: "date" },
-              { label: "Designation", field: "designation" },
-              { label: "Joining Date", field: "joiningDate", type: "date" },
-              { label: "Salary", field: "salary" },
-              { label: "Blood Group", field: "bloodGroup" },
-            ].map(({ label, field, type = "text" }) => (
-              <div key={field}>
-                <label className="leading-7 text-sm">{label}</label>
-                <input
-                  type={type}
-                  value={data[field]}
-                  onChange={(e) => handleInputChange(field, e.target.value)}
-                  className="w-full bg-blue-50 rounded border focus:border-dark-green focus:bg-secondary-light focus:ring-2 focus:ring-light-green text-base outline-none py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-                />
-              </div>
-            ))}
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-8 w-[90%] max-w-4xl max-h-[90vh] overflow-y-auto relative">
+            <button
+              onClick={resetForm}
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 p-1 rounded-full hover:bg-gray-100 transition-colors"
+            >
+              <IoMdClose className="text-2xl" />
+            </button>
+            <h2 className="text-2xl font-semibold mb-6">
+              {isEditing ? "Edit Faculty" : "Add New Faculty"}
+            </h2>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                addFacultyHandler();
+              }}
+            >
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Profile Photo
+                  </label>
+                  <input
+                    type="file"
+                    onChange={(e) => setFile(e.target.files[0])}
+                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    accept="image/*"
+                  />
+                </div>
 
-            <div>
-              <label htmlFor="branch" className="leading-7 text-sm">
-                Select Branch
-              </label>
-              <select
-                name="branchId"
-                value={data.branchId}
-                onChange={(e) => handleInputChange("branchId", e.target.value)}
-                className="w-full bg-blue-50 rounded border focus:border-dark-green focus:bg-secondary-light focus:ring-2 focus:ring-light-green text-base outline-none py-2 px-3 leading-8 transition-colors duration-200 ease-in-out"
-                required
-              >
-                <option value="">Select Branch</option>
-                {branch.map((item) => (
-                  <option key={item._id} value={item._id}>
-                    {item.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="leading-7 text-sm">Gender</label>
-              <select
-                name="gender"
-                value={data.gender}
-                onChange={(e) => handleInputChange("gender", e.target.value)}
-                className="w-full bg-blue-50 rounded border focus:border-dark-green focus:bg-secondary-light focus:ring-2 focus:ring-light-green text-base outline-none py-2 px-3 leading-8 transition-colors duration-200 ease-in-out"
-                required
-              >
-                <option value="">Select Gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    First Name
+                  </label>
+                  <input
+                    type="text"
+                    value={data.firstName}
+                    onChange={(e) =>
+                      handleInputChange("firstName", e.target.value)
+                    }
+                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
 
-            {["name", "relationship", "phone"].map((field) => (
-              <div key={field}>
-                <label className="leading-7 text-sm">
-                  Emergency {field.charAt(0).toUpperCase() + field.slice(1)}
-                </label>
-                <input
-                  type="text"
-                  value={data.emergencyContact[field]}
-                  onChange={(e) =>
-                    handleEmergencyContactChange(field, e.target.value)
-                  }
-                  className="w-full bg-blue-50 rounded border focus:border-dark-green focus:bg-secondary-light focus:ring-2 focus:ring-light-green text-base outline-none py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-                />
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Last Name
+                  </label>
+                  <input
+                    type="text"
+                    value={data.lastName}
+                    onChange={(e) =>
+                      handleInputChange("lastName", e.target.value)
+                    }
+                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    value={data.email}
+                    onChange={(e) => handleInputChange("email", e.target.value)}
+                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Phone
+                  </label>
+                  <input
+                    type="tel"
+                    value={data.phone}
+                    onChange={(e) => handleInputChange("phone", e.target.value)}
+                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Gender
+                  </label>
+                  <select
+                    value={data.gender}
+                    onChange={(e) =>
+                      handleInputChange("gender", e.target.value)
+                    }
+                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  >
+                    <option value="">Select Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Date of Birth
+                  </label>
+                  <input
+                    type="date"
+                    value={data.dob}
+                    onChange={(e) => handleInputChange("dob", e.target.value)}
+                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Blood Group
+                  </label>
+                  <select
+                    value={data.bloodGroup}
+                    onChange={(e) =>
+                      handleInputChange("bloodGroup", e.target.value)
+                    }
+                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  >
+                    <option value="">Select Blood Group</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Designation
+                  </label>
+                  <input
+                    type="text"
+                    value={data.designation}
+                    onChange={(e) =>
+                      handleInputChange("designation", e.target.value)
+                    }
+                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Joining Date
+                  </label>
+                  <input
+                    type="date"
+                    value={data.joiningDate}
+                    onChange={(e) =>
+                      handleInputChange("joiningDate", e.target.value)
+                    }
+                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Salary
+                  </label>
+                  <input
+                    type="number"
+                    value={data.salary}
+                    onChange={(e) =>
+                      handleInputChange("salary", e.target.value)
+                    }
+                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Branch
+                  </label>
+                  <select
+                    value={data.branchId}
+                    onChange={(e) =>
+                      handleInputChange("branchId", e.target.value)
+                    }
+                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  >
+                    <option value="">Select Branch</option>
+                    {branch.map((item) => (
+                      <option key={item._id} value={item._id}>
+                        {item.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Address
+                  </label>
+                  <input
+                    type="text"
+                    value={data.address}
+                    onChange={(e) =>
+                      handleInputChange("address", e.target.value)
+                    }
+                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    City
+                  </label>
+                  <input
+                    type="text"
+                    value={data.city}
+                    onChange={(e) => handleInputChange("city", e.target.value)}
+                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    State
+                  </label>
+                  <input
+                    type="text"
+                    value={data.state}
+                    onChange={(e) => handleInputChange("state", e.target.value)}
+                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Pincode
+                  </label>
+                  <input
+                    type="text"
+                    value={data.pincode}
+                    onChange={(e) =>
+                      handleInputChange("pincode", e.target.value)
+                    }
+                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Country
+                  </label>
+                  <input
+                    type="text"
+                    value={data.country}
+                    onChange={(e) =>
+                      handleInputChange("country", e.target.value)
+                    }
+                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <h3 className="text-lg font-semibold mb-4">
+                    Emergency Contact
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Name
+                      </label>
+                      <input
+                        type="text"
+                        value={data.emergencyContact.name}
+                        onChange={(e) =>
+                          handleEmergencyContactChange("name", e.target.value)
+                        }
+                        className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Relationship
+                      </label>
+                      <input
+                        type="text"
+                        value={data.emergencyContact.relationship}
+                        onChange={(e) =>
+                          handleEmergencyContactChange(
+                            "relationship",
+                            e.target.value
+                          )
+                        }
+                        className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Phone
+                      </label>
+                      <input
+                        type="tel"
+                        value={data.emergencyContact.phone}
+                        onChange={(e) =>
+                          handleEmergencyContactChange("phone", e.target.value)
+                        }
+                        className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
-            ))}
+
+              <div className="mt-8 flex justify-between items-center gap-4">
+                <div>
+                  <p className="text-sm">
+                    Default password will be{" "}
+                    <span className="font-bold">faculty123</span>
+                  </p>
+                </div>
+                <div className="flex gap-4">
+                  <CustomButton
+                    type="button"
+                    variant="secondary"
+                    onClick={resetForm}
+                  >
+                    Cancel
+                  </CustomButton>
+                  <CustomButton type="submit" variant="primary">
+                    {isEditing ? "Update Faculty" : "Add Faculty"}
+                  </CustomButton>
+                </div>
+              </div>
+            </form>
           </div>
-          <div className="text-sm text-gray-600 mt-3 mb-4">
-            Note: New faculty will be created with default password:{" "}
-            <span className="font-semibold">faculty123</span>
-          </div>
-          <CustomButton className="mt-6" onClick={addFacultyHandler}>
-            {isEditing ? "Update Faculty" : "Add Faculty"}
-          </CustomButton>
         </div>
       )}
 

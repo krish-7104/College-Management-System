@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { MdOutlineDelete, MdEdit } from "react-icons/md";
-import { IoMdAdd } from "react-icons/io";
+import { IoMdAdd, IoMdClose } from "react-icons/io";
 import Heading from "../../components/Heading";
 import DeleteConfirm from "../../components/DeleteConfirm";
 import axiosWrapper from "../../utils/AxiosWrapper";
@@ -498,7 +498,13 @@ const Student = () => {
 
       {showAddForm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-8 w-[90%] max-w-4xl max-h-[90vh] overflow-y-auto">
+          <div className="bg-white rounded-lg p-8 w-[90%] max-w-4xl max-h-[90vh] overflow-y-auto relative">
+            <button
+              onClick={resetForm}
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 p-1 rounded-full hover:bg-gray-100 transition-colors"
+            >
+              <IoMdClose className="text-2xl" />
+            </button>
             <h2 className="text-2xl font-semibold mb-6">
               {isEditing ? "Edit Student" : "Add New Student"}
             </h2>
@@ -811,17 +817,29 @@ const Student = () => {
                 </div>
               </div>
 
-              <div className="mt-8 flex justify-end gap-4">
-                <CustomButton
-                  type="button"
-                  variant="secondary"
-                  onClick={resetForm}
-                >
-                  Cancel
-                </CustomButton>
-                <CustomButton type="submit" variant="primary">
-                  {isEditing ? "Update Student" : "Add Student"}
-                </CustomButton>
+              <div className="mt-8 flex justify-between items-center gap-4">
+                <div>
+                  <p className="text-sm">
+                    Default login will be{" "}
+                    <span className="font-bold">
+                      {formData.enrollmentNo || "enrollment_no"}@gmail.com
+                    </span>{" "}
+                    and password will be{" "}
+                    <span className="font-bold">student123</span>
+                  </p>
+                </div>
+                <div className="flex gap-4">
+                  <CustomButton
+                    type="button"
+                    variant="secondary"
+                    onClick={resetForm}
+                  >
+                    Cancel
+                  </CustomButton>
+                  <CustomButton type="submit" variant="primary">
+                    {isEditing ? "Update Student" : "Add Student"}
+                  </CustomButton>
+                </div>
               </div>
             </form>
           </div>
