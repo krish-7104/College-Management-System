@@ -536,8 +536,8 @@ const Material = () => {
                 >
                   Cancel
                 </CustomButton>
-                <CustomButton type="submit" disabled={loading}>
-                  {loading
+                <CustomButton type="submit" disabled={dataLoading}>
+                  {dataLoading
                     ? "Processing..."
                     : editingMaterial
                     ? "Update Material"

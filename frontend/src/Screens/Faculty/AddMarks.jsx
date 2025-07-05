@@ -379,7 +379,7 @@ const AddMarks = () => {
             <CustomButton
               type="submit"
               disabled={
-                loading ||
+                dataLoading ||
                 !selectedBranch ||
                 !selectedSubject ||
                 !selectedExam ||
@@ -388,7 +388,7 @@ const AddMarks = () => {
               variant="primary"
               onClick={handleSearch}
             >
-              {loading ? "Searching..." : "Search"}
+              {dataLoading ? "Searching..." : "Search"}
             </CustomButton>
           </div>
         </div>
@@ -513,11 +513,11 @@ const AddMarks = () => {
 
             <CustomButton
               type="submit"
-              disabled={loading || !consent}
+              disabled={dataLoading || !consent}
               variant="primary"
               onClick={handleSubmit}
             >
-              {loading ? "Submitting..." : "Submit Marks"}
+              {dataLoading ? "Submitting..." : "Submit Marks"}
             </CustomButton>
           </div>
         </div>
