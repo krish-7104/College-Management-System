@@ -54,8 +54,6 @@ A comprehensive MERN stack-based College Management System that helps manage aca
 
 ## Setup Instructions
 
-Project Setup Video Tutorial: https://youtu.be/gw4jh4RHzuo
-
 Sample .env file is added in both backend and frontend, copy that variables and create `.env` in both the folders and then follow below given instructions
 
 1. Clone the repository:
